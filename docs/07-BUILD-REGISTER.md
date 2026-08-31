@@ -240,3 +240,42 @@ This section is informational and must not imply guaranteed immigration or spons
 - [x] Internal pre-review cross-document consistency audit completed, final post-professional-review rerun still required
 - [x] Final solicitor/accountant/immigration-adviser review register created, actual professional approvals pending
 - [x] Portal import-ready content map
+
+
+## Phase 15, Programme commercial launch
+
+- [x] Programme sales page copy
+- [x] Programme pricing comparison
+- [x] Programme Meta Ads launch plan
+- [x] Programme lead form
+- [x] Programme sales-call script
+- [x] Programme sales objections
+- [x] Programme participant intake
+- [x] Programme onboarding automation
+- [x] Programme internal implementation board
+- [x] Programme launch checklist
+- [x] Programme sales pipeline
+- [x] Consultation confirmation and reminders
+- [x] No-show and follow-up process
+- [x] Programme FAQ
+- [x] Payment confirmation email
+- [x] Intake review checklist
+- [x] Participant weekly progress review
+- [x] Lost-lead reason framework
+
+## Phase 16, Portal and programme administration
+
+- [x] Student portal Start Here
+- [x] Programme portal admin SOP
+- [x] Tier access matrix
+- [x] Participant lifecycle
+- [x] Support-end automations
+- [x] Programme content versioning SOP
+- [x] Professional referral directory template
+- [x] Student download library structure
+- [ ] Portal implementation/build
+- [ ] Programme sales page implementation on Kydos website
+- [ ] Checkout implementation and solicitor-approved consent flow
+- [ ] Programme CRM automation implementation
+- [ ] Programme Meta campaign live build
+- [ ] Record programme walkthrough videos
