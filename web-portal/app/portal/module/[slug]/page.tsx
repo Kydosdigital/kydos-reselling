@@ -47,9 +47,10 @@ export default async function ModulePage({
             return (
               <article className="lesson card" key={lesson.id}>
                 <div>
-                  <small>{lesson.source}</small>
+                  <small>Lesson</small>
                   <h3>{lesson.title}</h3>
                   <p className="muted" style={{ margin: 0 }}>{lesson.description}</p>
+                  <Link className="lesson-link" href={"/portal/lesson/" + lesson.id}>Open lesson →</Link>
                 </div>
 
                 <form action={setLessonCompletion}>
