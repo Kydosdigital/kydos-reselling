@@ -67,36 +67,36 @@ This is the working production list for the complete Kydos Digital Agency Busine
 
 ## Phase 5, Client onboarding
 
-- [ ] Client Onboarding SOP
-- [ ] Onboarding Email
-- [ ] Google Form Template
-- [ ] Client Asset Checklist
-- [ ] Client Drive Folder Template
-- [ ] Account Manager Handover Checklist
-- [ ] Creative Handover Checklist
-- [ ] Client Content Rules Sheet
-- [ ] Access Checklist
+- [x] Client Onboarding SOP
+- [x] Onboarding Email
+- [x] Google Form Template
+- [x] Client Asset Checklist
+- [x] Client Drive Folder Template
+- [x] Account Manager Handover Checklist
+- [x] Creative Handover Checklist
+- [x] Client Content Rules Sheet
+- [x] Access Checklist
 
 ## Phase 6, Social media fulfilment
 
-- [ ] Account Manager Manual
-- [ ] Creative Manual
-- [ ] Social Media Management SOP
-- [ ] Monthly Content Calendar Template
-- [ ] Monthly Content Calendar Worked Example
-- [ ] Weekly Creative Brief Template
-- [ ] Weekly Creative Brief Worked Example
-- [ ] Caption and Copy Guide
-- [ ] Hook Library
-- [ ] CTA Library
-- [ ] Hashtag Guide
-- [ ] Community Management SOP
-- [ ] Story SOP
-- [ ] Reactive Content SOP
-- [ ] Approval SOP
-- [ ] Revision SOP
-- [ ] Monthly Reporting SOP
-- [ ] Monthly Report Template
+- [x] Account Manager Manual
+- [x] Creative Manual
+- [x] Social Media Management SOP
+- [x] Monthly Content Calendar Template
+- [x] Monthly Content Calendar Worked Example
+- [x] Weekly Creative Brief Template
+- [x] Weekly Creative Brief Worked Example
+- [x] Caption and Copy Guide
+- [x] Hook Library
+- [x] CTA Library
+- [x] Hashtag Guide
+- [x] Community Management SOP
+- [x] Story SOP
+- [x] Reactive Content SOP
+- [x] Approval SOP
+- [x] Revision SOP
+- [x] Monthly Reporting SOP
+- [x] Monthly Report Template
 
 ## Phase 7, Recruitment and people
 
