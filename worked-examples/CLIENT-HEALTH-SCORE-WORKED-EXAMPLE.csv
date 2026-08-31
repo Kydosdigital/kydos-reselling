@@ -1,0 +1,4 @@
+Client,Payment (0-2),Approval/Responsiveness (0-2),Satisfaction (0-2),Performance/Value Perception (0-2),Relationship (0-2),Total,Health,Main Risk,Action Owner,Next Review
+Northline Physio,2,2,2,2,2,10,Green,,Amina,2026-10-05
+Westfield Events,2,1,1,1,2,7,Amber,"Slow approvals and questioning value",Sarah,2026-09-15
+Example Red Client,1,0,1,0,1,3,Red,"Payment late, repeated complaints, cancellation language",Agency Owner,2026-09-03
