@@ -262,3 +262,12 @@ h3{letter-spacing:-.025em}
   padding:10px 12px;
   text-align:left
 }
+
+.date-input{
+  min-height:40px;
+  border-radius:10px;
+  border:1px solid var(--line);
+  background:rgba(255,255,255,.045);
+  color:var(--text);
+  padding:7px 10px
+}
