@@ -168,15 +168,18 @@ export default async function AdminPage() {
                   <td>
                     <form action={updateTaskStatus}>
                       <input type="hidden" name="taskId" value={task.id} />
-                      <select name="status" defaultValue={task.status} className="select compact" onChange={(e) => e.currentTarget.form?.requestSubmit()}>
-                        <option value="not_started">Not started</option>
-                        <option value="in_progress">In progress</option>
-                        <option value="waiting_participant">Waiting participant</option>
-                        <option value="waiting_kydos">Waiting Kydos</option>
-                        <option value="waiting_third_party">Waiting third party</option>
-                        <option value="review">Review</option>
-                        <option value="complete">Complete</option>
-                      </select>
+                      <div style={{ display: "flex", gap: 8, alignItems: "center" }}>
+                        <select name="status" defaultValue={task.status} className="select compact">
+                          <option value="not_started">Not started</option>
+                          <option value="in_progress">In progress</option>
+                          <option value="waiting_participant">Waiting participant</option>
+                          <option value="waiting_kydos">Waiting Kydos</option>
+                          <option value="waiting_third_party">Waiting third party</option>
+                          <option value="review">Review</option>
+                          <option value="complete">Complete</option>
+                        </select>
+                        <button className="btn" type="submit">Save</button>
+                      </div>
                     </form>
                   </td>
                 </tr>
