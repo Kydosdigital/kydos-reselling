@@ -7,6 +7,7 @@ const consultationUrl =
 const plans = [
   {
     name: "Blueprint",
+    slug: "blueprint",
     price: "£2,500",
     description: "The complete Kydos agency operating system for someone who wants to build it themselves.",
     features: [
@@ -22,6 +23,7 @@ const plans = [
   },
   {
     name: "Build With Us",
+    slug: "build",
     price: "£5,000",
     description: "The operating system plus hands-on implementation of your core agency infrastructure.",
     featured: true,
@@ -38,6 +40,7 @@ const plans = [
   },
   {
     name: "Done For You",
+    slug: "dfy",
     price: "£10,000",
     description: "Kydos establishes the core agency infrastructure, initial team and handover system.",
     features: [
@@ -146,9 +149,14 @@ export default function HomePage() {
                   <ul className="feature-list">
                     {plan.features.map((f) => <li key={f}>{f}</li>)}
                   </ul>
-                  <a className="btn btn-primary" style={{ width: "100%", marginTop: 26 }} href={consultationUrl}>
-                    Discuss this route
-                  </a>
+                  <div style={{ display: "grid", gap: 10, marginTop: 26 }}>
+                    <a className="btn btn-primary" style={{ width: "100%" }} href={consultationUrl}>
+                      Discuss this route
+                    </a>
+                    <Link className="btn" style={{ width: "100%" }} href={"/enrol/" + plan.slug}>
+                      View enrolment
+                    </Link>
+                  </div>
                 </article>
               ))}
             </div>
