@@ -1,0 +1,2 @@
+Candidate,Role,Communication (1-5),Core Skill (1-5),Research/Judgment (1-5),Attention to Detail (1-5),Reliability Evidence (1-5),Test Task (1-5),Culture/Professionalism (1-5),Total,Decision,Notes
+,,,,,,,,,"=SUM(C2:I2)",,
