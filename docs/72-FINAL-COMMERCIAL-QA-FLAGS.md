@@ -1,121 +1,195 @@
 # Final Commercial QA Flags
 
-These are not blockers to drafting. They are decisions that must be checked before the programme becomes a live commercial product.
+These items are intentionally unresolved or require a final business decision before launch.
 
-## 1. Meta Ads percentage threshold
+Do not lose them inside the wider programme library.
 
-Current Kydos rule recorded:
+## 1. Meta Ads pricing threshold
 
-- £150/month up to £500 ad spend
-- 15% where spend exceeds £500
+Current rule recorded:
 
-At £501, 15% is less than £150.
+- £150/month management where ad spend is up to £500
+- 15% of ad spend where spend exceeds £500
 
-Before public launch, confirm whether the intended commercial rule is:
+Problem:
 
-- 15% with a £150 minimum
-- a higher spend threshold
-- a different formula
+15% of £501 is £75.15, which would charge less than the £150 base fee.
 
-Do not silently change current Kydos pricing until approved.
+The pricing is commercially discontinuous.
 
-## 2. Google Ads percentage threshold
+Recommended fix:
 
-Current rule:
+Use:
 
-- £300/month up to £1,000 spend
+Management fee = greater of £150 or 15% of monthly ad spend.
+
+Alternative:
+
+Move the percentage threshold to a spend level where 15% is at least £150, such as £1,000.
+
+Final Kydos decision required before public pricing documents are finalised.
+
+## 2. Google Ads pricing threshold
+
+Current rule recorded:
+
+- £300/month up to £1,000 monthly ad spend
 - 15% above £1,000
 
-At £1,001, 15% is less than £300.
+Problem:
 
-Confirm whether the intended rule uses:
+15% of £1,001 is £150.15, below the £300 base fee.
 
-- a £300 minimum
-- another threshold
-- another formula
+Recommended fix:
 
-## 3. Staff status
+Management fee = greater of £300 or 15% of monthly ad spend.
 
-Kydos uses overseas team members and expects structured working hours.
+Alternative:
 
-Before publishing a ready-made contractor agreement as the default, determine the correct employment/contractor status for each jurisdiction and real working relationship.
+Move percentage threshold to £2,000, where 15% equals £300.
 
-Contract label alone does not decide status.
+Final Kydos decision required.
 
-## 4. Staff compensation
+## 3. Social package live check
 
-Programme does not publish Kydos's Naira salary budgets.
+Before launch:
 
-Final programme wording:
-"Contact Kydos for current recruitment and staffing-cost guidance."
+- verify Starter £165
+- verify Visibility £275
+- verify Pipeline £455
+- verify Partner £655
+- verify exact post/platform/Story inclusions on the live Kydos website
 
-Keep this consistent.
+Do not let old TapRave £99/£195/£295 pricing re-enter current materials.
 
-## 5. One-off Sales Closer commission
+## 4. CRM referral commercial setup
 
-Current draft working rule:
+Current decision:
 
-15% of qualifying one-off service fees actually received, excluding VAT.
+Programme customers are not charged an additional Kydos CRM licence fee for setting up their own agency CRM.
 
-Confirm the final list of qualifying services and any exceptions before the Sales Closer Agreement goes live.
-
-## 6. Support response target
-
-Draft Support Policy currently uses:
-
-Aim to respond within one UK business day.
-
-Confirm operationally before sales launch.
-
-## 7. Programme lifetime access
-
-Commercial intention:
-lifetime access to programme materials.
-
-Final legal wording should define what lifetime means if:
-
-- Kydos changes platform
-- programme is migrated
-- old technology is retired
-
-## 8. Website Blueprint add-on
-
-Indicative programme price:
-approximately £300 for a five-page starter website.
-
-Confirm the final advertised add-on price before publishing the sales page.
-
-## 9. CRM referral
-
-Kydos does not add a programme CRM licence fee.
+They must use the Kydos-approved referral route where applicable.
 
 Before launch confirm:
 
-- exact referral route
-- provider plan participant buys
-- usage/messaging charges
-- whether any affiliate/referral disclosure is needed
+- referral URL/code
+- provider plan required
+- provider monthly fee paid by participant
+- phone/SMS/WhatsApp usage charges
+- whether full agency branding is available on selected plan
+- whether participants can resell CRM services to their own clients and under what provider terms
 
-## 10. Insurance
+## 5. One-off Sales Closer commission
 
-Current Kydos records believe professional indemnity is active.
+Current working rule:
 
-Verify the complete Kydos policy schedule before using Kydos as the worked compliance example.
+15% of qualifying one-off service fee actually received, excluding VAT.
+
+Before contract is finalised define:
+
+- which one-off services qualify
+- whether landing pages qualify
+- website custom quotes
+- ecommerce
+- one-off setup fees
+- what happens to commission after refund/chargeback
+
+## 6. Staff salary and recruitment budgets
+
+Kydos does not publish current Naira salary/recruitment figures in the programme.
+
+Student-facing wording:
+
+"Contact Kydos for current recruitment support and cost guidance."
+
+This is intentional.
+
+## 7. Employment status
+
+Current Kydos team may work full-time and to UK-aligned schedules while being outside the UK.
+
+Do not automatically call every overseas team member a contractor.
+
+Before issuing an agreement:
+
+- complete Employment Status Decision Record
+- check country of work
+- check local payroll/employment rules
+- use correct employment or contractor agreement
+
+## 8. Probation and notice
+
+Draft Kydos standard:
+
+- probation: 3 months
+- notice during employee probation: 14 days
+- notice after probation: 30 days
+
+This must be reviewed for the relevant jurisdiction.
+
+## 9. Insurance
+
+Professional indemnity is believed to be active.
+
+Before the Kydos worked example is published, verify the actual current insurance schedule and remove "believed" wording.
+
+## 10. Password manager
+
+The programme correctly rejects plain-text Google Drive password storage as the recommended standard.
+
+Final decision still required on the default recommended password manager.
+
+Candidates:
+
+- 1Password Business
+- Bitwarden business/team product
+
+Choose one after price, admin controls and participant usability are reviewed.
 
 ## 11. Programme name
 
-No final product name has been selected.
+Current working description:
 
-Do not hold up operations documents for naming.
+"Kydos Digital Agency Business-in-a-Box"
 
-Choose the final public name before:
+Final public product name has not been chosen.
 
-- sales page
-- checkout
-- participant agreement
-- portal branding
-- PDFs/videos
+Do not let naming delay operational completion.
 
-## 12. Legal approval
+## 12. "Lifetime access"
 
-All documents marked DRAFT remain draft until the relevant professional review in the Legal Review Register is complete.
+Commercial intention:
+
+Participants retain lifetime access to programme materials.
+
+Final legal wording should define this sensibly around:
+
+- Kydos continuing to operate
+- platform migration
+- substantially equivalent access
+- lawful termination
+- third-party platform failure
+
+## 13. Website add-on for Blueprint
+
+Indicative student price currently recorded:
+
+approximately £300 for a standard five-page starter agency website.
+
+Confirm final public add-on price before launch.
+
+## 14. Referral disclosure
+
+Where Kydos receives referral or affiliate benefit from:
+
+- ANNA
+- CRM provider
+- other third parties
+
+make any disclosure required by law, platform terms and good commercial practice.
+
+## 15. Final launch gate
+
+None of the flags above prevents continued programme production.
+
+They do prevent the affected price/legal/commercial documents being labelled FINAL until resolved.
