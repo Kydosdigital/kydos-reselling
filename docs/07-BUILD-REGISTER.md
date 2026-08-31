@@ -165,12 +165,12 @@ This is the working production list for the complete Kydos Digital Agency Busine
 
 ## Phase 11, Optional business-readiness information
 
-- [ ] Sponsor Licence Business Readiness Guide
-- [ ] Business Records Checklist
-- [ ] Payroll/PAYE Readiness Checklist
-- [ ] Accountant Referral Process
-- [ ] Immigration Adviser Referral Process
-- [ ] Compliance Disclaimer
+- [x] Sponsor Licence Business Readiness Guide
+- [x] Business Records Checklist
+- [x] Payroll/PAYE Readiness Checklist
+- [x] Accountant Referral Process
+- [x] Immigration Adviser Referral Process
+- [x] Compliance Disclaimer
 
 This section is informational and must not imply guaranteed immigration or sponsorship outcomes.
 
