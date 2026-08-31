@@ -176,17 +176,58 @@ This section is informational and must not imply guaranteed immigration or spons
 
 ## Phase 12, Programme delivery
 
-- [ ] Blueprint Delivery Pack
-- [ ] Build With Us Delivery Pack
-- [ ] Done For You Delivery Pack
-- [ ] Participant Agreement
-- [ ] Terms and Conditions
-- [ ] Refund Policy
-- [ ] Support Policy
-- [ ] Handover Pack
-- [ ] Video Recording List
-- [ ] WhatsApp Support Process
-- [ ] CRM Portal Structure
-- [ ] Student Progress Dashboard
-- [ ] Downloadable Template Library
-- [ ] Final Programme QA
+- [x] Blueprint Delivery Pack
+- [x] Build With Us Delivery Pack
+- [x] Done For You Delivery Pack
+- [x] Participant Agreement
+- [x] Terms and Conditions
+- [x] Refund Policy
+- [x] Support Policy
+- [x] Handover Pack
+- [x] Video Recording List
+- [x] WhatsApp Support Process
+- [x] CRM Portal Structure
+- [x] Student Progress Dashboard
+- [x] Downloadable Template Library
+- [ ] Final Programme QA, checklist created but final sign-off intentionally pending legal review and final document conversion
+
+## Phase 13, Legal and policy completion
+
+- [ ] Programme Complaints Policy
+- [ ] Template Use Licence
+- [ ] Programme Privacy Notice
+- [ ] Digital Content Access Terms
+- [ ] Build With Us Scope of Work
+- [ ] Done For You Scope of Work
+- [ ] Handover and Acceptance Terms
+- [ ] Master Client Service Agreement
+- [ ] Social Media Service Schedule
+- [ ] Meta Ads Service Schedule
+- [ ] Google Ads Service Schedule
+- [ ] SEO Service Schedule
+- [ ] Website Development Service Schedule
+- [ ] Landing Page Service Schedule
+- [ ] CRM and Automation Service Schedule
+- [ ] Client Payment and Late Payment Policy
+- [ ] Client Approval and Revision Policy
+- [ ] Client Access and Credentials Policy
+- [ ] Account Manager Agreement
+- [ ] Creative Agreement
+- [ ] Operations Manager Agreement
+- [ ] Sales Closer Agreement
+- [ ] Specialist Contractor Agreement
+- [ ] Staff Confidentiality and IP Agreement
+- [ ] Staff Data Protection Policy
+- [ ] Staff Acceptable Use and Security Policy
+- [ ] Recruitment Privacy Notice
+- [ ] Programme checkout consent wording
+
+## Phase 14, Final editable-format production
+
+- [ ] Convert core contracts/templates to DOCX
+- [ ] Convert calculators/trackers to styled XLSX workbooks
+- [ ] Create student-facing PDF handbooks
+- [ ] Create Kydos worked-example versions
+- [ ] Final cross-document consistency audit
+- [ ] Final solicitor/accountant/immigration-adviser review register
+- [ ] Portal import-ready content map
