@@ -15,23 +15,25 @@ This is the working production list for the complete Kydos Digital Agency Busine
 
 ## Phase 2, Company setup and finance
 
-- [ ] UK Company Setup Guide
-- [ ] Companies House Checklist
-- [ ] ANNA Money Setup Guide
-- [ ] NatWest Business Banking Guide
-- [ ] FreeAgent Setup Guide
-- [ ] Accountant Onboarding Checklist
-- [ ] Startup Budget Calculator
-- [ ] Monthly Business Cost Calculator
-- [ ] Tax Reserve Calculator
-- [ ] MRR Calculator
-- [ ] Gross Margin Calculator
-- [ ] Churn Calculator
-- [ ] Hiring Affordability Calculator
-- [ ] Finance Monthly Routine
-- [ ] ICO and Data Protection Setup Guide
-- [ ] Business Insurance Checklist
-- [ ] UK Business Compliance Calendar
+- [x] UK Company Setup Guide
+- [x] Companies House Checklist
+- [x] ANNA Money Setup Guide
+- [x] NatWest Business Banking Guide
+- [x] FreeAgent Setup Guide
+- [x] Accountant Onboarding Checklist
+- [x] Startup Budget Calculator
+- [x] Monthly Business Cost Calculator
+- [x] Tax Reserve Calculator
+- [x] MRR Calculator, covered in Agency KPI Calculator
+- [x] Gross Margin Calculator, covered in Agency KPI Calculator
+- [x] Churn Calculator, covered in Agency KPI Calculator
+- [x] Hiring Affordability Calculator
+- [x] Finance Monthly Routine
+- [x] ICO and Data Protection Setup Guide
+- [x] Business Insurance Checklist
+- [x] UK Business Compliance Calendar
+
+- [x] Startup Technology Stack
 
 ## Phase 3, Brand, domain and website
 
