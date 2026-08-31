@@ -100,43 +100,43 @@ This is the working production list for the complete Kydos Digital Agency Busine
 
 ## Phase 7, Recruitment and people
 
-- [ ] Recruitment Master SOP
-- [ ] Account Manager Job Description
-- [ ] Creative Job Description
-- [ ] Operations Manager Job Description
-- [ ] Sales Closer Job Description
-- [ ] Account Manager Interview Guide
-- [ ] Creative Interview Guide
-- [ ] Operations Manager Interview Guide
-- [ ] Sales Closer Interview Guide
-- [ ] Account Manager Test Task
-- [ ] Creative Test Task
-- [ ] Candidate Scorecards
-- [ ] Offer Letter
-- [ ] Staff Onboarding Plan
-- [ ] Probation Review Template
-- [ ] Performance Review Template
-- [ ] Offboarding Checklist
+- [x] Recruitment Master SOP
+- [x] Account Manager Job Description
+- [x] Creative Job Description
+- [x] Operations Manager Job Description
+- [x] Sales Closer Job Description
+- [x] Account Manager Interview Guide
+- [x] Creative Interview Guide
+- [x] Operations Manager Interview Guide
+- [x] Sales Closer Interview Guide
+- [x] Account Manager Test Task
+- [x] Creative Test Task
+- [x] Candidate Scorecards
+- [x] Offer Letter
+- [x] Staff Onboarding Plan
+- [x] Probation Review Template
+- [x] Performance Review Template
+- [x] Offboarding Checklist
 
 ## Phase 8, Specialist service SOPs
 
-- [ ] Meta Ads SOP
-- [ ] Meta Ads Onboarding Form
-- [ ] Meta Ads Campaign Build Sheet
-- [ ] Meta Ads Reporting Template
-- [ ] Google Ads SOP
-- [ ] Google Ads Onboarding Form
-- [ ] Google Ads Campaign Build Sheet
-- [ ] Google Ads Reporting Template
-- [ ] SEO SOP
-- [ ] SEO Package Breakdown
-- [ ] SEO Audit Template
-- [ ] SEO Monthly Report
-- [ ] Website Development SOP
-- [ ] Website Discovery Form
-- [ ] Website Build Checklist
-- [ ] Landing Page SOP
-- [ ] CRM and Lead Automation Service SOP
+- [x] Meta Ads SOP
+- [x] Meta Ads Onboarding Form
+- [x] Meta Ads Campaign Build Sheet
+- [x] Meta Ads Reporting Template
+- [x] Google Ads SOP
+- [x] Google Ads Onboarding Form
+- [x] Google Ads Campaign Build Sheet
+- [x] Google Ads Reporting Template
+- [x] SEO SOP
+- [x] SEO Package Breakdown
+- [x] SEO Audit Template
+- [x] SEO Monthly Report
+- [x] Website Development SOP
+- [x] Website Discovery Form
+- [x] Website Build Checklist
+- [x] Landing Page SOP
+- [x] CRM and Lead Automation Service SOP
 
 ## Phase 9, Operations
 
