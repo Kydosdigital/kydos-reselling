@@ -1,0 +1,63 @@
+Module,Order,Section,Primary Source,Asset Type,Tier Access,Video Needed?,Download?,Status
+Start Here,1,Programme Overview,docs/00-PROGRAMME-MASTER-PLAN.md,Guide,All,Yes,No,Ready
+Start Here,2,Programme Tiers,docs/02-PROGRAMME-TIERS.md,Guide,All,Yes,No,Ready
+Start Here,3,4-Week Launch,docs/03-4-WEEK-LAUNCH-ROADMAP.md,Guide,All,Yes,Yes,Ready
+Company,1,UK Company Setup,docs/08-UK-COMPANY-SETUP-GUIDE.md,Guide,All,Yes,Yes,Ready
+Company,2,Companies House,docs/09-COMPANIES-HOUSE-CHECKLIST.md,Checklist,All,Yes,Yes,Ready
+Company,3,ANNA Money,docs/10-ANNA-MONEY-SETUP-GUIDE.md,Guide,All,Yes,Yes,Ready
+Company,4,NatWest,docs/11-NATWEST-BUSINESS-BANKING-GUIDE.md,Guide,All,Yes,Yes,Ready
+Company,5,FreeAgent,docs/12-FREEAGENT-SETUP-GUIDE.md,Guide,All,Yes,Yes,Ready
+Company,6,Accountant,docs/13-ACCOUNTANT-ONBOARDING-CHECKLIST.md,Checklist,All,No,Yes,Ready
+Brand,1,Agency Naming,docs/19-AGENCY-NAMING-GUIDE.md,Guide,All,Yes,Yes,Ready
+Brand,2,Brand Brief,templates/brand/BRAND-BRIEF-TEMPLATE.md,Template,All,Yes,Yes,Ready
+Brand,3,Logo Brief,templates/brand/LOGO-BRIEF-TEMPLATE.md,Template,All,No,Yes,Ready
+Brand,4,Brand Guidelines,templates/brand/BRAND-GUIDELINES-TEMPLATE.md,Template,All,No,Yes,Ready
+Website,1,Domain,docs/20-GODADDY-DOMAIN-SETUP-GUIDE.md,Guide,All,Yes,Yes,Ready
+Website,2,Business Email,docs/21-BUSINESS-EMAIL-SETUP-GUIDE.md,Guide,All,Yes,Yes,Ready
+Website,3,Five-Page Brief,templates/website/5-PAGE-WEBSITE-BRIEF.md,Template,All,Yes,Yes,Ready
+Website,4,Website QA,docs/22-WEBSITE-QA-CHECKLIST.md,Checklist,All,Yes,Yes,Ready
+CRM,1,CRM Setup,docs/24-CRM-SETUP-MANUAL.md,Manual,All,Yes,Yes,Ready
+CRM,2,Stripe,docs/25-STRIPE-SETUP-GUIDE.md,Guide,All,Yes,Yes,Ready
+CRM,3,Booking Calendar,docs/32-DISCOVERY-CALL-CALENDAR-SETUP.md,Guide,All,Yes,Yes,Ready
+CRM,4,Sales Pipeline,templates/crm/SALES-PIPELINE-TEMPLATE.md,Template,All,Yes,Yes,Ready
+CRM,5,Lead Automations,templates/crm/NEW-LEAD-EMAIL-AUTOMATION.md,Template,All,Yes,Yes,Ready
+Sales,1,60-Second Lead Call,docs/26-60-SECOND-LEAD-CALL-SOP.md,SOP,All,Yes,Yes,Ready
+Sales,2,Closer Script,docs/27-SALES-CLOSER-SCRIPT.md,Script,All,Yes,Yes,Ready
+Sales,3,Qualification,docs/28-LEAD-QUALIFICATION-GUIDE.md,Guide,All,Yes,Yes,Ready
+Sales,4,Objection Handling,docs/29-SALES-OBJECTION-HANDLING-GUIDE.md,Guide,All,Yes,Yes,Ready
+Sales,5,Follow-Up,templates/crm/LEAD-FOLLOW-UP-SEQUENCE.md,Template,All,Yes,Yes,Ready
+Onboarding,1,Client Onboarding,docs/33-CLIENT-ONBOARDING-SOP.md,SOP,All,Yes,Yes,Ready
+Onboarding,2,Onboarding Email,templates/onboarding/CLIENT-ONBOARDING-EMAIL.md,Template,All,No,Yes,Ready
+Onboarding,3,Google Form,templates/onboarding/SOCIAL-MEDIA-ONBOARDING-FORM.md,Template,All,Yes,Yes,Ready
+Onboarding,4,Client Drive,templates/onboarding/CLIENT-DRIVE-FOLDER-STRUCTURE.md,Template,All,Yes,Yes,Ready
+Onboarding,5,Content Rules,templates/onboarding/CLIENT-CONTENT-RULES-SHEET.md,Template,All,Yes,Yes,Ready
+Social Delivery,1,Account Manager Manual,docs/34-ACCOUNT-MANAGER-MANUAL.md,Manual,All,Yes,Yes,Ready
+Social Delivery,2,Creative Manual,docs/35-CREATIVE-MANUAL.md,Manual,All,Yes,Yes,Ready
+Social Delivery,3,Social SOP,docs/36-SOCIAL-MEDIA-MANAGEMENT-SOP.md,SOP,All,Yes,Yes,Ready
+Social Delivery,4,Content Calendar,templates/social/MONTHLY-CONTENT-CALENDAR-TEMPLATE.csv,Spreadsheet,All,Yes,Yes,Ready
+Social Delivery,5,Creative Brief,templates/social/WEEKLY-CREATIVE-BRIEF-TEMPLATE.md,Template,All,Yes,Yes,Ready
+Social Delivery,6,Monthly Report,templates/social/MONTHLY-REPORT-TEMPLATE.md,Template,All,Yes,Yes,Ready
+Recruitment,1,Recruitment SOP,docs/47-RECRUITMENT-MASTER-SOP.md,SOP,All,Yes,Yes,Ready
+Recruitment,2,Account Manager Hiring,templates/recruitment/ACCOUNT-MANAGER-JOB-DESCRIPTION.md,Template,All,Yes,Yes,Ready
+Recruitment,3,Creative Hiring,templates/recruitment/CREATIVE-JOB-DESCRIPTION.md,Template,All,Yes,Yes,Ready
+Recruitment,4,Operations Manager Hiring,templates/recruitment/OPERATIONS-MANAGER-JOB-DESCRIPTION.md,Template,DFY,Yes,Yes,Ready
+Recruitment,5,Sales Closer Hiring,templates/recruitment/SALES-CLOSER-JOB-DESCRIPTION.md,Template,All,Yes,Yes,Ready
+Services,1,Meta Ads,docs/53-META-ADS-SERVICE-SOP.md,SOP,All,Yes,Yes,Ready
+Services,2,Google Ads,docs/54-GOOGLE-ADS-SERVICE-SOP.md,SOP,All,Yes,Yes,Ready
+Services,3,SEO,docs/55-SEO-SERVICE-SOP.md,SOP,All,Yes,Yes,Ready
+Services,4,Website,docs/57-WEBSITE-DEVELOPMENT-SOP.md,SOP,All,Yes,Yes,Ready
+Services,5,Landing Page,docs/58-LANDING-PAGE-SOP.md,SOP,All,Yes,Yes,Ready
+Services,6,CRM Service,docs/59-CRM-AND-LEAD-AUTOMATION-SERVICE-SOP.md,SOP,All,Yes,Yes,Ready
+Operations,1,Operations Manager Manual,docs/60-OPERATIONS-MANAGER-MANUAL.md,Manual,DFY,Yes,Yes,Ready
+Operations,2,Task Management,docs/62-TASK-MANAGEMENT-SOP.md,SOP,All,Yes,Yes,Ready
+Operations,3,Management Dashboard,docs/63-MANAGEMENT-DASHBOARD-SPECIFICATION.md,Spec,All,Yes,No,Ready
+Operations,4,Quality Control,templates/operations/QUALITY-CONTROL-CHECKLIST.md,Checklist,All,Yes,Yes,Ready
+Finance,1,Monthly Finance Routine,docs/14-FINANCE-MONTHLY-ROUTINE.md,SOP,All,Yes,Yes,Ready
+Finance,2,Calculators,calculators/STARTUP-BUDGET-CALCULATOR.csv,Spreadsheet,All,Yes,Yes,Ready
+Growth,1,Retention,docs/64-CLIENT-RETENTION-SOP.md,SOP,All,Yes,Yes,Ready
+Growth,2,Renewal,docs/65-CLIENT-RENEWAL-SOP.md,SOP,All,Yes,Yes,Ready
+Growth,3,Upsell,docs/66-UPSELL-GUIDE.md,Guide,All,No,Yes,Ready
+Growth,4,Cross-Sell,docs/67-CROSS-SELL-GUIDE.md,Guide,All,No,Yes,Ready
+Business Readiness,1,Sponsor Licence Readiness,docs/68-SPONSOR-LICENCE-BUSINESS-READINESS-GUIDE.md,Guide,Optional,Yes,Yes,Draft professional review
+Business Readiness,2,Business Records,templates/business-readiness/BUSINESS-RECORDS-CHECKLIST.md,Checklist,Optional,Yes,Yes,Ready
+Business Readiness,3,PAYE Readiness,templates/business-readiness/PAYROLL-PAYE-READINESS-CHECKLIST.md,Checklist,Optional,Yes,Yes,Ready
