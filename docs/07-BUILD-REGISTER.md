@@ -193,34 +193,43 @@ This section is informational and must not imply guaranteed immigration or spons
 
 ## Phase 13, Legal and policy completion
 
-- [ ] Programme Complaints Policy
-- [ ] Template Use Licence
-- [ ] Programme Privacy Notice
-- [ ] Digital Content Access Terms
-- [ ] Build With Us Scope of Work
-- [ ] Done For You Scope of Work
-- [ ] Handover and Acceptance Terms
-- [ ] Master Client Service Agreement
-- [ ] Social Media Service Schedule
-- [ ] Meta Ads Service Schedule
-- [ ] Google Ads Service Schedule
-- [ ] SEO Service Schedule
-- [ ] Website Development Service Schedule
-- [ ] Landing Page Service Schedule
-- [ ] CRM and Automation Service Schedule
-- [ ] Client Payment and Late Payment Policy
-- [ ] Client Approval and Revision Policy
-- [ ] Client Access and Credentials Policy
-- [ ] Account Manager Agreement
-- [ ] Creative Agreement
-- [ ] Operations Manager Agreement
-- [ ] Sales Closer Agreement
-- [ ] Specialist Contractor Agreement
-- [ ] Staff Confidentiality and IP Agreement
-- [ ] Staff Data Protection Policy
-- [ ] Staff Acceptable Use and Security Policy
-- [ ] Recruitment Privacy Notice
-- [ ] Programme checkout consent wording
+- [x] Programme Complaints Policy
+- [x] Template Use Licence
+- [x] Programme Privacy Notice
+- [x] Digital Content Access Terms
+- [x] Build With Us Scope of Work
+- [x] Done For You Scope of Work
+- [x] Handover and Acceptance Terms
+- [x] Master Client Service Agreement
+- [x] Social Media Service Schedule
+- [x] Meta Ads Service Schedule
+- [x] Google Ads Service Schedule
+- [x] SEO Service Schedule
+- [x] Website Development Service Schedule
+- [x] Landing Page Service Schedule
+- [x] CRM and Automation Service Schedule
+- [x] Client Payment and Late Payment Policy
+- [x] Client Approval and Revision Policy
+- [x] Client Access and Credentials Policy
+- [x] Account Manager Agreement
+- [x] Creative Agreement
+- [x] Operations Manager Agreement
+- [x] Sales Closer Agreement
+- [x] Specialist Contractor Agreement
+- [x] Staff Confidentiality and IP Agreement
+- [x] Staff Data Protection Policy
+- [x] Staff Acceptable Use and Security Policy
+- [x] Recruitment Privacy Notice
+- [x] Programme checkout consent wording
+
+- [x] Employment Status Decision Record
+- [x] Core Employment Agreement draft
+- [x] Independent Contractor Services Agreement draft
+- [x] Working Hours and Availability Policy
+- [x] Leave and Absence Policy
+- [x] Probation Policy
+- [x] Performance Management Policy
+- [x] Disciplinary and Misconduct Policy
 
 ## Phase 14, Final editable-format production
 
