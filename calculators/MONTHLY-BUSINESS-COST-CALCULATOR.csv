@@ -1,0 +1,24 @@
+Cost Type,Item,Monthly Cost (£),Direct Fulfilment Cost?,Notes
+People,Account Manager,0,Yes,"Enter actual monthly cost"
+People,Creative,0,Yes,"Enter actual monthly cost"
+People,Operations Manager,0,Yes,"Optional in owner-operated model"
+People,Sales closer base,0,No,"Commission usually separate"
+Contractors,Meta Ads specialist,0,Yes,"Only when used"
+Contractors,Google Ads specialist,0,Yes,"Only when used"
+Contractors,SEO specialist,0,Yes,"Only when used"
+Contractors,Developer,0,Yes,"Only when used"
+Contractors,CRM specialist,0,Yes,"Only when used"
+Software,CRM/provider plan,0,No,
+Software,Creative tools,0,Yes,
+Software,Email/business productivity,0,No,
+Software,Other SaaS,0,No,
+Finance,Accountant,0,No,
+Finance,Bank fees,0,No,
+Insurance,Business insurance,0,No,
+Marketing,Agency Meta Ads,300,No,"Recommended launch starting budget, adjust after launch"
+Marketing,Other marketing,0,No,
+Office,Phone/internet/office,0,No,
+Other,Other fixed costs,0,No,
+TOTAL MONTHLY COST,,"=SUM(C2:C21)",,
+DIRECT FULFILMENT COST,,"=SUMIF(D2:D21,"Yes",C2:C21)",,
+OVERHEAD COST,,"=C22-C23",,
