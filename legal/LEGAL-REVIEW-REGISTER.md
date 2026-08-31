@@ -1,112 +1,149 @@
 # Legal and Professional Review Register
 
-This register prevents draft documents from being mistaken for final legal advice.
+This register controls what must be professionally reviewed before the programme is commercially launched.
 
-## Status labels
+No document marked DRAFT should be presented as final legal advice.
 
-- Drafted
-- Needs UK solicitor review
-- Needs employment-law review
-- Needs data-protection review
-- Needs accountant review
-- Needs immigration-adviser review
-- Ready after review
+## UK solicitor
 
-## Programme customer documents
+Review:
 
-| Document | Status | Reviewer |
-| --- | --- | --- |
-| Programme Participant Agreement | Drafted | UK solicitor |
-| Programme Terms and Conditions | Drafted | UK solicitor |
-| Refund and Cancellation Policy | Drafted | UK solicitor |
-| Programme Complaints Policy | Drafted | UK solicitor |
-| Support Policy | Drafted | UK solicitor / commercial |
-| Digital Content Access Terms | Drafted | UK solicitor |
-| Template Use Licence | Drafted | UK solicitor / IP |
-| Programme Privacy Notice | Drafted | Data protection / solicitor |
-| Checkout Consent Wording | Drafted | UK solicitor / checkout implementation |
-| Build With Us Scope | Drafted | Commercial / solicitor |
-| Done For You Scope | Drafted | Commercial / solicitor |
-| Handover and Acceptance Terms | Drafted | UK solicitor |
-
-## Client documents
-
-| Document | Status | Reviewer |
-| --- | --- | --- |
-| Master Client Service Agreement | Drafted | UK solicitor |
-| Social Media Schedule | Drafted | UK solicitor / commercial |
-| Meta Ads Schedule | Drafted | UK solicitor / commercial |
-| Google Ads Schedule | Drafted | UK solicitor / commercial |
-| SEO Schedule | Drafted | UK solicitor / commercial |
-| Website Development Schedule | Drafted | UK solicitor / commercial |
-| Landing Page Schedule | Drafted | UK solicitor / commercial |
-| CRM and Automation Schedule | Drafted | UK solicitor / data protection |
-| Payment and Late Payment Policy | Drafted | UK solicitor / accountant |
-| Approval and Revision Policy | Drafted | Commercial / solicitor |
-| Access and Credentials Policy | Drafted | Security / data protection |
-
-## Staff and contractor documents
-
-| Document | Status | Reviewer |
-| --- | --- | --- |
-| Employment Status Decision Record | Drafted | Employment/tax adviser |
-| Core Employment Agreement | Drafted | Employment solicitor |
-| Independent Contractor Agreement | Drafted | Solicitor / local jurisdiction |
-| Account Manager Schedule | Drafted | Employment/commercial |
-| Creative Schedule | Drafted | Employment/commercial |
-| Operations Manager Schedule | Drafted | Employment/commercial |
-| Sales Closer Schedule | Drafted | Employment/commercial |
-| Specialist Contractor Schedule | Drafted | Solicitor |
-| Confidentiality and IP Agreement | Drafted | Solicitor / IP |
-| Staff Data Protection Policy | Drafted | Data protection |
-| Acceptable Use and Security Policy | Drafted | Security / data protection |
-| Working Hours Policy | Drafted | Employment adviser |
-| Leave and Absence Policy | Drafted | Employment adviser |
-| Probation Policy | Drafted | Employment adviser |
-| Performance Management Policy | Drafted | Employment adviser |
-| Disciplinary and Misconduct Policy | Drafted | Employment solicitor |
-| Recruitment Privacy Notice | Drafted | Data protection |
-
-## Finance and tax material
-
-Review before launch:
-
-- VAT references
-- Corporation Tax references
-- PAYE guidance
-- tax reserve wording
-- accountant referral wording
+- Programme Participant Agreement
+- Programme Terms and Conditions
+- Refund and Cancellation Policy
+- Digital Content Access Terms
+- Template Use Licence
+- Programme Complaints Policy
+- Build With Us Scope of Work
+- Done For You Scope of Work
+- Handover and Acceptance Terms
+- Programme checkout consent wording
+- Master Client Service Agreement
+- all Client Service Schedules
+- Client Payment and Late Payment Policy
+- Client Approval and Revision Policy
+- Client Access and Credentials Policy
+- final limitation-of-liability wording
+- governing-law/jurisdiction wording
+- intellectual-property terms
 
 Reviewer:
-Kydos accountant.
 
-## Immigration/business-readiness material
+Firm:
 
-Review before launch:
+Date sent:
 
-- Sponsor Licence Business Readiness Guide
-- Business Records Checklist
-- PAYE Readiness Checklist
-- Immigration Adviser Referral Process
-- Compliance Disclaimer
-
-Reviewer:
-Kydos immigration solicitor/adviser.
-
-## Review evidence
-
-For every reviewed document record:
-
-Document:
+Date approved:
 
 Version:
+
+Outstanding comments:
+
+## Employment solicitor / jurisdiction-specific employment adviser
+
+Review:
+
+- Employment Status Decision Record
+- Core Employment Agreement
+- Independent Contractor Services Agreement
+- Account Manager Role Schedule
+- Creative Role Schedule
+- Operations Manager Role Schedule
+- Sales Closer Role Schedule
+- Specialist Contractor Schedule
+- Confidentiality and IP Agreement
+- Working Hours and Availability Policy
+- Leave and Absence Policy
+- Probation Policy
+- Performance Management Policy
+- Disciplinary and Misconduct Policy
+
+Important:
+
+Overseas staff arrangements require local-country review where applicable. Do not assume a UK document alone is sufficient.
 
 Reviewer:
 
 Date:
 
-Changes required:
+Jurisdictions checked:
 
-Approved for publication?
+Outstanding comments:
 
-Next review date:
+## Data protection review
+
+Review:
+
+- Programme Privacy Notice
+- Recruitment Privacy Notice
+- Staff Data Protection Policy
+- Access and Credentials Policy
+- client onboarding forms
+- CRM lead automations
+- cookie/privacy implementation
+- data retention periods
+- international processors
+- AI-tool data handling
+
+Reviewer:
+
+Date:
+
+Outstanding comments:
+
+## Accountant
+
+Validate:
+
+- company setup finance process
+- FreeAgent workflow
+- VAT wording
+- Corporation Tax reference points
+- PAYE/payroll guide
+- tax reserve planner disclaimer
+- accounting record requirements
+- referral wording
+- sponsor-readiness accounting records
+
+Accountant:
+
+Date:
+
+Outstanding comments:
+
+## Immigration solicitor/adviser
+
+Validate the optional business-readiness section only:
+
+- Sponsor Licence Business Readiness Guide
+- supporting-document descriptions
+- business-bank evidence wording
+- key-personnel wording
+- Skilled Worker salary wording
+- business records checklist
+- PAYE readiness checklist
+- referral process
+- disclaimer
+
+Do not ask the immigration adviser to validate general marketing-business content unless relevant.
+
+Adviser:
+
+Regulatory status:
+
+Date:
+
+Outstanding comments:
+
+## Launch gate
+
+The programme cannot be marked "LEGAL QA COMPLETE" until:
+
+- [ ] programme contract suite approved
+- [ ] client contract suite approved
+- [ ] employment/contractor framework approved for intended jurisdictions
+- [ ] privacy/data framework approved
+- [ ] tax/accounting wording validated
+- [ ] immigration-readiness module validated
+- [ ] all changes returned to repository
+- [ ] final document versions regenerated
