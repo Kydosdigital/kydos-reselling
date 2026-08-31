@@ -1,7 +1,7 @@
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import { createAdminClient } from "@/lib/supabase/admin";
-import { createImplementationTask, inviteParticipant, updateTaskStatus } from "./actions";
+import { createImplementationTask, inviteParticipant, recordHandover, updateTaskStatus } from "./actions";
 
 export default async function AdminPage() {
   const supabase = await createClient();
@@ -78,6 +78,7 @@ export default async function AdminPage() {
                 <th>Status</th>
                 <th>Start</th>
                 <th>Support end</th>
+                <th>DFY handover</th>
               </tr>
             </thead>
             <tbody>
@@ -88,6 +89,15 @@ export default async function AdminPage() {
                   <td>{e.status}</td>
                   <td>{e.programme_start || "Not set"}</td>
                   <td>{e.support_end || (e.tier === "dfy" ? "Starts after handover" : "Not set")}</td>
+                  <td>
+                    {e.tier === "dfy" ? (
+                      <form action={recordHandover} style={{ display: "flex", gap: 8, alignItems: "center" }}>
+                        <input type="hidden" name="enrolmentId" value={e.id} />
+                        <input className="date-input" name="handoverDate" type="date" defaultValue={e.handover_date || ""} required />
+                        <button className="btn" type="submit">{e.handover_date ? "Update" : "Set"}</button>
+                      </form>
+                    ) : "Not applicable"}
+                  </td>
                 </tr>
               ))}
             </tbody>
