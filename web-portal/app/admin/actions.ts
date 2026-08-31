@@ -109,3 +109,27 @@ export async function updateTaskStatus(formData: FormData) {
 
   revalidatePath("/admin");
 }
+
+
+export async function recordHandover(formData: FormData) {
+  const admin = await requireAdmin();
+  const enrolmentId = String(formData.get("enrolmentId") || "");
+  const handoverDate = String(formData.get("handoverDate") || "");
+
+  if (!enrolmentId || !handoverDate) throw new Error("Missing handover details.");
+
+  const handover = new Date(handoverDate + "T00:00:00Z");
+  const supportEnd = new Date(handover);
+  supportEnd.setDate(supportEnd.getDate() + 90);
+
+  await admin
+    .from("enrolments")
+    .update({
+      handover_date: handoverDate,
+      support_end: isoDate(supportEnd)
+    })
+    .eq("id", enrolmentId)
+    .eq("tier", "dfy");
+
+  revalidatePath("/admin");
+}
