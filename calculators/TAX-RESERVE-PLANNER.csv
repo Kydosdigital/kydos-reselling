@@ -1,0 +1,10 @@
+Item,Input,Value (£),Notes
+Accounting profit estimate,Input,0,"Use accountant-approved profit estimate, not bank balance"
+Estimated Corporation Tax rate,Input,0.19,"Planning input only, exact effective rate can differ"
+Estimated Corporation Tax reserve,Formula,"=C2*C3","Do not use as a final tax calculation"
+VAT collected and not yet paid,Input,0,"Only if VAT registered"
+PAYE/NIC due and not yet paid,Input,0,"Only where applicable"
+Other tax liabilities,Input,0,
+Total suggested tax reserve,Formula,"=SUM(C4:C7)",
+Cash currently reserved for tax,Input,0,
+Reserve shortfall/(surplus),Formula,"=C8-C9","Positive means more cash should be reserved"
