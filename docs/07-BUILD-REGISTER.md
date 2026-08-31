@@ -37,33 +37,33 @@ This is the working production list for the complete Kydos Digital Agency Busine
 
 ## Phase 3, Brand, domain and website
 
-- [ ] Agency Naming Guide
-- [ ] Brand Brief
-- [ ] Logo Brief
-- [ ] Brand Guidelines Template
-- [ ] GoDaddy Domain Guide
-- [ ] Business Email Setup Guide
-- [ ] 5-Page Website Brief
-- [ ] Website Content Questionnaire
-- [ ] Website QA Checklist
-- [ ] Privacy and Cookie Checklist
+- [x] Agency Naming Guide
+- [x] Brand Brief
+- [x] Logo Brief
+- [x] Brand Guidelines Template
+- [x] GoDaddy Domain Guide
+- [x] Business Email Setup Guide
+- [x] 5-Page Website Brief
+- [x] Website Content Questionnaire
+- [x] Website QA Checklist
+- [x] Privacy and Cookie Checklist
 
 ## Phase 4, CRM and sales infrastructure
 
-- [ ] CRM Setup Manual
-- [ ] Stripe Setup Guide
-- [ ] Booking Calendar Setup
-- [ ] Sales Pipeline Template
-- [ ] Email Automation Template
-- [ ] SMS Automation Template
-- [ ] WhatsApp Automation Template
-- [ ] 60-Second Call SOP
-- [ ] Sales Closer Script
-- [ ] Lead Qualification Script
-- [ ] Objection Handling Guide
-- [ ] Follow-Up Sequence
-- [ ] Invoice Workflow
-- [ ] Contract/E-signature Workflow
+- [x] CRM Setup Manual
+- [x] Stripe Setup Guide
+- [x] Booking Calendar Setup
+- [x] Sales Pipeline Template
+- [x] Email Automation Template
+- [x] SMS Automation Template
+- [x] WhatsApp Automation Template
+- [x] 60-Second Call SOP
+- [x] Sales Closer Script
+- [x] Lead Qualification Script
+- [x] Objection Handling Guide
+- [x] Follow-Up Sequence
+- [x] Invoice Workflow
+- [x] Contract/E-signature Workflow
 
 ## Phase 5, Client onboarding
 
