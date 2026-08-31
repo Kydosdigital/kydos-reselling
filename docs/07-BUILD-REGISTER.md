@@ -279,3 +279,40 @@ This section is informational and must not imply guaranteed immigration or spons
 - [ ] Programme CRM automation implementation
 - [ ] Programme Meta campaign live build
 - [ ] Record programme walkthrough videos
+
+
+## Phase 17, Deployable programme portal
+
+- [x] Next.js portal application scaffold
+- [x] Responsive public programme sales page
+- [x] Blueprint / Build With Us / Done For You pricing routes
+- [x] Participant login
+- [x] Protected student dashboard
+- [x] Tier-aware module access
+- [x] Lesson progress tracking
+- [x] Build-time programme content sync from repository source
+- [x] In-portal lesson reading
+- [x] Protected source downloads
+- [x] Participant intake form
+- [x] Build With Us / Done For You implementation board
+- [x] Kydos admin dashboard
+- [x] Participant invite and enrolment flow
+- [x] Implementation task management
+- [x] Done For You handover date and 90-day support timer
+- [x] Stripe checkout architecture
+- [x] Checkout consent capture architecture
+- [x] Stripe webhook automated participant provisioning
+- [x] Programme order audit table
+- [x] Prelaunch legal pages
+- [x] Prelaunch no-index control
+- [x] GitHub Actions production-build CI
+- [x] Vercel/Supabase deployment guide
+- [ ] Create dedicated Supabase production project, cost approval required before creation
+- [ ] Connect repository to a new Vercel project with web-portal as Root Directory
+- [ ] Add production environment variables
+- [ ] Create Stripe products/prices after legal launch approval
+- [ ] Configure Stripe webhook in deployed environment
+- [ ] Upload approved final DOCX/XLSX/PDF download assets
+- [ ] Replace draft legal web pages with solicitor-approved text
+- [ ] End-to-end test-mode purchase and provisioning QA
+- [ ] Public launch approval
