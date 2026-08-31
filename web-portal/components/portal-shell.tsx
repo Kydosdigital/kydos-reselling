@@ -12,6 +12,8 @@ export function PortalShell({ children }: { children: React.ReactNode }) {
 
         <nav className="side-nav">
           <Link href="/portal">Dashboard</Link>
+          <Link href="/portal/intake">My Intake</Link>
+          <Link href="/portal/implementation">Implementation</Link>
           <Link href="/portal/module/start-here">Start Here</Link>
           <Link href="/portal/module/crm-sales">CRM & Sales</Link>
           <Link href="/portal/module/social-delivery">Delivery</Link>
