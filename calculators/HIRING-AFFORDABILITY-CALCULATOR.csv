@@ -1,0 +1,2 @@
+Role,Current Monthly Revenue (£),Current Direct Fulfilment Cost (£),Current Overheads (£),Current Monthly Profit Before Tax (£),Proposed New Hire Monthly Cost (£),Expected Extra Monthly Revenue Capacity (£),Profit After Hire Before Extra Revenue (£),Profit After Hire With Expected Extra Revenue (£),Decision Note
+Example/Input,0,0,0,"=B2-C2-D2",0,0,"=E2-F2","=H2+G2","Do not hire only because revenue is growing, check cash and delivery capacity"
