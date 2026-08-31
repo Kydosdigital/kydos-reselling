@@ -1,0 +1,3 @@
+Team Member,Role,Active Clients,Recommended Capacity,Upper Capacity,Capacity %,Status,Notes
+,Account Manager,0,4,5,"=IF(D2=0,0,C2/D2)","=IF(C2>E2,"OVER CAPACITY",IF(C2=D2,"AT RECOMMENDED CAPACITY","AVAILABLE"))",
+,Creative,0,4,5,"=IF(D3=0,0,C3/D3)","=IF(C3>E3,"OVER CAPACITY",IF(C3=D3,"AT RECOMMENDED CAPACITY","AVAILABLE"))",
