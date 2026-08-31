@@ -234,9 +234,9 @@ This section is informational and must not imply guaranteed immigration or spons
 ## Phase 14, Final editable-format production
 
 - [x] Convert core contract packs to DOCX, four polished master packs created and visually QA checked
-- [ ] Convert calculators/trackers to styled XLSX workbooks
+- [x] Convert calculators/trackers to styled XLSX workbooks, finance/operations and content/ads/SEO workbooks created and visually QA checked
 - [x] Create student-facing PDF handbooks, four PDF packs created and rendered for QA
 - [x] Create Kydos worked-example versions, priority onboarding, content, reporting, recruitment, ads, SEO, operations and handover examples created
-- [ ] Final cross-document consistency audit
-- [ ] Final solicitor/accountant/immigration-adviser review register
+- [x] Internal pre-review cross-document consistency audit completed, final post-professional-review rerun still required
+- [x] Final solicitor/accountant/immigration-adviser review register created, actual professional approvals pending
 - [x] Portal import-ready content map
