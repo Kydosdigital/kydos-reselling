@@ -1,0 +1,2 @@
+Client,Payment (0-2),Approval/Responsiveness (0-2),Satisfaction (0-2),Performance/Value Perception (0-2),Relationship (0-2),Total,Health,Main Risk,Action Owner,Next Review
+,2,2,2,2,2,"=SUM(B2:F2)","=IF(G2>=8,"Green",IF(G2>=5,"Amber","Red"))",,,
