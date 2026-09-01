@@ -1977,3 +1977,32 @@ h3{letter-spacing:-.025em}
 @media(max-width:900px){
   .export-grid{grid-template-columns:1fr}
 }
+
+.admin-auth-support{
+  margin-top:18px;
+  padding:26px
+}
+.admin-auth-support h2{
+  margin:8px 0
+}
+.admin-auth-actions{
+  display:grid;
+  grid-template-columns:1fr .75fr;
+  gap:24px;
+  align-items:end;
+  margin-top:20px
+}
+.revoke-session-form{
+  padding:18px;
+  border-radius:13px;
+  border:1px solid rgba(255,209,102,.18);
+  background:rgba(255,209,102,.025)
+}
+.revoke-session-form p{
+  margin-top:0;
+  line-height:1.55;
+  font-size:13px
+}
+@media(max-width:800px){
+  .admin-auth-actions{grid-template-columns:1fr}
+}
