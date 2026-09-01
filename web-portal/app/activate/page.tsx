@@ -2,6 +2,7 @@ import Link from "next/link";
 import { createStripeClient } from "@/lib/stripe";
 import { publicPlans, type PublicPlanSlug } from "@/lib/public-plans";
 import { activatePaidAccount } from "./actions";
+import { maskEmail } from "@/lib/privacy";
 
 export const dynamic = "force-dynamic";
 
@@ -11,7 +12,8 @@ const errorCopy: Record<string, string> = {
   password: "Choose a password with at least 12 characters.",
   match: "The two password fields do not match.",
   payment: "We could not confirm a paid programme order for this activation link.",
-  account: "We could not create this account automatically. Contact Kydos support and we will complete the activation."
+  account: "We could not create this account automatically. Contact Kydos support and we will complete the activation.",
+  email: "The email address does not match the paid programme order."
 };
 
 export default async function ActivatePage({
@@ -67,11 +69,16 @@ export default async function ActivatePage({
           <>
             <div className="activation-identity">
               <div><small>Name</small><strong>{name || "Participant"}</strong></div>
-              <div><small>Login email</small><strong>{email}</strong></div>
+              <div><small>Login email</small><strong>{maskEmail(email)}</strong></div>
             </div>
 
             <form action={activatePaidAccount}>
               <input type="hidden" name="sessionId" value={sessionId} />
+              <div className="field">
+                <label htmlFor="emailConfirmation">Confirm the email used at checkout</label>
+                <input id="emailConfirmation" name="emailConfirmation" type="email" autoComplete="email" required />
+                <small className="muted">For security, enter the full email address used for the paid order.</small>
+              </div>
               <div className="field">
                 <label htmlFor="password">Create password</label>
                 <input id="password" name="password" type="password" minLength={12} autoComplete="new-password" required />
