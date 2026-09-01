@@ -182,8 +182,8 @@ export default function HomePage() {
           <div className="container split-story">
             <div className="story-image-wrap">
               <img
-                src="https://images.pexels.com/photos/6476253/pexels-photo-6476253.jpeg?cs=srgb&fm=jpg"
-                alt="Marketing professionals reviewing digital work together in an office"
+                src="https://images.pexels.com/photos/5466236/pexels-photo-5466236.jpeg?cs=srgb&fm=jpg"
+                alt="A diverse business team collaborating around a laptop in a bright modern office"
                 className="story-image"
               />
               <div className="story-badge">
@@ -391,7 +391,7 @@ export default function HomePage() {
             <strong>Photography</strong>
             <p>
               Free stock photography from Pexels.<br />
-              Andrea Piacquadio, Mikael Blomkvist and Mikhail Nilov.
+              Andrea Piacquadio, Antoni Shkraba and Mikhail Nilov.
             </p>
           </div>
         </div>
