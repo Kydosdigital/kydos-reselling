@@ -5,6 +5,7 @@
 alter table academy_users enable row level security;
 alter table enrolments enable row level security;
 alter table lesson_progress enable row level security;
+alter table lesson_notes enable row level security;
 alter table participant_intake enable row level security;
 alter table implementation_tasks enable row level security;
 alter table implementation_task_updates enable row level security;
@@ -65,6 +66,57 @@ create policy lesson_progress_delete_own on lesson_progress
       select 1
       from academy_users u
       where u.id = lesson_progress.user_id
+        and u.auth_user_id = auth.user_id()
+    )
+  );
+
+drop policy if exists lesson_notes_select_own on lesson_notes;
+create policy lesson_notes_select_own on lesson_notes
+  for select
+  using (
+    exists (
+      select 1 from academy_users u
+      where u.id = lesson_notes.user_id
+        and u.auth_user_id = auth.user_id()
+    )
+  );
+
+drop policy if exists lesson_notes_insert_own on lesson_notes;
+create policy lesson_notes_insert_own on lesson_notes
+  for insert
+  with check (
+    exists (
+      select 1 from academy_users u
+      where u.id = lesson_notes.user_id
+        and u.auth_user_id = auth.user_id()
+    )
+  );
+
+drop policy if exists lesson_notes_update_own on lesson_notes;
+create policy lesson_notes_update_own on lesson_notes
+  for update
+  using (
+    exists (
+      select 1 from academy_users u
+      where u.id = lesson_notes.user_id
+        and u.auth_user_id = auth.user_id()
+    )
+  )
+  with check (
+    exists (
+      select 1 from academy_users u
+      where u.id = lesson_notes.user_id
+        and u.auth_user_id = auth.user_id()
+    )
+  );
+
+drop policy if exists lesson_notes_delete_own on lesson_notes;
+create policy lesson_notes_delete_own on lesson_notes
+  for delete
+  using (
+    exists (
+      select 1 from academy_users u
+      where u.id = lesson_notes.user_id
         and u.auth_user_id = auth.user_id()
     )
   );
