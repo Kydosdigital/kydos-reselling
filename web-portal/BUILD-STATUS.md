@@ -1,61 +1,38 @@
-# Web Portal Build Status
+# Kydos Academy Build Status
 
-Last verified:
-31 August 2026
+## Public website
 
-## CI
+Built and connected to academy.kydosdigital.com.
 
-GitHub Actions workflow:
-Web Portal CI
+## Application
 
-Latest verified build job:
-SUCCESS
+Neon migration in progress.
 
-Verified steps:
+Implemented in code:
 
-- repository checkout
-- Node setup
-- npm dependency installation
-- build-time sync of programme source files
-- Next.js production compilation
-- TypeScript validation
-
-The current portal codebase builds successfully in GitHub Actions.
-
-## Implemented
-
-- public programme sales page
-- pricing and enrolment routes
-- checkout consent architecture
-- Stripe checkout/webhook architecture
-- student authentication
-- tier-aware dashboard
-- in-portal lesson reading
-- protected source downloads
-- progress tracking
+- Managed Neon Auth integration
+- Neon Postgres data layer
+- participant login protection
+- Blueprint / Build With Us / Done For You access model
+- lesson progress
 - participant intake
 - implementation board
-- admin participant invitations
-- admin implementation tasks
-- Done For You handover support timer
-- Supabase schema/migrations
-- prelaunch legal pages
-- no-index control
-- deployment documentation
+- Kydos admin dashboard
+- participant account creation
+- DFY handover support timer
+- protected downloads
+- programme order records
+- Stripe webhook foundation
 
-## Deliberately disabled
+## External setup still required
 
-Live checkout:
-OFF until legal sign-off.
+- enable Neon Auth
+- run the Academy schema in Neon
+- add Neon environment values to Vercel
+- create first Kydos admin Auth user
+- end-to-end application QA
+- final downloadable DOCX/XLSX/PDF asset hosting
+- solicitor/accountant/adviser review
+- Stripe test-mode setup
 
-Public indexing:
-OFF until launch.
-
-## External infrastructure still required
-
-- dedicated Supabase project
-- Vercel project connected to the repository with web-portal as Root Directory
-- Stripe products/prices and webhook
-- approved final legal copy
-- production environment variables
-- final downloadable DOCX/XLSX/PDF assets
+Live checkout remains intentionally disabled.
