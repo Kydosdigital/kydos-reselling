@@ -4,6 +4,7 @@ import { requireAdminContext } from "@/lib/academy";
 import { addParticipantAdminNote, updateEnrolmentStatus, updateSupportEnd } from "../../actions";
 import { getSql } from "@/lib/db";
 import { accessibleLessons, tierLabels, type Tier } from "@/lib/programme-data";
+import { getLaunchReadiness } from "@/lib/academy-rules";
 
 export const dynamic = "force-dynamic";
 
@@ -32,6 +33,7 @@ export default async function AdminParticipantPage({ params }: { params: Promise
   const completeCount = accessible.filter((lesson) => completed.has(lesson.id)).length;
   const percent = accessible.length ? Math.round((completeCount / accessible.length) * 100) : 0;
   const intake = intakeRows[0] as Record<string, any> | undefined;
+  const readiness = getLaunchReadiness(intake);
 
   return (
     <main className="container admin-participant-page">
@@ -50,6 +52,7 @@ export default async function AdminParticipantPage({ params }: { params: Promise
         <section className="portal-stat card"><small>Open tasks</small><strong>{tasks.filter((task) => String(task.status) !== "complete").length}</strong><span>{tasks.filter((task) => String(task.status) === "waiting_participant").length} waiting on participant</span></section>
         <section className="portal-stat card"><small>Programme start</small><strong className="stat-date">{active?.programme_start ? String(active.programme_start) : "Not set"}</strong><span>Current enrolment</span></section>
         <section className="portal-stat card"><small>Support end</small><strong className="stat-date">{active?.support_end ? String(active.support_end) : tier === "dfy" ? "After handover" : "Not set"}</strong><span>{tier === "dfy" && active?.handover_date ? "Handover " + String(active.handover_date) : "Support window"}</span></section>
+        <section className="portal-stat card"><small>Launch readiness</small><strong>{intake ? readiness.percent + "%" : "No intake"}</strong><span>{intake ? readiness.stage : "Waiting for participant intake"}</span></section>
       </div>
 
       <div className="admin-detail-grid">
