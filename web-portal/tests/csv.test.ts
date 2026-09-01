@@ -12,3 +12,13 @@ test("rowsToCsv produces an Excel-friendly UTF-8 CSV", () => {
   assert.match(csv, /name,notes/);
   assert.match(csv, /"Line 1\nLine 2"/);
 });
+
+
+test("csvEscape neutralises spreadsheet formulas from user-controlled text", () => {
+  assert.equal(csvEscape("=HYPERLINK(\"https://example.com\")"), "'=HYPERLINK(\"https://example.com\")");
+  assert.equal(csvEscape("@SUM(A1:A2)"), "'@SUM(A1:A2)");
+});
+
+test("csvEscape keeps numeric values numeric", () => {
+  assert.equal(csvEscape(-100), "-100");
+});
