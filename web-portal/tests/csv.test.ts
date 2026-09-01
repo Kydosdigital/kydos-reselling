@@ -15,7 +15,7 @@ test("rowsToCsv produces an Excel-friendly UTF-8 CSV", () => {
 
 
 test("csvEscape neutralises spreadsheet formulas from user-controlled text", () => {
-  assert.equal(csvEscape("=HYPERLINK(\"https://example.com\")"), "'=HYPERLINK(\"https://example.com\")");
+  assert.equal(csvEscape("=HYPERLINK(\"https://example.com\")"), "\"'=HYPERLINK(\"\"https://example.com\"\")\"");
   assert.equal(csvEscape("@SUM(A1:A2)"), "'@SUM(A1:A2)");
 });
 
