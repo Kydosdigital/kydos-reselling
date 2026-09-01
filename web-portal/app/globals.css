@@ -1042,3 +1042,55 @@ h3{letter-spacing:-.025em}
   margin-left:auto;
   margin-right:auto
 }
+
+.startup-cost-section{
+  background:
+    radial-gradient(circle at 15% 0%,rgba(66,203,184,.055),transparent 28%),
+    transparent
+}
+.startup-cost-grid{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:14px
+}
+.startup-cost-card{padding:22px;min-height:220px}
+.startup-cost-card small{
+  display:block;
+  color:var(--accent);
+  font-size:11px;
+  font-weight:900;
+  letter-spacing:.1em;
+  margin-bottom:28px
+}
+.startup-cost-card h3{font-size:20px;margin:0 0 10px}
+.startup-cost-card p{
+  margin:0;
+  color:var(--muted);
+  line-height:1.6;
+  font-size:14px
+}
+.cost-cta{
+  margin-top:16px;
+  padding:18px 20px;
+  border-radius:16px;
+  border:1px solid var(--line);
+  background:rgba(255,255,255,.025);
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:20px
+}
+.cost-cta strong{display:block}
+.cost-cta span{
+  display:block;
+  color:var(--muted);
+  font-size:13px;
+  margin-top:4px
+}
+@media(max-width:980px){
+  .startup-cost-grid{grid-template-columns:repeat(2,1fr)}
+}
+@media(max-width:650px){
+  .startup-cost-grid{grid-template-columns:1fr}
+  .cost-cta{align-items:flex-start;flex-direction:column}
+}

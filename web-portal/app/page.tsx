@@ -324,6 +324,50 @@ export default function HomePage() {
           </div>
         </section>
 
+
+        <section className="section startup-cost-section">
+          <div className="container">
+            <div className="section-head centred">
+              <span className="eyebrow">Budget with the full picture</span>
+              <h2 style={{ marginTop: 14 }}>The programme fee is not your only startup cost.</h2>
+              <p>
+                We want you to plan for a functioning agency, not spend everything on the programme and then discover there is no budget left to operate it.
+              </p>
+            </div>
+
+            <div className="startup-cost-grid">
+              <article className="startup-cost-card card">
+                <small>01</small>
+                <h3>Programme</h3>
+                <p>£2,500, £5,000 or £10,000 depending on how much implementation you want Kydos to handle.</p>
+              </article>
+              <article className="startup-cost-card card">
+                <small>02</small>
+                <h3>People</h3>
+                <p>Budget for the team you need at launch and the ongoing cost of keeping delivery capacity in place.</p>
+              </article>
+              <article className="startup-cost-card card">
+                <small>03</small>
+                <h3>Software & providers</h3>
+                <p>Domain, email, CRM/provider usage, creative tools and other third-party operating costs sit outside the programme fee.</p>
+              </article>
+              <article className="startup-cost-card card">
+                <small>04</small>
+                <h3>Client acquisition</h3>
+                <p>We currently recommend £300 as the initial Meta Ads testing budget, separate from your programme fee.</p>
+              </article>
+            </div>
+
+            <div className="cost-cta">
+              <div>
+                <strong>Need help working out the numbers?</strong>
+                <span>The programme includes startup-budget and hiring-affordability calculators.</span>
+              </div>
+              <Link className="btn" href="/consultation">Talk through your launch budget</Link>
+            </div>
+          </div>
+        </section>
+
         <section className="section section-soft">
           <div className="container">
             <div className="section-head centred">
