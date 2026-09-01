@@ -2,6 +2,7 @@ import { redirect } from "next/navigation";
 import { getAuth, isNeonAuthConfigured } from "@/lib/auth/server";
 import { getSql, isDatabaseConfigured } from "@/lib/db";
 import type { Tier } from "@/lib/programme-data";
+import { supportEndForTier as calculateSupportEnd } from "@/lib/academy-rules";
 
 export type AcademyUser = {
   id: string;
@@ -90,14 +91,5 @@ export async function getActiveEnrolment(userId: string) {
 }
 
 export function supportEndForTier(tier: string, from = new Date()) {
-  const end = new Date(from);
-  if (tier === "blueprint") {
-    end.setDate(end.getDate() + 56);
-    return end.toISOString().slice(0, 10);
-  }
-  if (tier === "build") {
-    end.setDate(end.getDate() + 84);
-    return end.toISOString().slice(0, 10);
-  }
-  return null;
+  return calculateSupportEnd(tier, from);
 }
