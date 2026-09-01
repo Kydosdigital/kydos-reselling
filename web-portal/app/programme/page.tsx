@@ -84,6 +84,7 @@ export default function ProgrammePage() {
               <img
                 src="https://images.pexels.com/photos/3184291/pexels-photo-3184291.jpeg?cs=srgb&fm=jpg"
                 alt="Business team working together around a table"
+                fetchPriority="high"
               />
             </div>
           </div>
@@ -143,6 +144,7 @@ export default function ProgrammePage() {
               src="https://images.pexels.com/photos/3184418/pexels-photo-3184418.jpeg?cs=srgb&fm=jpg"
               alt="Business professionals discussing work at a table"
               className="wide-story-image"
+              loading="lazy"
             />
           </div>
         </section>
