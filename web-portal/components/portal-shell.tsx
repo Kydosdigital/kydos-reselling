@@ -7,9 +7,8 @@ export function PortalShell({ children }: { children: React.ReactNode }) {
       <aside className="sidebar">
         <Link href="/portal" className="brand">
           <span className="brand-mark" />
-          <span>Kydos Digital</span>
+          <span>Kydos Academy</span>
         </Link>
-
         <nav className="side-nav">
           <Link href="/portal">Dashboard</Link>
           <Link href="/portal/intake">My Intake</Link>
@@ -20,12 +19,10 @@ export function PortalShell({ children }: { children: React.ReactNode }) {
           <Link href="/portal/module/recruitment">Recruitment</Link>
           <Link href="/portal/module/operations">Operations</Link>
         </nav>
-
         <form action={signOut} style={{ marginTop: 28 }}>
           <button className="btn" type="submit" style={{ width: "100%" }}>Sign out</button>
         </form>
       </aside>
-
       <main className="portal-main">{children}</main>
     </div>
   );

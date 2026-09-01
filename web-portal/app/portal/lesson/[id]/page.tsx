@@ -1,40 +1,35 @@
 import Link from "next/link";
 import { notFound, redirect } from "next/navigation";
 import { marked } from "marked";
-import { createClient } from "@/lib/supabase/server";
 import { canAccessTier, modules, tierLabels, type Tier } from "@/lib/programme-data";
+import { getActiveEnrolment, requireAcademyContext } from "@/lib/academy";
+import { getSql } from "@/lib/db";
 import contentMap from "@/generated/content.json";
 import { setLessonCompletion } from "../../actions";
 
-export default async function LessonPage({
-  params
-}: {
-  params: Promise<{ id: string }>;
-}) {
+export const dynamic = "force-dynamic";
+
+export default async function LessonPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
   const module = modules.find((item) => item.lessons.some((lesson) => lesson.id === id));
   const lesson = module?.lessons.find((item) => item.id === id);
-
   if (!module || !lesson) notFound();
 
-  const supabase = await createClient();
-  const { data: { user } } = await supabase.auth.getUser();
-  if (!user) redirect("/login");
-
-  const [{ data: enrolment }, { data: progress }] = await Promise.all([
-    supabase.from("enrolments").select("tier").eq("user_id", user.id).eq("status", "active").maybeSingle(),
-    supabase.from("lesson_progress").select("lesson_id").eq("user_id", user.id).eq("lesson_id", lesson.id).maybeSingle()
+  const { academyUser } = await requireAcademyContext();
+  const sql = getSql();
+  const [enrolment, progress] = await Promise.all([
+    getActiveEnrolment(academyUser.id),
+    sql.query("select lesson_id from lesson_progress where user_id = $1 and lesson_id = $2 limit 1", [academyUser.id, lesson.id])
   ]);
+  if (!enrolment) redirect("/portal");
 
-  const tier = ((enrolment?.tier as Tier) || "blueprint");
-
-  if (!canAccessTier(tier, lesson.minimumTier)) {
-    redirect("/portal/module/" + module.slug);
-  }
+  const tier = enrolment.tier as Tier;
+  if (!canAccessTier(tier, lesson.minimumTier)) redirect("/portal/module/" + module.slug);
 
   const raw = (contentMap as Record<string, string>)[lesson.source] || "";
   const isCsv = lesson.source.endsWith(".csv");
   const html = isCsv ? "" : await marked.parse(raw || "# Content is being prepared");
+  const isComplete = progress.length > 0;
 
   return (
     <>
@@ -48,17 +43,12 @@ export default async function LessonPage({
       </div>
 
       <div className="lesson-toolbar">
-        <a className="btn" href={"/api/download?source=" + encodeURIComponent(lesson.source)}>
-          Download source
-        </a>
-
+        <a className="btn" href={"/api/download?source=" + encodeURIComponent(lesson.source)}>Download source</a>
         <form action={setLessonCompletion}>
           <input type="hidden" name="lessonId" value={lesson.id} />
           <input type="hidden" name="moduleSlug" value={module.slug} />
-          <input type="hidden" name="completed" value={progress ? "false" : "true"} />
-          <button className={progress ? "btn" : "btn btn-primary"} type="submit">
-            {progress ? "Mark incomplete" : "Mark complete"}
-          </button>
+          <input type="hidden" name="completed" value={isComplete ? "false" : "true"} />
+          <button className={isComplete ? "btn" : "btn btn-primary"} type="submit">{isComplete ? "Mark incomplete" : "Mark complete"}</button>
         </form>
       </div>
 

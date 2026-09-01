@@ -1,29 +1,28 @@
 import Link from "next/link";
-import { notFound, redirect } from "next/navigation";
-import { createClient } from "@/lib/supabase/server";
+import { notFound } from "next/navigation";
 import { canAccessTier, modules, tierLabels, type Tier } from "@/lib/programme-data";
+import { getActiveEnrolment, requireAcademyContext } from "@/lib/academy";
+import { getSql } from "@/lib/db";
 import { setLessonCompletion } from "../../actions";
 
-export default async function ModulePage({
-  params
-}: {
-  params: Promise<{ slug: string }>;
-}) {
+export const dynamic = "force-dynamic";
+
+export default async function ModulePage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
   const module = modules.find((item) => item.slug === slug);
   if (!module) notFound();
 
-  const supabase = await createClient();
-  const { data: { user } } = await supabase.auth.getUser();
-  if (!user) redirect("/login");
-
-  const [{ data: enrolment }, { data: progress }] = await Promise.all([
-    supabase.from("enrolments").select("tier").eq("user_id", user.id).eq("status", "active").maybeSingle(),
-    supabase.from("lesson_progress").select("lesson_id").eq("user_id", user.id)
+  const { academyUser } = await requireAcademyContext();
+  const sql = getSql();
+  const [enrolment, progress] = await Promise.all([
+    getActiveEnrolment(academyUser.id),
+    sql.query("select lesson_id from lesson_progress where user_id = $1", [academyUser.id])
   ]);
 
-  const tier = ((enrolment?.tier as Tier) || "blueprint");
-  const completed = new Set((progress || []).map((item) => item.lesson_id));
+  if (!enrolment) return <div className="notice">Your programme enrolment is not active yet.</div>;
+
+  const tier = enrolment.tier as Tier;
+  const completed = new Set(progress.map((item) => String(item.lesson_id)));
   const lessons = module.lessons.filter((lesson) => canAccessTier(tier, lesson.minimumTier));
 
   return (
@@ -43,7 +42,6 @@ export default async function ModulePage({
         <div className="lesson-list">
           {lessons.map((lesson) => {
             const isComplete = completed.has(lesson.id);
-
             return (
               <article className="lesson card" key={lesson.id}>
                 <div>
@@ -52,14 +50,11 @@ export default async function ModulePage({
                   <p className="muted" style={{ margin: 0 }}>{lesson.description}</p>
                   <Link className="lesson-link" href={"/portal/lesson/" + lesson.id}>Open lesson →</Link>
                 </div>
-
                 <form action={setLessonCompletion}>
                   <input type="hidden" name="lessonId" value={lesson.id} />
                   <input type="hidden" name="moduleSlug" value={module.slug} />
                   <input type="hidden" name="completed" value={isComplete ? "false" : "true"} />
-                  <button className={isComplete ? "btn" : "btn btn-primary"} type="submit">
-                    {isComplete ? "Mark incomplete" : "Mark complete"}
-                  </button>
+                  <button className={isComplete ? "btn" : "btn btn-primary"} type="submit">{isComplete ? "Mark incomplete" : "Mark complete"}</button>
                   {isComplete ? <div className="lesson-complete" style={{ marginTop: 8 }}>Completed ✓</div> : null}
                 </form>
               </article>
@@ -69,9 +64,7 @@ export default async function ModulePage({
       )}
 
       {slug === "business-readiness" ? (
-        <div className="notice" style={{ marginTop: 18 }}>
-          This module provides general business-readiness information only. Personal immigration questions must go to a suitably regulated immigration adviser or solicitor.
-        </div>
+        <div className="notice" style={{ marginTop: 18 }}>This module provides general business-readiness information only. Personal immigration questions must go to a suitably regulated immigration adviser or solicitor.</div>
       ) : null}
     </>
   );

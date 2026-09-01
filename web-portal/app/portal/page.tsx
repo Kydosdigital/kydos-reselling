@@ -1,26 +1,35 @@
 import Link from "next/link";
-import { redirect } from "next/navigation";
-import { createClient } from "@/lib/supabase/server";
 import { accessibleLessons, canAccessTier, modules, tierLabels, type Tier } from "@/lib/programme-data";
+import { getActiveEnrolment, requireAcademyContext } from "@/lib/academy";
+import { getSql } from "@/lib/db";
+
+export const dynamic = "force-dynamic";
 
 export default async function PortalDashboard() {
-  const supabase = await createClient();
-  const { data: { user } } = await supabase.auth.getUser();
-  if (!user) redirect("/login");
+  const { academyUser } = await requireAcademyContext();
+  const sql = getSql();
 
-  const [{ data: profile }, { data: enrolment }, { data: progress }] = await Promise.all([
-    supabase.from("profiles").select("full_name").eq("id", user.id).maybeSingle(),
-    supabase.from("enrolments").select("tier,programme_start,support_end,handover_date,status").eq("user_id", user.id).eq("status", "active").maybeSingle(),
-    supabase.from("lesson_progress").select("lesson_id").eq("user_id", user.id)
+  const [enrolment, progress] = await Promise.all([
+    getActiveEnrolment(academyUser.id),
+    sql.query("select lesson_id from lesson_progress where user_id = $1", [academyUser.id])
   ]);
 
-  const tier = ((enrolment?.tier as Tier) || "blueprint");
+  if (!enrolment) {
+    return (
+      <section className="panel card">
+        <span className="pill">Access pending</span>
+        <h1>Your Academy account is ready.</h1>
+        <p className="muted">Your programme enrolment has not been activated yet. If you have already paid, contact Support@kydosdigital.com and we will check your account.</p>
+      </section>
+    );
+  }
+
+  const tier = enrolment.tier as Tier;
   const allAccessible = accessibleLessons(tier);
-  const completed = new Set((progress || []).map((p) => p.lesson_id));
+  const completed = new Set(progress.map((p) => String(p.lesson_id)));
   const completeCount = allAccessible.filter((lesson) => completed.has(lesson.id)).length;
   const percent = allAccessible.length ? Math.round((completeCount / allAccessible.length) * 100) : 0;
-
-  const firstName = profile?.full_name?.split(" ")[0] || user.email?.split("@")[0] || "there";
+  const firstName = academyUser.full_name?.split(" ")[0] || academyUser.email.split("@")[0] || "there";
 
   return (
     <>
@@ -41,23 +50,19 @@ export default async function PortalDashboard() {
             </div>
             <strong>{completeCount}/{allAccessible.length}</strong>
           </div>
-
           <div className="progress-track" style={{ marginTop: 18 }}>
             <div className="progress-bar" style={{ width: percent + "%" }} />
           </div>
-
           <p className="muted" style={{ marginBottom: 0 }}>
-            Programme start: {enrolment?.programme_start || "Set by Kydos"}<br />
-            Active support ends: {enrolment?.support_end || "Set by Kydos"}
+            Programme start: {enrolment.programme_start || "Set by Kydos"}<br />
+            Active support ends: {enrolment.support_end || (tier === "dfy" ? "Starts after formal handover" : "Set by Kydos")}
           </p>
         </section>
 
         <section className="panel card">
           <small className="muted">Your current operating rule</small>
           <h3 style={{ fontSize: 24 }}>Build capacity before acquisition.</h3>
-          <p className="muted">
-            Your minimum launch team is an Account Manager, Creative and Sales Closer before paid lead generation starts.
-          </p>
+          <p className="muted">Your minimum launch team is an Account Manager, Creative and Sales Closer before paid lead generation starts.</p>
         </section>
       </div>
 
@@ -68,14 +73,8 @@ export default async function PortalDashboard() {
             const accessible = module.lessons.filter((lesson) => canAccessTier(tier, lesson.minimumTier));
             const moduleComplete = accessible.filter((lesson) => completed.has(lesson.id)).length;
             const locked = accessible.length === 0;
-
             return (
-              <Link
-                href={locked ? "#" : "/portal/module/" + module.slug}
-                className="module-card card"
-                key={module.slug}
-                aria-disabled={locked}
-              >
+              <Link href={locked ? "#" : "/portal/module/" + module.slug} className="module-card card" key={module.slug} aria-disabled={locked}>
                 <small>Module {module.number}</small>
                 <h3>{module.title}</h3>
                 <p>{module.description}</p>

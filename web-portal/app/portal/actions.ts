@@ -1,27 +1,28 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
-import { createClient } from "@/lib/supabase/server";
+import { requireAcademyContext } from "@/lib/academy";
+import { getSql } from "@/lib/db";
 
 export async function setLessonCompletion(formData: FormData) {
   const lessonId = String(formData.get("lessonId") || "");
   const completed = String(formData.get("completed") || "") === "true";
   const moduleSlug = String(formData.get("moduleSlug") || "");
-
   if (!lessonId) return;
 
-  const supabase = await createClient();
-  const { data: { user } } = await supabase.auth.getUser();
-  if (!user) return;
+  const { academyUser } = await requireAcademyContext();
+  const sql = getSql();
 
   if (completed) {
-    await supabase.from("lesson_progress").upsert({
-      user_id: user.id,
-      lesson_id: lessonId,
-      completed_at: new Date().toISOString()
-    });
+    await sql.query(
+      "insert into lesson_progress (user_id, lesson_id, completed_at) values ($1,$2,now()) on conflict (user_id, lesson_id) do update set completed_at = excluded.completed_at",
+      [academyUser.id, lessonId]
+    );
   } else {
-    await supabase.from("lesson_progress").delete().eq("user_id", user.id).eq("lesson_id", lessonId);
+    await sql.query(
+      "delete from lesson_progress where user_id = $1 and lesson_id = $2",
+      [academyUser.id, lessonId]
+    );
   }
 
   revalidatePath("/portal");

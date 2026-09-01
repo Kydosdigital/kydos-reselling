@@ -1,8 +1,16 @@
-import { type NextRequest } from "next/server";
-import { updateSession } from "@/lib/supabase/middleware";
+import { NextResponse, type NextRequest } from "next/server";
+import { getAuth, isNeonAuthConfigured } from "@/lib/auth/server";
 
 export async function middleware(request: NextRequest) {
-  return updateSession(request);
+  if (!isNeonAuthConfigured()) {
+    const url = request.nextUrl.clone();
+    url.pathname = "/login";
+    url.searchParams.set("setup", "pending");
+    return NextResponse.redirect(url);
+  }
+
+  const protect = getAuth().middleware({ loginUrl: "/login" });
+  return protect(request);
 }
 
 export const config = {
