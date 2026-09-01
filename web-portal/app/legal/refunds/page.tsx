@@ -1,14 +1,20 @@
-import Link from "next/link";
+import type { Metadata } from "next";
+import { PublicHeader } from "@/components/public-header";
+import { PublicFooter } from "@/components/public-footer";
+
+export const metadata: Metadata = {
+  title: "Refund & Cancellation Policy",
+  description: "Pre-launch Kydos Academy refund and cancellation policy, pending legal approval.",
+  alternates: { canonical: "/legal/refunds" }
+};
 
 export default function RefundPolicyPage() {
   return (
-    <main className="container legal-page">
-      <Link href="/" className="brand">
-        <span className="brand-mark" />
-        <span>Kydos Digital</span>
-      </Link>
+    <>
+      <PublicHeader />
+      <main className="container legal-page">
 
-      <span className="pill" style={{ marginTop: 28 }}>Draft for solicitor review</span>
+      <span className="pill" >Draft for solicitor review</span>
       <h1>Refund & Cancellation Policy</h1>
 
       <div className="notice">
@@ -32,5 +38,7 @@ export default function RefundPolicyPage() {
         <p>If Kydos materially fails to provide contracted work, the complaints process and applicable legal remedies remain available.</p>
       </section>
     </main>
+      <PublicFooter />
+    </>
   );
 }
