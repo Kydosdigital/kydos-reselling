@@ -311,6 +311,22 @@ This section is informational and must not imply guaranteed immigration or spons
 - [x] Tier-aware download library page
 - [x] Enhanced participant dashboard with next-step, support and implementation status
 - [x] Admin participant detail view with intake, progress, task and order visibility
+- [x] Participant launch-readiness dashboard and launch plan
+- [x] Expanded participant intake for website, CRM, team, budget and acquisition readiness
+- [x] Collaborative participant/Kydos implementation-task conversations
+- [x] Private per-lesson implementation notes
+- [x] Participant programme search
+- [x] Participant account and support controls
+- [x] Admin operational attention queue
+- [x] Admin task conversation view
+- [x] Admin internal participant notes
+- [x] Admin Auth support tools for password reset and session revocation
+- [x] Admin system-status dashboard
+- [x] Admin programme-order and audit dashboards
+- [x] Admin CSV export centre with spreadsheet-injection protection
+- [x] Paid-order account activation with masked email and purchase-email confirmation
+- [x] Participant/admin loading and error states
+- [x] CI content validation, TypeScript typecheck, unit tests and static RLS security tests
 - [ ] Apply Academy Postgres schema to production neondb
 - [ ] Apply participant-facing RLS migration to production neondb
 - [ ] Create and verify first Kydos admin account
