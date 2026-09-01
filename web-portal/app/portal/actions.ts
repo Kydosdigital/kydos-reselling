@@ -1,10 +1,9 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
-import { requireAcademyContext } from "@/lib/academy";
+import { getActiveEnrolment, requireAcademyContext } from "@/lib/academy";
 import { getSql } from "@/lib/db";
 import { canAccessTier, modules, type Tier } from "@/lib/programme-data";
-import { getActiveEnrolment } from "@/lib/academy";
 
 export async function setLessonCompletion(formData: FormData) {
   const lessonId = String(formData.get("lessonId") || "");
@@ -13,6 +12,14 @@ export async function setLessonCompletion(formData: FormData) {
   if (!lessonId) return;
 
   const { academyUser } = await requireAcademyContext();
+  const enrolment = await getActiveEnrolment(academyUser.id);
+  if (!enrolment) throw new Error("No active programme access.");
+
+  const lesson = modules.flatMap((module) => module.lessons).find((item) => item.id === lessonId);
+  if (!lesson || !canAccessTier(enrolment.tier as Tier, lesson.minimumTier)) {
+    throw new Error("This lesson is not included in your programme access.");
+  }
+
   const sql = getSql();
 
   if (completed) {
