@@ -2,15 +2,9 @@ import Link from "next/link";
 import { accessibleLessons, canAccessTier, modules, tierLabels, type Tier } from "@/lib/programme-data";
 import { getActiveEnrolment, requireAcademyContext } from "@/lib/academy";
 import { getSql } from "@/lib/db";
+import { daysRemaining, getLaunchReadiness } from "@/lib/academy-rules";
 
 export const dynamic = "force-dynamic";
-
-function daysRemaining(value: string | null) {
-  if (!value) return null;
-  const end = new Date(value + "T23:59:59Z");
-  const now = new Date();
-  return Math.max(0, Math.ceil((end.getTime() - now.getTime()) / 86400000));
-}
 
 export default async function PortalDashboard() {
   const { academyUser } = await requireAcademyContext();
@@ -20,7 +14,7 @@ export default async function PortalDashboard() {
     getActiveEnrolment(academyUser.id),
     sql.query("select lesson_id from lesson_progress where user_id = $1", [academyUser.id]),
     sql.query("select status from implementation_tasks where user_id = $1", [academyUser.id]),
-    sql.query("select user_id from participant_intake where user_id = $1 limit 1", [academyUser.id])
+    sql.query("select user_id, company_status, domain_status, website_status, crm_status, team_status, acquisition_readiness from participant_intake where user_id = $1 limit 1", [academyUser.id])
   ]);
 
   if (!enrolment) {
@@ -47,6 +41,7 @@ export default async function PortalDashboard() {
   const openTasks = tasks.filter((task) => String(task.status) !== "complete").length;
   const supportDays = daysRemaining(enrolment.support_end);
   const hasIntake = intakeRows.length > 0;
+  const readiness = getLaunchReadiness((intakeRows[0] as Record<string, any> | undefined) || null);
 
   return (
     <>
@@ -75,9 +70,9 @@ export default async function PortalDashboard() {
           <span>{waitingOnYou ? waitingOnYou + " waiting on you" : "open implementation tasks"}</span>
         </section>
         <section className="portal-stat card">
-          <small>Agency intake</small>
-          <strong>{hasIntake ? "Saved" : "Needed"}</strong>
-          <span>{hasIntake ? "Your starting position is on file" : "Complete this before implementation"}</span>
+          <small>Launch readiness</small>
+          <strong>{hasIntake ? readiness.percent + "%" : "Needed"}</strong>
+          <span>{hasIntake ? readiness.stage : "Complete your intake to calculate readiness"}</span>
         </section>
       </div>
 
@@ -120,7 +115,10 @@ export default async function PortalDashboard() {
             <span className="eyebrow">Programme library</span>
             <h2>Your modules</h2>
           </div>
-          <Link className="btn" href="/portal/downloads">View all downloads</Link>
+          <div className="portal-heading-actions">
+            <Link className="btn" href="/portal/launch">Launch plan</Link>
+            <Link className="btn" href="/portal/downloads">View all downloads</Link>
+          </div>
         </div>
         <div className="module-grid">
           {modules.map((module) => {
