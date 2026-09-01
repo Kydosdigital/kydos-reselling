@@ -1,32 +1,21 @@
 # Production Blockers
 
-Everything on this list requires an external account, professional sign-off or live environment decision.
+## 1. Neon activation
 
-## 1. Supabase
+The production Neon project already exists.
 
-Create a dedicated programme Supabase project.
+Still required:
 
-Reason:
-The only currently connected Supabase project belongs to another Kydos application and should not be reused.
-
-Requires:
-- organisation choice
-- cost confirmation
-- project creation
-- migrations
-- admin user
+- enable Managed Neon Auth
+- run the Academy schema
+- add the Neon connection string and Auth settings to Vercel
+- create the first Kydos admin Auth account
 
 ## 2. Vercel
 
-Create a new Vercel project linked to:
+The Academy Vercel project and academy.kydosdigital.com domain are connected.
 
-Kydosdigital/kydos-reselling
-
-Root Directory:
-
-web-portal
-
-The existing Vercel account does not currently contain a project linked to this repository.
+The Hobby build-rate limit can temporarily delay automatic deployments during heavy development.
 
 ## 3. Stripe
 
@@ -35,42 +24,26 @@ After legal launch approval:
 - create Blueprint £2,500 price
 - create Build With Us £5,000 price
 - create Done For You £10,000 price
-- add price IDs to Vercel
-- add webhook
-- complete test-mode purchase
+- configure test-mode webhook
+- complete purchase-to-enrolment QA
 
-## 4. Legal
+## 4. Legal and professional review
 
 Before live checkout:
 
-- solicitor approves Participant Agreement
-- solicitor approves Terms
-- solicitor approves Refund/Cancellation Policy
-- solicitor approves digital-content consent
-- solicitor approves early-service-start consent
-- approved wording replaces draft web pages
+- solicitor-approved participant terms and cancellation wording
+- data-protection review
+- accountant validation of finance/tax language
+- employment/jurisdiction review
+- immigration adviser validation of the optional business-readiness module
 
-## 5. Professional reviews
+## 5. Final downloads
 
-- accountant validates finance/tax language
-- employment/legal advisers validate engagement documents
-- immigration adviser validates optional sponsor-readiness module
-- data-protection/privacy review completed
+Move the approved Word, Excel and PDF deliverables into protected customer download storage before public launch.
 
-## 6. Downloads
-
-Upload final approved:
-
-- DOCX packs
-- XLSX workbooks
-- PDF handbooks
-
-Student portal can already render and download Markdown/CSV source documents.
-
-## 7. Launch flags
+## 6. Launch flags
 
 Only after QA:
 
 ENABLE_LIVE_CHECKOUT=true
-
 NEXT_PUBLIC_ENABLE_INDEXING=true
