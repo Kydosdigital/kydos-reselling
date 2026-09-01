@@ -145,3 +145,45 @@ export async function addParticipantAdminNote(formData: FormData) {
   await writeAudit(adminUser.id, "participant_admin_note_added", "participant_admin_note", String(rows[0].id), { userId });
   revalidatePath("/admin/participants/" + userId);
 }
+
+
+export async function addAdminTaskUpdate(formData: FormData) {
+  const { academyUser: adminUser } = await requireAdminContext();
+  const taskId = String(formData.get("taskId") || "");
+  const message = String(formData.get("message") || "").trim();
+  const requestedStatus = String(formData.get("status") || "in_progress");
+  const allowedStatuses = ["not_started","in_progress","waiting_participant","waiting_kydos","waiting_third_party","review","complete"];
+
+  if (!taskId || message.length < 2 || message.length > 4000 || !allowedStatuses.includes(requestedStatus)) {
+    throw new Error("Add a valid Kydos task update.");
+  }
+
+  const sql = getSql();
+  const tasks = await sql.query(
+    "select id, user_id, status from implementation_tasks where id = $1 limit 1",
+    [taskId]
+  );
+  if (!tasks.length) throw new Error("Implementation task not found.");
+
+  const task = tasks[0];
+  await sql.query(
+    "insert into implementation_task_updates (task_id, user_id, author_user_id, author_role, message) values ($1,$2,$3,$4,$5)",
+    [taskId, task.user_id, adminUser.id, "admin", message]
+  );
+
+  await sql.query(
+    "update implementation_tasks set status = $1, updated_at = now() where id = $2",
+    [requestedStatus, taskId]
+  );
+
+  await writeAudit(adminUser.id, "admin_task_update_added", "implementation_task", taskId, {
+    statusBefore: String(task.status),
+    statusAfter: requestedStatus,
+    userId: String(task.user_id)
+  });
+
+  revalidatePath("/admin");
+  revalidatePath("/admin/tasks/" + taskId);
+  revalidatePath("/admin/participants/" + String(task.user_id));
+  revalidatePath("/portal/implementation");
+}
