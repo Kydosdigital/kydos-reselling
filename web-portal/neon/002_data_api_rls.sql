@@ -9,6 +9,7 @@ alter table participant_intake enable row level security;
 alter table implementation_tasks enable row level security;
 alter table programme_orders enable row level security;
 alter table academy_audit_log enable row level security;
+alter table participant_admin_notes enable row level security;
 
 drop policy if exists academy_users_select_own on academy_users;
 create policy academy_users_select_own on academy_users
@@ -137,5 +138,6 @@ create policy programme_orders_select_own on programme_orders
     )
   );
 
--- No participant-facing policies are intentionally created for academy_audit_log.
--- Kydos admin operations continue through authenticated server-side code.
+-- No participant-facing policies are intentionally created for academy_audit_log
+-- or participant_admin_notes. Kydos admin operations continue through
+-- authenticated server-side code.

@@ -104,3 +104,44 @@ export async function recordHandover(formData: FormData) {
   await writeAudit(adminUser.id, "dfy_handover_recorded", "enrolment", enrolmentId, { handoverDate, supportEnd: isoDate(supportEnd) });
   revalidatePath("/admin");
 }
+
+
+export async function updateEnrolmentStatus(formData: FormData) {
+  const { academyUser: adminUser } = await requireAdminContext();
+  const enrolmentId = String(formData.get("enrolmentId") || "");
+  const status = String(formData.get("status") || "");
+  const allowed = ["pending","active","paused","complete","cancelled"];
+  if (!enrolmentId || !allowed.includes(status)) throw new Error("Invalid enrolment update.");
+
+  const sql = getSql();
+  await sql.query("update enrolments set status = $1, updated_at = now() where id = $2", [status, enrolmentId]);
+  await writeAudit(adminUser.id, "enrolment_status_updated", "enrolment", enrolmentId, { status });
+  revalidatePath("/admin");
+}
+
+export async function updateSupportEnd(formData: FormData) {
+  const { academyUser: adminUser } = await requireAdminContext();
+  const enrolmentId = String(formData.get("enrolmentId") || "");
+  const supportEnd = String(formData.get("supportEnd") || "") || null;
+  if (!enrolmentId) throw new Error("Missing enrolment.");
+
+  const sql = getSql();
+  await sql.query("update enrolments set support_end = $1, updated_at = now() where id = $2", [supportEnd, enrolmentId]);
+  await writeAudit(adminUser.id, "support_end_updated", "enrolment", enrolmentId, { supportEnd });
+  revalidatePath("/admin");
+}
+
+export async function addParticipantAdminNote(formData: FormData) {
+  const { academyUser: adminUser } = await requireAdminContext();
+  const userId = String(formData.get("userId") || "");
+  const note = String(formData.get("note") || "").trim();
+  if (!userId || note.length < 2) throw new Error("Add a note before saving.");
+
+  const sql = getSql();
+  const rows = await sql.query(
+    "insert into participant_admin_notes (user_id, author_user_id, note) values ($1,$2,$3) returning id",
+    [userId, adminUser.id, note]
+  );
+  await writeAudit(adminUser.id, "participant_admin_note_added", "participant_admin_note", String(rows[0].id), { userId });
+  revalidatePath("/admin/participants/" + userId);
+}

@@ -41,6 +41,15 @@ create table if not exists participant_intake (
   target_launch_date date,
   preferred_structure text,
   location text,
+  website_status text,
+  domain_status text,
+  crm_status text,
+  team_status text,
+  acquisition_readiness text,
+  services_focus text,
+  weekly_time_commitment text,
+  current_clients integer check (current_clients is null or current_clients >= 0),
+  startup_budget_gbp integer check (startup_budget_gbp is null or startup_budget_gbp >= 0),
   goals text,
   notes text,
   submitted_at timestamptz not null default now(),
@@ -94,3 +103,13 @@ create table if not exists academy_audit_log (
 );
 
 create index if not exists academy_audit_log_created_idx on academy_audit_log(created_at desc);
+
+create table if not exists participant_admin_notes (
+  id uuid primary key default gen_random_uuid(),
+  user_id uuid not null references academy_users(id) on delete cascade,
+  author_user_id uuid references academy_users(id) on delete set null,
+  note text not null,
+  created_at timestamptz not null default now()
+);
+
+create index if not exists participant_admin_notes_user_created_idx on participant_admin_notes(user_id, created_at desc);

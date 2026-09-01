@@ -1503,3 +1503,46 @@ h3{letter-spacing:-.025em}
 @media(max-width:520px){
   .portal-stat-grid{grid-template-columns:1fr}
 }
+
+.intake-section{
+  padding:8px 0 26px;
+  margin-bottom:18px;
+  border-bottom:1px solid var(--line)
+}
+.intake-section:last-of-type{border-bottom:0}
+.intake-section>.eyebrow{margin-bottom:8px}
+.admin-control-panel{
+  margin-top:18px;
+  display:grid;
+  grid-template-columns:1fr .7fr .7fr;
+  gap:20px;
+  align-items:end
+}
+.admin-control-panel h2{margin:8px 0 0}
+.admin-control-panel .field{margin:0 0 10px}
+.admin-notes-panel{margin-top:18px}
+.admin-notes-panel h2{margin:8px 0}
+.admin-note-list{
+  display:grid;
+  gap:10px;
+  margin-top:24px
+}
+.admin-note-list article{
+  padding:14px 15px;
+  border-radius:12px;
+  border:1px solid var(--line);
+  background:rgba(255,255,255,.022)
+}
+.admin-note-list p{
+  margin:0;
+  color:#ccd6e1;
+  line-height:1.55
+}
+.admin-note-list small{
+  display:block;
+  color:var(--muted);
+  margin-top:8px
+}
+@media(max-width:900px){
+  .admin-control-panel{grid-template-columns:1fr}
+}
