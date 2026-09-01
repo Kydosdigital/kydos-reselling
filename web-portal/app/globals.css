@@ -2006,3 +2006,47 @@ h3{letter-spacing:-.025em}
 @media(max-width:800px){
   .admin-auth-actions{grid-template-columns:1fr}
 }
+
+.attention-section{
+  margin-top:30px
+}
+.attention-list{
+  display:grid;
+  gap:10px
+}
+.attention-row{
+  padding:17px 18px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:18px
+}
+.attention-row small{
+  display:block;
+  color:var(--muted);
+  font-size:10px;
+  margin-bottom:5px;
+  text-transform:uppercase;
+  letter-spacing:.04em
+}
+.attention-row strong{
+  display:block;
+  font-size:15px
+}
+.attention-row span{
+  display:block;
+  color:var(--muted);
+  font-size:12px;
+  margin-top:4px
+}
+.attention-clear{
+  border-color:rgba(127,227,106,.16);
+  background:rgba(127,227,106,.035);
+  color:#b9f4ae
+}
+@media(max-width:700px){
+  .attention-row{
+    align-items:flex-start;
+    flex-direction:column
+  }
+}
