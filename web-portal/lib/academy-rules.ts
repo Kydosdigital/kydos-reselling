@@ -126,3 +126,27 @@ export function mondayWeekStart(date = new Date()) {
   current.setUTCDate(current.getUTCDate() - daysSinceMonday);
   return current.toISOString().slice(0, 10);
 }
+
+export type WeeklyCheckInSignal = "missing" | "support_requested" | "low_confidence" | "clear";
+
+export function getWeeklyCheckInSignal(input: {
+  latestWeekStart?: string | null;
+  currentWeekStart: string;
+  supportNeeded?: string | null;
+  confidence?: number | string | null;
+}): WeeklyCheckInSignal {
+  if (!input.latestWeekStart || String(input.latestWeekStart) !== input.currentWeekStart) {
+    return "missing";
+  }
+
+  if (String(input.supportNeeded || "").trim()) {
+    return "support_requested";
+  }
+
+  const confidence = Number(input.confidence);
+  if (Number.isFinite(confidence) && confidence > 0 && confidence <= 2) {
+    return "low_confidence";
+  }
+
+  return "clear";
+}
