@@ -7,6 +7,7 @@ alter table enrolments enable row level security;
 alter table lesson_progress enable row level security;
 alter table lesson_notes enable row level security;
 alter table participant_intake enable row level security;
+alter table participant_weekly_checkins enable row level security;
 alter table implementation_tasks enable row level security;
 alter table implementation_task_updates enable row level security;
 alter table programme_orders enable row level security;
@@ -161,6 +162,46 @@ create policy participant_intake_update_own on participant_intake
       select 1
       from academy_users u
       where u.id = participant_intake.user_id
+        and u.auth_user_id = auth.user_id()
+    )
+  );
+
+drop policy if exists participant_weekly_checkins_select_own on participant_weekly_checkins;
+create policy participant_weekly_checkins_select_own on participant_weekly_checkins
+  for select
+  using (
+    exists (
+      select 1 from academy_users u
+      where u.id = participant_weekly_checkins.user_id
+        and u.auth_user_id = auth.user_id()
+    )
+  );
+
+drop policy if exists participant_weekly_checkins_insert_own on participant_weekly_checkins;
+create policy participant_weekly_checkins_insert_own on participant_weekly_checkins
+  for insert
+  with check (
+    exists (
+      select 1 from academy_users u
+      where u.id = participant_weekly_checkins.user_id
+        and u.auth_user_id = auth.user_id()
+    )
+  );
+
+drop policy if exists participant_weekly_checkins_update_own on participant_weekly_checkins;
+create policy participant_weekly_checkins_update_own on participant_weekly_checkins
+  for update
+  using (
+    exists (
+      select 1 from academy_users u
+      where u.id = participant_weekly_checkins.user_id
+        and u.auth_user_id = auth.user_id()
+    )
+  )
+  with check (
+    exists (
+      select 1 from academy_users u
+      where u.id = participant_weekly_checkins.user_id
         and u.auth_user_id = auth.user_id()
     )
   );
