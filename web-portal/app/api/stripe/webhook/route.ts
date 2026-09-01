@@ -27,7 +27,7 @@ async function handlePaidCheckout(session: Stripe.Checkout.Session) {
 
   const sql = getSql();
   await sql.query(
-    "insert into programme_orders (stripe_session_id, stripe_payment_intent_id, email, full_name, tier, amount_total, currency, terms_accepted, digital_content_consent, early_service_start_consent, consent_timestamp, status) values ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12) on conflict (stripe_session_id) do update set stripe_payment_intent_id = excluded.stripe_payment_intent_id, amount_total = excluded.amount_total, currency = excluded.currency, status = excluded.status",
+    "insert into programme_orders (stripe_session_id, stripe_payment_intent_id, email, full_name, tier, amount_total, currency, terms_accepted, digital_content_consent, early_service_start_consent, consent_timestamp, status) values ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12) on conflict (stripe_session_id) do update set stripe_payment_intent_id = excluded.stripe_payment_intent_id, amount_total = excluded.amount_total, currency = excluded.currency, status = case when programme_orders.status in ('refunded','disputed','cancelled') then programme_orders.status else excluded.status end",
     [session.id, typeof session.payment_intent === "string" ? session.payment_intent : null, email, fullName, tier, session.amount_total, session.currency, session.metadata?.terms_accepted === "true", session.metadata?.digital_content_consent === "true", session.metadata?.early_service_start_consent === "true", session.metadata?.consent_timestamp || null, "paid"]
   );
 
