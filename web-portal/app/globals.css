@@ -2050,3 +2050,68 @@ h3{letter-spacing:-.025em}
     flex-direction:column
   }
 }
+
+.portal-search-form{
+  padding:18px 20px;
+  display:grid;
+  grid-template-columns:1fr auto;
+  gap:12px;
+  align-items:end
+}
+.portal-search-form .field{margin:0}
+.portal-search-summary{
+  display:flex;
+  align-items:baseline;
+  gap:9px;
+  margin:24px 0 14px
+}
+.portal-search-summary strong{
+  font-size:25px
+}
+.portal-search-summary span{
+  color:var(--muted);
+  font-size:13px
+}
+.portal-search-results{
+  display:grid;
+  gap:10px
+}
+.portal-search-result{
+  padding:20px;
+  display:flex;
+  justify-content:space-between;
+  gap:24px;
+  align-items:center;
+  transition:.16s ease
+}
+.portal-search-result:hover{
+  transform:translateY(-1px);
+  border-color:rgba(127,227,106,.22)
+}
+.portal-search-result small{
+  color:var(--muted);
+  font-size:10px
+}
+.portal-search-result h2{
+  font-size:19px;
+  margin:6px 0
+}
+.portal-search-result p{
+  color:var(--muted);
+  margin:0;
+  line-height:1.5;
+  font-size:13px
+}
+.portal-search-result>span{
+  color:#b9f4ae;
+  font-size:12px;
+  font-weight:850;
+  white-space:nowrap
+}
+@media(max-width:650px){
+  .portal-search-form{grid-template-columns:1fr}
+  .portal-search-result{
+    align-items:flex-start;
+    flex-direction:column
+  }
+}
