@@ -11,16 +11,14 @@ alter table programme_orders enable row level security;
 alter table academy_audit_log enable row level security;
 alter table participant_admin_notes enable row level security;
 
+-- Participant profile rows are read-only through the Data API. This is
+-- deliberate: allowing self-update here would also expose the application
+-- role column and could create a privilege-escalation path.
+drop policy if exists academy_users_update_own on academy_users;
 drop policy if exists academy_users_select_own on academy_users;
 create policy academy_users_select_own on academy_users
   for select
   using (auth_user_id = auth.user_id());
-
-drop policy if exists academy_users_update_own on academy_users;
-create policy academy_users_update_own on academy_users
-  for update
-  using (auth_user_id = auth.user_id())
-  with check (auth_user_id = auth.user_id());
 
 drop policy if exists enrolments_select_own on enrolments;
 create policy enrolments_select_own on enrolments
