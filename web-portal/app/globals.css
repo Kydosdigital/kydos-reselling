@@ -2115,3 +2115,36 @@ h3{letter-spacing:-.025em}
     flex-direction:column
   }
 }
+
+.lesson-notes-card{
+  margin-top:18px;
+  padding:26px
+}
+.lesson-notes-card h2{
+  margin:8px 0
+}
+.lesson-notes-card>div>p{
+  color:var(--muted);
+  line-height:1.6;
+  margin-top:0
+}
+.lesson-notes-card form{
+  margin-top:18px
+}
+.lesson-note-actions{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:14px;
+  margin-top:10px
+}
+.lesson-note-actions span{
+  color:var(--muted);
+  font-size:10px
+}
+@media(max-width:600px){
+  .lesson-note-actions{
+    align-items:flex-start;
+    flex-direction:column
+  }
+}
