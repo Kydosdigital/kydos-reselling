@@ -1,14 +1,20 @@
-import Link from "next/link";
+import type { Metadata } from "next";
+import { PublicHeader } from "@/components/public-header";
+import { PublicFooter } from "@/components/public-footer";
+
+export const metadata: Metadata = {
+  title: "Programme Terms",
+  description: "Pre-launch Kydos Academy programme terms, pending solicitor approval.",
+  alternates: { canonical: "/legal/terms" }
+};
 
 export default function ProgrammeTermsPage() {
   return (
-    <main className="container legal-page">
-      <Link href="/" className="brand">
-        <span className="brand-mark" />
-        <span>Kydos Digital</span>
-      </Link>
+    <>
+      <PublicHeader />
+      <main className="container legal-page">
 
-      <span className="pill" style={{ marginTop: 28 }}>Draft for solicitor review</span>
+      <span className="pill" >Draft for solicitor review</span>
       <h1>Programme Terms</h1>
 
       <div className="notice">
@@ -35,5 +41,7 @@ export default function ProgrammeTermsPage() {
         <p>Nothing in the final terms will exclude rights that cannot lawfully be excluded.</p>
       </section>
     </main>
+      <PublicFooter />
+    </>
   );
 }
