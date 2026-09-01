@@ -1025,3 +1025,20 @@ h3{letter-spacing:-.025em}
   .plan-detail-grid,
   .outcome-card{grid-template-columns:1fr}
 }
+
+.not-found-page{
+  min-height:62vh;
+  display:grid;
+  align-items:center;
+  padding:78px 0
+}
+.not-found-page h1{
+  max-width:760px;
+  margin-left:auto;
+  margin-right:auto
+}
+.not-found-page .hero-copy{
+  max-width:650px;
+  margin-left:auto;
+  margin-right:auto
+}
