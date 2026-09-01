@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { createStripeClient } from "@/lib/stripe";
 import { publicPlans, type PublicPlanSlug } from "@/lib/public-plans";
+import { maskEmail } from "@/lib/privacy";
 
 export const dynamic = "force-dynamic";
 
@@ -46,7 +47,7 @@ export default async function PurchaseSuccessPage({
           {email ? (
             <div className="purchase-email-box">
               <small>Programme email</small>
-              <strong>{email}</strong>
+              <strong>{maskEmail(email)}</strong>
             </div>
           ) : null}
 
