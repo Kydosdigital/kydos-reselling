@@ -31,3 +31,9 @@ test("implementation update insert policy checks task ownership", () => {
   assert.match(rls, /t\.id\s*=\s*implementation_task_updates\.task_id/i);
   assert.match(rls, /t\.user_id\s*=\s*implementation_task_updates\.user_id/i);
 });
+
+
+test("participant task updates cannot spoof a Kydos author", () => {
+  assert.match(rls, /implementation_task_updates\.author_role\s*=\s*'participant'/i);
+  assert.match(rls, /implementation_task_updates\.author_user_id\s*=\s*implementation_task_updates\.user_id/i);
+});
