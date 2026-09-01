@@ -9,6 +9,16 @@ import { supportEndForTier } from "@/lib/academy";
 const allowedTiers = ["blueprint","build","dfy"] as const;
 
 async function ensurePaidOrder(sessionId: string) {
+  const sql = getSql();
+  const existingOrder = await sql.query(
+    "select status from programme_orders where stripe_session_id = $1 limit 1",
+    [sessionId]
+  );
+  const existingStatus = existingOrder.length ? String(existingOrder[0].status) : "";
+  if (["refunded","disputed","cancelled"].includes(existingStatus)) {
+    throw new Error("This order is no longer eligible for activation.");
+  }
+
   const stripe = createStripeClient();
   const session = await stripe.checkout.sessions.retrieve(sessionId);
 
@@ -24,9 +34,8 @@ async function ensurePaidOrder(sessionId: string) {
     throw new Error("The payment session is missing programme details.");
   }
 
-  const sql = getSql();
   await sql.query(
-    "insert into programme_orders (stripe_session_id, stripe_payment_intent_id, email, full_name, tier, amount_total, currency, terms_accepted, digital_content_consent, early_service_start_consent, consent_timestamp, status) values ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12) on conflict (stripe_session_id) do update set stripe_payment_intent_id = excluded.stripe_payment_intent_id, amount_total = excluded.amount_total, currency = excluded.currency, status = excluded.status",
+    "insert into programme_orders (stripe_session_id, stripe_payment_intent_id, email, full_name, tier, amount_total, currency, terms_accepted, digital_content_consent, early_service_start_consent, consent_timestamp, status) values ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12) on conflict (stripe_session_id) do update set stripe_payment_intent_id = excluded.stripe_payment_intent_id, amount_total = excluded.amount_total, currency = excluded.currency, status = case when programme_orders.status in ('refunded','disputed','cancelled') then programme_orders.status else excluded.status end",
     [
       session.id,
       typeof session.payment_intent === "string" ? session.payment_intent : null,
@@ -42,6 +51,14 @@ async function ensurePaidOrder(sessionId: string) {
       "paid"
     ]
   );
+
+  const statusRows = await sql.query(
+    "select status from programme_orders where stripe_session_id = $1 limit 1",
+    [session.id]
+  );
+  if (!statusRows.length || String(statusRows[0].status) !== "paid") {
+    throw new Error("This order is not eligible for activation.");
+  }
 
   return { sessionId: session.id, email, fullName, tier };
 }
