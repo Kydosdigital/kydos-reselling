@@ -2148,3 +2148,69 @@ h3{letter-spacing:-.025em}
     flex-direction:column
   }
 }
+
+.app-error{
+  max-width:760px;
+  padding:34px;
+  margin:40px auto
+}
+.app-error h1{
+  margin:14px 0 10px
+}
+.app-error p{
+  color:var(--muted);
+  line-height:1.7
+}
+.app-error-actions{
+  display:flex;
+  flex-wrap:wrap;
+  gap:9px;
+  margin-top:22px
+}
+.app-loading{
+  padding-top:12px
+}
+.loading-line,
+.loading-stat-grid>div,
+.loading-panel{
+  background:linear-gradient(90deg,rgba(255,255,255,.025),rgba(255,255,255,.065),rgba(255,255,255,.025));
+  background-size:200% 100%;
+  animation:academy-pulse 1.4s ease-in-out infinite;
+  border:1px solid var(--line)
+}
+.loading-line{
+  height:16px;
+  border-radius:999px;
+  margin-bottom:12px
+}
+.loading-line-short{width:140px}
+.loading-line-title{
+  width:min(520px,80%);
+  height:48px;
+  border-radius:14px;
+  margin-bottom:28px
+}
+.loading-stat-grid{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:13px
+}
+.loading-stat-grid>div{
+  min-height:145px;
+  border-radius:16px
+}
+.loading-panel{
+  min-height:260px;
+  border-radius:18px;
+  margin-top:18px
+}
+@keyframes academy-pulse{
+  0%{background-position:100% 0}
+  100%{background-position:-100% 0}
+}
+@media(max-width:900px){
+  .loading-stat-grid{grid-template-columns:1fr 1fr}
+}
+@media(max-width:520px){
+  .loading-stat-grid{grid-template-columns:1fr}
+}
