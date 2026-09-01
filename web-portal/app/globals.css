@@ -1546,3 +1546,37 @@ h3{letter-spacing:-.025em}
 @media(max-width:900px){
   .admin-control-panel{grid-template-columns:1fr}
 }
+
+.purchase-success-card,.activation-card{width:min(520px,100%)}
+.purchase-email-box{
+  margin-top:18px;
+  padding:14px 15px;
+  border-radius:12px;
+  border:1px solid var(--line);
+  background:rgba(255,255,255,.025)
+}
+.purchase-email-box small,.activation-identity small{
+  display:block;
+  color:var(--muted);
+  font-size:11px;
+  margin-bottom:4px
+}
+.purchase-email-box strong,.activation-identity strong{
+  display:block;
+  overflow-wrap:anywhere
+}
+.activation-identity{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:10px;
+  margin:18px 0
+}
+.activation-identity>div{
+  padding:13px 14px;
+  border-radius:12px;
+  border:1px solid var(--line);
+  background:rgba(255,255,255,.025)
+}
+@media(max-width:560px){
+  .activation-identity{grid-template-columns:1fr}
+}

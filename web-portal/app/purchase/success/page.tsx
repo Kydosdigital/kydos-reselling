@@ -1,5 +1,8 @@
 import Link from "next/link";
 import { createStripeClient } from "@/lib/stripe";
+import { publicPlans, type PublicPlanSlug } from "@/lib/public-plans";
+
+export const dynamic = "force-dynamic";
 
 export default async function PurchaseSuccessPage({
   searchParams
@@ -9,6 +12,7 @@ export default async function PurchaseSuccessPage({
   const { session_id } = await searchParams;
   let email = "";
   let tier = "";
+  let paid = false;
 
   if (session_id && process.env.STRIPE_SECRET_KEY) {
     try {
@@ -16,34 +20,44 @@ export default async function PurchaseSuccessPage({
       const session = await stripe.checkout.sessions.retrieve(session_id);
       email = session.customer_details?.email || session.customer_email || "";
       tier = session.metadata?.programme_tier || "";
+      paid = session.payment_status === "paid";
     } catch {
     }
   }
 
+  const plan = tier in publicPlans ? publicPlans[tier as PublicPlanSlug] : null;
+
   return (
     <main className="auth-wrap">
-      <section className="auth-card card">
+      <section className="auth-card card purchase-success-card">
         <Link href="/" className="brand">
           <span className="brand-mark" />
-          <span>Kydos Digital</span>
+          <span>Kydos Academy</span>
         </Link>
 
         <div style={{ marginTop: 28 }}>
-          <span className="pill">Payment received</span>
-          <h2 style={{ marginTop: 14 }}>Welcome to the programme.</h2>
+          <span className="pill">{paid ? "Payment received" : "Checkout complete"}</span>
+          <h2 style={{ marginTop: 14 }}>{paid ? "Welcome to Kydos Academy." : "We are confirming your payment."}</h2>
           <p className="muted">
-            {tier ? "Your " + tier + " enrolment has been received. " : ""}
-            We are preparing your programme access now.
+            {plan ? "Your " + plan.name + " enrolment has been received. " : ""}
+            {paid ? "The next step is to create your secure participant account." : "Refresh this page shortly if payment confirmation is still processing."}
           </p>
 
           {email ? (
-            <p className="muted">
-              Check <strong style={{ color: "white" }}>{email}</strong> for your access invitation and onboarding instructions.
-            </p>
+            <div className="purchase-email-box">
+              <small>Programme email</small>
+              <strong>{email}</strong>
+            </div>
           ) : null}
 
-          <div className="notice">
-            If your access email does not arrive shortly, contact Support@kydosdigital.com and include the email address used at checkout.
+          {paid && session_id ? (
+            <Link className="btn btn-primary btn-large" style={{ width: "100%", marginTop: 18 }} href={"/activate?session_id=" + encodeURIComponent(session_id)}>
+              Create my Academy account
+            </Link>
+          ) : null}
+
+          <div className="notice" style={{ marginTop: 18 }}>
+            Keep this page private. Account activation is tied to the payment session and the email address used at checkout. If you need help, contact Support@kydosdigital.com.
           </div>
         </div>
       </section>

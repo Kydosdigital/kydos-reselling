@@ -4,7 +4,7 @@ import { login } from "./actions";
 export default async function LoginPage({
   searchParams
 }: {
-  searchParams: Promise<{ error?: string; setup?: string }>;
+  searchParams: Promise<{ error?: string; setup?: string; activated?: string }>;
 }) {
   const params = await searchParams;
 
@@ -23,6 +23,10 @@ export default async function LoginPage({
           <div className="notice">
             Participant login is being prepared. The public Academy website is available now, but the student portal will be activated after the programme backend is connected.
           </div>
+        ) : null}
+
+        {params.activated ? (
+          <div className="notice">Your Academy account has been created. Sign in with the email and password you set during activation.</div>
         ) : null}
 
         {params.error ? <div className="notice">The email or password was not recognised. Please try again.</div> : null}
