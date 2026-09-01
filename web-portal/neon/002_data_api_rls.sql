@@ -7,6 +7,7 @@ alter table enrolments enable row level security;
 alter table lesson_progress enable row level security;
 alter table participant_intake enable row level security;
 alter table implementation_tasks enable row level security;
+alter table implementation_task_updates enable row level security;
 alter table programme_orders enable row level security;
 alter table academy_audit_log enable row level security;
 alter table participant_admin_notes enable row level security;
@@ -120,6 +121,33 @@ create policy implementation_tasks_select_own on implementation_tasks
       select 1
       from academy_users u
       where u.id = implementation_tasks.user_id
+        and u.auth_user_id = auth.user_id()
+    )
+  );
+
+drop policy if exists implementation_task_updates_select_own on implementation_task_updates;
+create policy implementation_task_updates_select_own on implementation_task_updates
+  for select
+  using (
+    exists (
+      select 1
+      from academy_users u
+      where u.id = implementation_task_updates.user_id
+        and u.auth_user_id = auth.user_id()
+    )
+  );
+
+drop policy if exists implementation_task_updates_insert_own on implementation_task_updates;
+create policy implementation_task_updates_insert_own on implementation_task_updates
+  for insert
+  with check (
+    exists (
+      select 1
+      from academy_users u
+      join implementation_tasks t on t.user_id = u.id
+      where u.id = implementation_task_updates.user_id
+        and t.id = implementation_task_updates.task_id
+        and t.user_id = implementation_task_updates.user_id
         and u.auth_user_id = auth.user_id()
     )
   );
