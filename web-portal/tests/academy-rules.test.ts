@@ -1,6 +1,6 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import { daysRemaining, getLaunchReadiness, supportEndForTier } from "../lib/academy-rules.ts";
+import { canProvisionAcademyProfile, daysRemaining, getLaunchReadiness, supportEndForTier } from "../lib/academy-rules.ts";
 
 test("Blueprint support lasts 56 days", () => {
   const from = new Date("2026-09-01T12:00:00Z");
@@ -46,4 +46,18 @@ test("launch readiness identifies the first incomplete area", () => {
 test("daysRemaining never returns a negative number", () => {
   const now = new Date("2026-09-10T12:00:00Z");
   assert.equal(daysRemaining("2026-09-01", now), 0);
+});
+
+test("an allowlisted Kydos admin can be provisioned without a paid order", () => {
+  assert.equal(canProvisionAcademyProfile({ isAdminEmail: true, paidOrderStatus: null }), true);
+});
+
+test("a paid participant can be provisioned", () => {
+  assert.equal(canProvisionAcademyProfile({ isAdminEmail: false, paidOrderStatus: "paid" }), true);
+});
+
+test("an arbitrary Neon Auth signup cannot create an Academy profile", () => {
+  assert.equal(canProvisionAcademyProfile({ isAdminEmail: false, paidOrderStatus: null }), false);
+  assert.equal(canProvisionAcademyProfile({ isAdminEmail: false, paidOrderStatus: "refunded" }), false);
+  assert.equal(canProvisionAcademyProfile({ isAdminEmail: false, paidOrderStatus: "disputed" }), false);
 });
