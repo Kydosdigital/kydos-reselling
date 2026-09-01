@@ -1,7 +1,7 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
-import { requireAcademyContext } from "@/lib/academy";
+import { requireAcademyContext, requireActiveEnrolment } from "@/lib/academy";
 import { getSql } from "@/lib/db";
 
 function optionalInteger(formData: FormData, key: string) {
@@ -13,6 +13,7 @@ function optionalInteger(formData: FormData, key: string) {
 
 export async function saveIntake(formData: FormData) {
   const { academyUser } = await requireAcademyContext();
+  await requireActiveEnrolment(academyUser.id);
   const sql = getSql();
 
   await sql.query(
