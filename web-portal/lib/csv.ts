@@ -1,6 +1,14 @@
 export function csvEscape(value: unknown) {
   if (value === null || value === undefined) return "";
-  const text = typeof value === "object" ? JSON.stringify(value) : String(value);
+  let text = typeof value === "object" ? JSON.stringify(value) : String(value);
+
+  // Prevent spreadsheet formula injection when exports are opened in Excel
+  // or Google Sheets. Numeric values remain numeric; only text beginning with
+  // a formula control character is neutralised.
+  if (typeof value === "string" && /^[=+\-@]/.test(text)) {
+    text = "'" + text;
+  }
+
   if (/[",\n\r]/.test(text)) return '"' + text.replace(/"/g, '""') + '"';
   return text;
 }
