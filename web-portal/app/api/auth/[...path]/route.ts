@@ -2,6 +2,10 @@ import { getAuth } from "@/lib/auth/server";
 
 export const dynamic = "force-dynamic";
 
-const auth = getAuth();
+export async function GET(request: Request) {
+  return getAuth().handler().GET(request);
+}
 
-export const { GET, POST } = auth.handler();
+export async function POST(request: Request) {
+  return getAuth().handler().POST(request);
+}
