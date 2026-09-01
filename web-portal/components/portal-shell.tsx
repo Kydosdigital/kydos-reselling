@@ -25,6 +25,7 @@ export async function PortalShell({ children }: { children: React.ReactNode }) {
           <small>Workspace</small>
           <nav className="side-nav">
             <Link href="/portal">Dashboard</Link>
+            <Link href="/portal/search">Search</Link>
             <Link href="/portal/intake">My Intake</Link>
             <Link href="/portal/implementation">Implementation</Link>
             <Link href="/portal/launch">Launch Plan</Link>
