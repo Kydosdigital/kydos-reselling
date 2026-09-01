@@ -1,6 +1,6 @@
 import Stripe from "stripe";
 import { headers } from "next/headers";
-import { createStripeClient } from "@/lib/stripe";
+import { canProcessStripeEvent, createStripeClient } from "@/lib/stripe";
 import { getSql } from "@/lib/db";
 import { supportEndForTier } from "@/lib/academy";
 
@@ -96,6 +96,10 @@ export async function POST(request: Request) {
     event = stripe.webhooks.constructEvent(body, signature, webhookSecret);
   } catch {
     return new Response("Invalid webhook signature.", { status: 400 });
+  }
+
+  if (!canProcessStripeEvent(event.livemode)) {
+    return Response.json({ received: true, ignored: "checkout_mode_not_authorised" });
   }
 
   if (event.type === "checkout.session.completed" || event.type === "checkout.session.async_payment_succeeded") {
