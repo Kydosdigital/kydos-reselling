@@ -5,13 +5,22 @@ import { getSql } from "@/lib/db";
 
 export const dynamic = "force-dynamic";
 
+function daysRemaining(value: string | null) {
+  if (!value) return null;
+  const end = new Date(value + "T23:59:59Z");
+  const now = new Date();
+  return Math.max(0, Math.ceil((end.getTime() - now.getTime()) / 86400000));
+}
+
 export default async function PortalDashboard() {
   const { academyUser } = await requireAcademyContext();
   const sql = getSql();
 
-  const [enrolment, progress] = await Promise.all([
+  const [enrolment, progress, tasks, intakeRows] = await Promise.all([
     getActiveEnrolment(academyUser.id),
-    sql.query("select lesson_id from lesson_progress where user_id = $1", [academyUser.id])
+    sql.query("select lesson_id from lesson_progress where user_id = $1", [academyUser.id]),
+    sql.query("select status from implementation_tasks where user_id = $1", [academyUser.id]),
+    sql.query("select user_id from participant_intake where user_id = $1 limit 1", [academyUser.id])
   ]);
 
   if (!enrolment) {
@@ -30,6 +39,14 @@ export default async function PortalDashboard() {
   const completeCount = allAccessible.filter((lesson) => completed.has(lesson.id)).length;
   const percent = allAccessible.length ? Math.round((completeCount / allAccessible.length) * 100) : 0;
   const firstName = academyUser.full_name?.split(" ")[0] || academyUser.email.split("@")[0] || "there";
+  const nextLesson = allAccessible.find((lesson) => !completed.has(lesson.id));
+  const nextModule = nextLesson
+    ? modules.find((module) => module.lessons.some((lesson) => lesson.id === nextLesson.id))
+    : null;
+  const waitingOnYou = tasks.filter((task) => String(task.status) === "waiting_participant").length;
+  const openTasks = tasks.filter((task) => String(task.status) !== "complete").length;
+  const supportDays = daysRemaining(enrolment.support_end);
+  const hasIntake = intakeRows.length > 0;
 
   return (
     <>
@@ -41,44 +58,92 @@ export default async function PortalDashboard() {
         </div>
       </div>
 
-      <div className="dashboard-grid">
-        <section className="panel card">
-          <div style={{ display: "flex", justifyContent: "space-between", gap: 18, alignItems: "baseline" }}>
-            <div>
-              <small className="muted">Programme progress</small>
-              <h2 style={{ marginTop: 8 }}>{percent}% complete</h2>
-            </div>
-            <strong>{completeCount}/{allAccessible.length}</strong>
-          </div>
-          <div className="progress-track" style={{ marginTop: 18 }}>
-            <div className="progress-bar" style={{ width: percent + "%" }} />
-          </div>
-          <p className="muted" style={{ marginBottom: 0 }}>
-            Programme start: {enrolment.programme_start || "Set by Kydos"}<br />
-            Active support ends: {enrolment.support_end || (tier === "dfy" ? "Starts after formal handover" : "Set by Kydos")}
-          </p>
+      <div className="portal-stat-grid">
+        <section className="portal-stat card">
+          <small>Programme progress</small>
+          <strong>{percent}%</strong>
+          <span>{completeCount} of {allAccessible.length} lessons complete</span>
         </section>
-
-        <section className="panel card">
-          <small className="muted">Your current operating rule</small>
-          <h3 style={{ fontSize: 24 }}>Build capacity before acquisition.</h3>
-          <p className="muted">Your minimum launch team is an Account Manager, Creative and Sales Closer before paid lead generation starts.</p>
+        <section className="portal-stat card">
+          <small>Support</small>
+          <strong>{supportDays === null ? (tier === "dfy" ? "Handover" : "Pending") : supportDays}</strong>
+          <span>{supportDays === null ? (tier === "dfy" ? "90 days starts after formal handover" : "Support date being set") : "days remaining in active support"}</span>
+        </section>
+        <section className="portal-stat card">
+          <small>Implementation</small>
+          <strong>{openTasks}</strong>
+          <span>{waitingOnYou ? waitingOnYou + " waiting on you" : "open implementation tasks"}</span>
+        </section>
+        <section className="portal-stat card">
+          <small>Agency intake</small>
+          <strong>{hasIntake ? "Saved" : "Needed"}</strong>
+          <span>{hasIntake ? "Your starting position is on file" : "Complete this before implementation"}</span>
         </section>
       </div>
 
-      <section style={{ marginTop: 30 }}>
-        <h2>Your modules</h2>
+      {nextLesson && nextModule ? (
+        <section className="next-step-card card">
+          <div>
+            <span className="eyebrow">Recommended next step</span>
+            <small>Module {nextModule.number} · {nextModule.title}</small>
+            <h2>{nextLesson.title}</h2>
+            <p>{nextLesson.description}</p>
+          </div>
+          <Link className="btn btn-primary" href={"/portal/lesson/" + nextLesson.id}>Continue programme</Link>
+        </section>
+      ) : (
+        <section className="next-step-card card">
+          <div>
+            <span className="eyebrow">Programme complete</span>
+            <h2>You have marked every lesson in your tier complete.</h2>
+            <p>Use the implementation board and your operating systems to keep the agency moving.</p>
+          </div>
+          <Link className="btn btn-primary" href="/portal/implementation">Open implementation board</Link>
+        </section>
+      )}
+
+      {!hasIntake ? (
+        <div className="notice portal-action-notice">
+          Your participant intake has not been saved yet. <Link href="/portal/intake">Complete your intake →</Link>
+        </div>
+      ) : null}
+
+      {waitingOnYou > 0 ? (
+        <div className="notice portal-action-notice">
+          {waitingOnYou} implementation {waitingOnYou === 1 ? "item is" : "items are"} waiting on you. <Link href="/portal/implementation">Review tasks →</Link>
+        </div>
+      ) : null}
+
+      <section style={{ marginTop: 34 }}>
+        <div className="portal-section-heading">
+          <div>
+            <span className="eyebrow">Programme library</span>
+            <h2>Your modules</h2>
+          </div>
+          <Link className="btn" href="/portal/downloads">View all downloads</Link>
+        </div>
         <div className="module-grid">
           {modules.map((module) => {
             const accessible = module.lessons.filter((lesson) => canAccessTier(tier, lesson.minimumTier));
             const moduleComplete = accessible.filter((lesson) => completed.has(lesson.id)).length;
             const locked = accessible.length === 0;
+            const modulePercent = accessible.length ? Math.round((moduleComplete / accessible.length) * 100) : 0;
             return (
-              <Link href={locked ? "#" : "/portal/module/" + module.slug} className="module-card card" key={module.slug} aria-disabled={locked}>
-                <small>Module {module.number}</small>
+              <Link href={locked ? "#" : "/portal/module/" + module.slug} className={"module-card card" + (locked ? " module-locked" : "")} key={module.slug} aria-disabled={locked}>
+                <div className="module-card-top">
+                  <small>Module {String(module.number).padStart(2, "0")}</small>
+                  <span>{locked ? "Locked" : modulePercent + "%"}</span>
+                </div>
                 <h3>{module.title}</h3>
                 <p>{module.description}</p>
-                <small>{locked ? "Not included in your tier" : moduleComplete + "/" + accessible.length + " complete"}</small>
+                {!locked ? (
+                  <>
+                    <div className="progress-track module-progress">
+                      <div className="progress-bar" style={{ width: modulePercent + "%" }} />
+                    </div>
+                    <small>{moduleComplete}/{accessible.length} complete</small>
+                  </>
+                ) : <small>Not included in your tier</small>}
               </Link>
             );
           })}
