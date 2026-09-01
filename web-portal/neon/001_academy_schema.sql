@@ -34,6 +34,17 @@ create table if not exists lesson_progress (
   primary key (user_id, lesson_id)
 );
 
+create table if not exists lesson_notes (
+  user_id uuid not null references academy_users(id) on delete cascade,
+  lesson_id text not null,
+  note text not null default '' check (char_length(note) <= 10000),
+  created_at timestamptz not null default now(),
+  updated_at timestamptz not null default now(),
+  primary key (user_id, lesson_id)
+);
+
+create index if not exists lesson_notes_user_updated_idx on lesson_notes(user_id, updated_at desc);
+
 create table if not exists participant_intake (
   user_id uuid primary key references academy_users(id) on delete cascade,
   agency_name text,
