@@ -27,6 +27,7 @@ export async function PortalShell({ children }: { children: React.ReactNode }) {
             <Link href="/portal">Dashboard</Link>
             <Link href="/portal/intake">My Intake</Link>
             <Link href="/portal/implementation">Implementation</Link>
+            <Link href="/portal/launch">Launch Plan</Link>
             <Link href="/portal/downloads">Downloads</Link>
             <Link href="/portal/account">My Account</Link>
             {academyUser.role === "admin" ? <Link href="/admin">Kydos Admin</Link> : null}
