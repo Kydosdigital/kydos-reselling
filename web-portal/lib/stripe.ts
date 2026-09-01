@@ -8,7 +8,15 @@ type CheckoutEnvironment = {
   STRIPE_SECRET_KEY?: string;
 };
 
-export function resolveCheckoutMode(env: CheckoutEnvironment = process.env): CheckoutMode {
+function checkoutEnvironmentFromProcess(): CheckoutEnvironment {
+  return {
+    ENABLE_TEST_CHECKOUT: process.env.ENABLE_TEST_CHECKOUT,
+    ENABLE_LIVE_CHECKOUT: process.env.ENABLE_LIVE_CHECKOUT,
+    STRIPE_SECRET_KEY: process.env.STRIPE_SECRET_KEY
+  };
+}
+
+export function resolveCheckoutMode(env: CheckoutEnvironment = checkoutEnvironmentFromProcess()): CheckoutMode {
   const testEnabled = env.ENABLE_TEST_CHECKOUT === "true";
   const liveEnabled = env.ENABLE_LIVE_CHECKOUT === "true";
   const secret = env.STRIPE_SECRET_KEY || "";
@@ -34,7 +42,7 @@ export function resolveCheckoutMode(env: CheckoutEnvironment = process.env): Che
   return "disabled";
 }
 
-export function canProcessStripeEvent(livemode: boolean, env: CheckoutEnvironment = process.env) {
+export function canProcessStripeEvent(livemode: boolean, env: CheckoutEnvironment = checkoutEnvironmentFromProcess()) {
   const mode = resolveCheckoutMode(env);
   if (mode === "disabled") return false;
   return (mode === "live" && livemode) || (mode === "test" && !livemode);
