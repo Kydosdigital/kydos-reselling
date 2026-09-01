@@ -1,6 +1,6 @@
 {
   "name": "kydos-agency-programme-portal",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "private": true,
   "scripts": {
     "dev": "node scripts/sync-content.mjs && next dev",
@@ -8,13 +8,13 @@
     "start": "next start"
   },
   "dependencies": {
-    "@supabase/ssr": "^0.6.1",
-    "@supabase/supabase-js": "^2.49.8",
     "next": "^15.5.2",
     "react": "^19.1.1",
     "react-dom": "^19.1.1",
     "stripe": "^18.5.0",
-    "marked": "^15.0.12"
+    "marked": "^15.0.12",
+    "@neondatabase/auth": "latest",
+    "@neondatabase/serverless": "latest"
   },
   "devDependencies": {
     "@types/node": "^22.13.10",
