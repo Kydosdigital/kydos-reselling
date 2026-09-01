@@ -304,8 +304,8 @@ export default function HomePage() {
                     <a className="btn btn-primary" style={{ width: "100%" }} href={consultationUrl}>
                       Discuss this route
                     </a>
-                    <Link className="btn" style={{ width: "100%" }} href="/compare">
-                      Compare full inclusions
+                    <Link className="btn" style={{ width: "100%" }} href={"/plans/" + plan.slug}>
+                      See full plan details
                     </Link>
                   </div>
                 </article>
