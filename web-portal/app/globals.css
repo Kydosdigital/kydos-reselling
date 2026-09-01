@@ -1580,3 +1580,49 @@ h3{letter-spacing:-.025em}
 @media(max-width:560px){
   .activation-identity{grid-template-columns:1fr}
 }
+
+.admin-top-actions{
+  display:flex;
+  flex-wrap:wrap;
+  justify-content:flex-end;
+  gap:8px
+}
+.table-subline{
+  display:block;
+  color:var(--muted);
+  font-size:10px;
+  margin-top:4px
+}
+.table-status{
+  display:inline-flex;
+  padding:5px 8px;
+  border-radius:999px;
+  border:1px solid var(--line);
+  background:rgba(255,255,255,.025);
+  font-size:11px;
+  text-transform:capitalize
+}
+.consent-mini{
+  display:grid;
+  gap:3px;
+  min-width:100px
+}
+.consent-mini span{
+  font-size:10px;
+  color:#aab8c8
+}
+.order-table{min-width:1080px}
+.audit-table{min-width:1000px}
+.audit-details{
+  display:block;
+  max-width:360px;
+  max-height:100px;
+  overflow:auto;
+  white-space:pre-wrap;
+  overflow-wrap:anywhere;
+  color:#b8c6d5;
+  font-size:10px
+}
+@media(max-width:760px){
+  .admin-top-actions{justify-content:flex-start}
+}

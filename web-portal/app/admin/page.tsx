@@ -21,7 +21,11 @@ export default async function AdminPage() {
     <main className="container admin-page">
       <div className="portal-top">
         <div><span className="pill">Kydos Admin</span><h1>Programme operations</h1><p className="muted">Create participants, assign tiers and manage implementation work.</p></div>
-        <Link className="btn" href="/portal">Participant view</Link>
+        <div className="admin-top-actions">
+          <Link className="btn" href="/admin/orders">Orders</Link>
+          <Link className="btn" href="/admin/audit">Audit log</Link>
+          <Link className="btn" href="/portal">Participant view</Link>
+        </div>
       </div>
 
       <div className="portal-stat-grid">
