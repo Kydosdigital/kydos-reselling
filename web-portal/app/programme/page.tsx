@@ -5,7 +5,8 @@ import { PublicFooter } from "@/components/public-footer";
 
 export const metadata: Metadata = {
   title: "Agency Programme",
-  description: "See how Kydos Academy takes you from company setup to a launch-ready digital marketing agency."
+  description: "See how Kydos Academy takes you from company setup to a launch-ready digital marketing agency.",
+  alternates: { canonical: "/programme" }
 };
 
 const phases = [
