@@ -4,6 +4,11 @@ import contentMap from "@/generated/content.json";
 
 export const dynamic = "force-dynamic";
 
+function safeDownloadFilename(source: string) {
+  const filename = source.split("/").pop() || "download.txt";
+  return filename.replace(/[\u0000-\u001f\u007f"\\]/g, "_");
+}
+
 export async function GET(request: Request) {
   const context = await getCurrentAcademyContext();
   if (!context) return new Response("Unauthorised", { status: 401 });
@@ -20,12 +25,15 @@ export async function GET(request: Request) {
     return new Response("This file is not included in your programme access", { status: 403 });
   }
 
-  const filename = source.split("/").pop() || "download.txt";
+  const filename = safeDownloadFilename(source);
   const contentType = filename.endsWith(".csv") ? "text/csv; charset=utf-8" : "text/markdown; charset=utf-8";
   return new Response(content, {
     headers: {
       "Content-Type": contentType,
-      "Content-Disposition": "attachment; filename=\"" + filename.replace(/\"/g, "") + "\""
+      "Content-Disposition": "attachment; filename=\"" + filename + "\"",
+      "Cache-Control": "private, no-store, max-age=0",
+      "Pragma": "no-cache",
+      "X-Content-Type-Options": "nosniff"
     }
   });
 }
