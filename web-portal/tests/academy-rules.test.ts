@@ -1,6 +1,6 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import { canProvisionAcademyProfile, daysRemaining, getLaunchReadiness, supportEndForTier } from "../lib/academy-rules.ts";
+import { canProvisionAcademyProfile, daysRemaining, getLaunchReadiness, mondayWeekStart, supportEndForTier } from "../lib/academy-rules.ts";
 
 test("Blueprint support lasts 56 days", () => {
   const from = new Date("2026-09-01T12:00:00Z");
@@ -60,4 +60,10 @@ test("an arbitrary Neon Auth signup cannot create an Academy profile", () => {
   assert.equal(canProvisionAcademyProfile({ isAdminEmail: false, paidOrderStatus: null }), false);
   assert.equal(canProvisionAcademyProfile({ isAdminEmail: false, paidOrderStatus: "refunded" }), false);
   assert.equal(canProvisionAcademyProfile({ isAdminEmail: false, paidOrderStatus: "disputed" }), false);
+});
+
+test("weekly check-ins consistently use Monday as the week start", () => {
+  assert.equal(mondayWeekStart(new Date("2026-09-01T23:00:00Z")), "2026-08-31");
+  assert.equal(mondayWeekStart(new Date("2026-09-06T12:00:00Z")), "2026-08-31");
+  assert.equal(mondayWeekStart(new Date("2026-09-07T00:01:00Z")), "2026-09-07");
 });
