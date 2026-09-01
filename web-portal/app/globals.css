@@ -917,3 +917,111 @@ h3{letter-spacing:-.025em}
   .subpage-image-frame,.subpage-image-frame img{min-height:340px}
   .footer-bottom{flex-direction:column}
 }
+
+
+/* Detailed plan pages */
+.plan-detail-hero{
+  display:grid;
+  grid-template-columns:1.15fr .65fr;
+  gap:46px;
+  align-items:center
+}
+.plan-price-panel{
+  padding:28px;
+  background:linear-gradient(180deg,rgba(127,227,106,.075),rgba(255,255,255,.025));
+  border-color:rgba(127,227,106,.24)
+}
+.plan-price-panel small{
+  display:block;
+  color:var(--muted);
+  text-transform:uppercase;
+  letter-spacing:.08em;
+  font-size:11px;
+  font-weight:850
+}
+.plan-price-panel p{
+  color:var(--muted);
+  line-height:1.55;
+  font-size:13px
+}
+.plan-support{
+  margin-top:20px;
+  padding-top:18px;
+  border-top:1px solid var(--line);
+  color:#dff9da;
+  font-weight:800;
+  line-height:1.45
+}
+.plan-detail-grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:24px
+}
+.plan-detail-grid>div{
+  padding:28px;
+  border-radius:20px;
+  border:1px solid var(--line);
+  background:rgba(255,255,255,.02)
+}
+.eyebrow-neutral{
+  color:#d2dce7;
+  background:rgba(255,255,255,.045);
+  border-color:var(--line)
+}
+.detail-check-list,
+.detail-separate-list{
+  list-style:none;
+  padding:0;
+  margin:24px 0 0;
+  display:grid;
+  gap:12px
+}
+.detail-check-list li,
+.detail-separate-list li{
+  position:relative;
+  padding-left:28px;
+  color:#c7d2de;
+  line-height:1.55;
+  font-size:14px
+}
+.detail-check-list li:before,
+.detail-separate-list li:before{
+  position:absolute;
+  left:0;
+  top:0
+}
+.detail-check-list li:before{
+  content:"✓";
+  color:var(--accent);
+  font-weight:900
+}
+.detail-separate-list li:before{
+  content:"•";
+  color:#8fa0b3;
+  font-weight:900
+}
+.outcome-card{
+  padding:30px;
+  display:grid;
+  grid-template-columns:.8fr 1.2fr;
+  gap:36px;
+  align-items:center
+}
+.outcome-card p{
+  color:#c8d3df;
+  line-height:1.75;
+  font-size:17px;
+  margin:0
+}
+.compare-plan-actions{
+  display:flex;
+  flex-wrap:wrap;
+  gap:8px;
+  margin-top:auto
+}
+
+@media(max-width:900px){
+  .plan-detail-hero,
+  .plan-detail-grid,
+  .outcome-card{grid-template-columns:1fr}
+}
