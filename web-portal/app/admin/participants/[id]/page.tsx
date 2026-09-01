@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { requireAdminContext } from "@/lib/academy";
-import { addParticipantAdminNote, updateEnrolmentStatus, updateSupportEnd } from "../../actions";
+import { addParticipantAdminNote, revokeParticipantSessions, setParticipantTemporaryPassword, updateEnrolmentStatus, updateSupportEnd } from "../../actions";
 import { getSql } from "@/lib/db";
 import { accessibleLessons, tierLabels, type Tier } from "@/lib/programme-data";
 import { getLaunchReadiness } from "@/lib/academy-rules";
@@ -132,6 +132,31 @@ export default async function AdminParticipantPage({ params }: { params: Promise
           </form>
         </section>
       ) : null}
+
+      <section className="panel card admin-auth-support">
+        <div>
+          <span className="eyebrow">Auth support</span>
+          <h2>Participant login controls</h2>
+          <p className="muted">Use these only for verified support requests. Password values are never written to the Academy audit log.</p>
+        </div>
+        <div className="admin-auth-actions">
+          <form action={setParticipantTemporaryPassword}>
+            <input type="hidden" name="userId" value={id} />
+            <div className="field">
+              <label>New temporary password</label>
+              <input name="newPassword" type="password" minLength={12} autoComplete="new-password" required />
+              <small className="muted">Minimum 12 characters. Send it to the participant through an approved secure channel.</small>
+            </div>
+            <button className="btn" type="submit">Set temporary password</button>
+          </form>
+
+          <form action={revokeParticipantSessions} className="revoke-session-form">
+            <input type="hidden" name="userId" value={id} />
+            <p className="muted">Use this if you need to sign the participant out of every active Academy session.</p>
+            <button className="btn" type="submit">Revoke all sessions</button>
+          </form>
+        </div>
+      </section>
 
       <section className="panel card admin-notes-panel">
         <div>
