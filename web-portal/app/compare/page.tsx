@@ -72,7 +72,10 @@ export default function ComparePage() {
                   <h2>{plan.name}</h2>
                   <div className="price">{plan.price}</div>
                   <p>{plan.subtitle}</p>
-                  <Link className="btn btn-primary" href="/consultation">Discuss this route</Link>
+                  <div className="compare-plan-actions">
+                    <Link className="btn btn-primary" href="/consultation">Discuss this route</Link>
+                    <Link className="btn" href={"/plans/" + plan.slug}>Full plan details</Link>
+                  </div>
                 </article>
               ))}
             </div>
