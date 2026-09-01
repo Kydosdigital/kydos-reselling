@@ -1752,3 +1752,115 @@ h3{letter-spacing:-.025em}
   .launch-meta{grid-template-columns:1fr}
   .launch-check{grid-template-columns:1fr}
 }
+
+.implementation-task{
+  padding:22px;
+  display:grid;
+  gap:18px
+}
+.implementation-task-head{
+  display:flex;
+  justify-content:space-between;
+  align-items:flex-start;
+  gap:20px
+}
+.implementation-task-head h3{margin:5px 0}
+.task-thread{
+  display:grid;
+  gap:8px;
+  padding-top:16px;
+  border-top:1px solid var(--line)
+}
+.task-thread-empty{
+  color:var(--muted);
+  font-size:12px;
+  margin:0;
+  padding-top:14px;
+  border-top:1px solid var(--line)
+}
+.task-message{
+  max-width:82%;
+  padding:12px 14px;
+  border-radius:13px;
+  border:1px solid var(--line)
+}
+.task-message strong{
+  display:block;
+  font-size:11px;
+  margin-bottom:5px
+}
+.task-message p{
+  margin:0;
+  color:#d3dde8;
+  line-height:1.55;
+  font-size:13px
+}
+.task-message small{
+  display:block;
+  color:var(--muted);
+  font-size:9px;
+  margin-top:7px
+}
+.participant-message{
+  margin-left:auto;
+  background:rgba(127,227,106,.055);
+  border-color:rgba(127,227,106,.16)
+}
+.kydos-message{
+  background:rgba(66,203,184,.045)
+}
+.task-update-form{
+  display:grid;
+  gap:10px;
+  padding-top:16px;
+  border-top:1px solid var(--line)
+}
+.task-update-form .btn{justify-self:start}
+.admin-task-breadcrumbs{
+  display:flex;
+  flex-wrap:wrap;
+  gap:8px;
+  color:var(--muted);
+  font-size:12px;
+  margin-bottom:26px
+}
+.admin-task-breadcrumbs a{color:#b9f4ae}
+.admin-task-summary-grid{
+  display:grid;
+  grid-template-columns:.75fr 1.25fr;
+  gap:16px
+}
+.admin-task-summary-grid h3{
+  margin:16px 0 5px
+}
+.admin-task-notes{
+  color:var(--muted);
+  line-height:1.55;
+  border-top:1px solid var(--line);
+  padding-top:14px
+}
+.admin-task-thread-card{
+  margin-top:18px;
+  padding:26px
+}
+.admin-task-thread-card h2{
+  margin:8px 0
+}
+.admin-task-thread{
+  display:grid;
+  gap:10px;
+  margin:24px 0
+}
+.admin-task-reply{
+  padding-top:20px;
+  border-top:1px solid var(--line)
+}
+.admin-task-send{
+  align-self:end;
+  padding-bottom:16px
+}
+@media(max-width:800px){
+  .implementation-task-head{flex-direction:column}
+  .task-message{max-width:100%}
+  .admin-task-summary-grid{grid-template-columns:1fr}
+}
