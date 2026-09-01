@@ -67,6 +67,22 @@ create table if not exists participant_intake (
   updated_at timestamptz not null default now()
 );
 
+create table if not exists participant_weekly_checkins (
+  id uuid primary key default gen_random_uuid(),
+  user_id uuid not null references academy_users(id) on delete cascade,
+  week_start date not null,
+  wins text not null default '' check (char_length(wins) <= 6000),
+  blockers text not null default '' check (char_length(blockers) <= 6000),
+  next_focus text not null default '' check (char_length(next_focus) <= 6000),
+  support_needed text not null default '' check (char_length(support_needed) <= 6000),
+  confidence integer check (confidence is null or confidence between 1 and 5),
+  submitted_at timestamptz not null default now(),
+  updated_at timestamptz not null default now(),
+  unique (user_id, week_start)
+);
+
+create index if not exists participant_weekly_checkins_user_week_idx on participant_weekly_checkins(user_id, week_start desc);
+
 create table if not exists implementation_tasks (
   id uuid primary key default gen_random_uuid(),
   user_id uuid not null references academy_users(id) on delete cascade,
