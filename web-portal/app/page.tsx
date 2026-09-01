@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { PublicHeader } from "@/components/public-header";
 import { PublicFooter } from "@/components/public-footer";
+import { HomeStructuredData } from "@/components/home-structured-data";
 
 export const metadata: Metadata = {
   title: "Build Your UK Digital Marketing Agency",
@@ -82,6 +83,7 @@ const buildItems = [
 export default function HomePage() {
   return (
     <>
+      <HomeStructuredData />
       <PublicHeader />
 
       <main>
