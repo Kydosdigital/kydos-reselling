@@ -69,6 +69,7 @@ export async function activatePaidAccount(formData: FormData) {
   }
 
   const sessionId = String(formData.get("sessionId") || "");
+  const emailConfirmation = String(formData.get("emailConfirmation") || "").trim().toLowerCase();
   const password = String(formData.get("password") || "");
   const confirmPassword = String(formData.get("confirmPassword") || "");
 
@@ -81,6 +82,10 @@ export async function activatePaidAccount(formData: FormData) {
     order = await ensurePaidOrder(sessionId);
   } catch {
     redirect("/activate?session_id=" + encodeURIComponent(sessionId) + "&error=payment");
+  }
+
+  if (!emailConfirmation || emailConfirmation !== order.email) {
+    redirect("/activate?session_id=" + encodeURIComponent(sessionId) + "&error=email");
   }
 
   const sql = getSql();
