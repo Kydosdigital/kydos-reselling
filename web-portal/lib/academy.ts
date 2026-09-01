@@ -2,7 +2,7 @@ import { redirect } from "next/navigation";
 import { getAuth, isNeonAuthConfigured } from "@/lib/auth/server";
 import { getSql, isDatabaseConfigured } from "@/lib/db";
 import type { Tier } from "@/lib/programme-data";
-import { supportEndForTier as calculateSupportEnd } from "@/lib/academy-rules";
+import { canProvisionAcademyProfile, supportEndForTier as calculateSupportEnd } from "@/lib/academy-rules";
 
 export type AcademyUser = {
   id: string;
@@ -50,8 +50,21 @@ export async function getCurrentAcademyContext() {
   let academyUser = rows[0] as AcademyUser | undefined;
 
   if (!academyUser) {
-    const email = (authUser.email || "").toLowerCase();
-    const role = adminEmails().includes(email) ? "admin" : "student";
+    const email = (authUser.email || "").trim().toLowerCase();
+    const isAdminEmail = adminEmails().includes(email);
+    const paidOrders = email
+      ? await sql.query(
+          "select status from programme_orders where lower(email) = lower($1) order by created_at desc limit 1",
+          [email]
+        )
+      : [];
+    const paidOrderStatus = paidOrders.length ? String(paidOrders[0].status) : null;
+
+    if (!canProvisionAcademyProfile({ isAdminEmail, paidOrderStatus })) {
+      return null;
+    }
+
+    const role = isAdminEmail ? "admin" : "student";
     const name = authUser.name || email.split("@")[0] || "Participant";
 
     rows = await sql.query(
@@ -71,7 +84,11 @@ export async function requireAcademyContext() {
   }
 
   const context = await getCurrentAcademyContext();
-  if (!context) redirect("/login");
+  if (!context) {
+    const authUser = await getCurrentAuthUser();
+    if (authUser) redirect("/access-pending");
+    redirect("/login");
+  }
   return context;
 }
 
@@ -88,6 +105,12 @@ export async function getActiveEnrolment(userId: string) {
     [userId, "active"]
   );
   return (rows[0] as AcademyEnrolment | undefined) || null;
+}
+
+export async function requireActiveEnrolment(userId: string) {
+  const enrolment = await getActiveEnrolment(userId);
+  if (!enrolment) throw new Error("No active programme access.");
+  return enrolment;
 }
 
 export function supportEndForTier(tier: string, from = new Date()) {
