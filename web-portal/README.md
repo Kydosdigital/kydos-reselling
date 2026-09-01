@@ -1,69 +1,44 @@
-# Kydos Digital Agency Programme Web Portal
+# Kydos Academy Web Portal
 
-This folder contains the first deployable MVP for the programme.
-
-## Included
-
-- public programme sales page
-- £2,500 / £5,000 / £10,000 tier comparison
-- participant login
-- protected student portal
-- 12-module programme structure
-- tier-aware lesson access
-- lesson progress tracking
-- support-period display
-- Supabase authentication/data schema
-- responsive mobile layout
+This folder contains the public Kydos Academy website and the participant/admin application.
 
 ## Stack
 
-- Next.js 15
+- Next.js 16
 - React 19
-- TypeScript
-- Supabase Auth + Postgres
-- plain CSS with no UI framework dependency
+- Managed Neon Auth
+- Neon Postgres
+- Neon serverless driver
+- Stripe, currently disabled for live checkout
+- Vercel
 
-## Local setup
+## Public routes
 
-1. Create a Supabase project.
-2. Run supabase/schema.sql in the Supabase SQL editor.
-3. Copy .env.example to .env.local.
-4. Add:
-   - NEXT_PUBLIC_SUPABASE_URL
-   - NEXT_PUBLIC_SUPABASE_ANON_KEY
-   - NEXT_PUBLIC_CONSULTATION_URL
-5. Run npm install.
-6. Run npm run dev.
+- /
+- /programme
+- /compare
+- /plans/blueprint
+- /plans/build
+- /plans/dfy
+- /consultation
+- /legal/terms
+- /legal/refunds
+- /legal/privacy
 
-## Create the first participant
+## Application routes
 
-1. Create the user in Supabase Authentication.
-2. Add an active row to public.enrolments.
-3. Set tier to blueprint, build or dfy.
-4. Set programme_start and support_end.
+- /login
+- /portal
+- /portal/intake
+- /portal/implementation
+- /admin
 
-Example:
+## Neon
 
-```sql
-insert into public.enrolments (user_id, tier, status, programme_start, support_end)
-values ('USER_UUID', 'build', 'active', current_date, current_date + 84);
-```
+See neon/README.md and neon/001_academy_schema.sql.
 
-For Done For You, the post-handover support period should eventually be calculated from the formal handover date.
+## Environment
 
-## Next implementation slices
+Copy .env.example to .env.local and configure Neon before testing protected application routes.
 
-1. Kydos admin dashboard.
-2. Stripe checkout and post-payment provisioning.
-3. Approved DOCX/XLSX/PDF downloads through private storage.
-4. Video lesson URLs and completion.
-5. Participant intake form inside the portal.
-6. Build With Us / Done For You implementation board.
-7. WhatsApp support link and support-expiry automation.
-8. Email onboarding automation.
-9. Vercel deployment and domain.
-10. Analytics and conversion tracking.
-
-## Important
-
-Legal documents in the repository remain drafts until the professional review register is completed.
+Live checkout and public indexing remain disabled until launch approval.
