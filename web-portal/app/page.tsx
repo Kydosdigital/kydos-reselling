@@ -4,8 +4,9 @@ import { PublicHeader } from "@/components/public-header";
 import { PublicFooter } from "@/components/public-footer";
 
 export const metadata: Metadata = {
-  title: "Kydos Academy | Build Your UK Digital Marketing Agency",
-  description: "Build a structured UK digital marketing agency with the company, brand, website, CRM, sales, team and delivery systems behind Kydos Digital."
+  title: "Build Your UK Digital Marketing Agency",
+  description: "Build a structured UK digital marketing agency with the company, brand, website, CRM, sales, team and delivery systems behind Kydos Digital.",
+  alternates: { canonical: "/" }
 };
 
 const consultationUrl =
