@@ -1864,3 +1864,37 @@ h3{letter-spacing:-.025em}
   .task-message{max-width:100%}
   .admin-task-summary-grid{grid-template-columns:1fr}
 }
+
+.admin-filter-panel{
+  margin-top:18px;
+  padding:18px 20px
+}
+.admin-filter-grid{
+  display:grid;
+  grid-template-columns:1.25fr .8fr .9fr auto;
+  gap:12px;
+  align-items:end
+}
+.admin-filter-grid .field{
+  margin:0
+}
+.admin-filter-actions{
+  display:flex;
+  gap:8px;
+  align-items:center;
+  padding-bottom:1px
+}
+@media(max-width:1050px){
+  .admin-filter-grid{
+    grid-template-columns:1fr 1fr
+  }
+}
+@media(max-width:650px){
+  .admin-filter-grid{
+    grid-template-columns:1fr
+  }
+  .admin-filter-actions{
+    align-items:stretch;
+    flex-direction:column
+  }
+}
