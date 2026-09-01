@@ -293,18 +293,26 @@ This section is informational and must not imply guaranteed immigration or spons
 - [x] Build-time programme content sync from repository source
 - [x] In-portal lesson reading
 - [x] Protected source downloads
+- [x] Protected download no-store caching, safe filenames and nosniff response hardening
 - [x] Participant intake form
+- [x] Participant weekly check-in form and history
 - [x] Build With Us / Done For You implementation board
 - [x] Kydos admin dashboard
+- [x] Admin weekly check-in review dashboard
+- [x] Weekly check-in support and low-confidence signals in admin attention queue
 - [x] Participant invite and enrolment flow
 - [x] Implementation task management
 - [x] Done For You handover date and 90-day support timer
 - [x] Stripe checkout architecture
+- [x] Separate Stripe test and live checkout safety gates
+- [x] Stripe test/live key-mode validation
+- [x] Stripe webhook test/live environment isolation
 - [x] Checkout consent capture architecture
 - [x] Stripe webhook automated participant provisioning
 - [x] Programme order audit table
 - [x] Neon Postgres application schema prepared
 - [x] Neon Managed Better Auth provisioned on production branch
+- [x] Neon Auth route lazy initialisation for build-safe deployment
 - [x] Neon Data API provisioned and linked to Neon Auth
 - [x] Participant-facing Data API RLS migration prepared
 - [x] Participant account and support summary page
@@ -327,6 +335,7 @@ This section is informational and must not imply guaranteed immigration or spons
 - [x] Paid-order account activation with masked email and purchase-email confirmation
 - [x] Participant/admin loading and error states
 - [x] CI content validation, TypeScript typecheck, unit tests and static RLS security tests
+- [x] Stripe checkout-mode safety and webhook-environment tests
 - [ ] Apply Academy Postgres schema to production neondb
 - [ ] Apply participant-facing RLS migration to production neondb
 - [ ] Create and verify first Kydos admin account
