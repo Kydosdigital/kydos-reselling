@@ -13,9 +13,6 @@ export const metadata: Metadata = {
   description: "Build a structured UK digital marketing agency with the company, website, CRM, sales, team and delivery systems behind Kydos Digital.",
   applicationName: "Kydos Academy",
   category: "Business education and agency implementation",
-  alternates: {
-    canonical: "/"
-  },
   openGraph: {
     title: "Kydos Academy | Build Your UK Digital Marketing Agency",
     description: "Build the company, brand, website, CRM, sales system, team and client-delivery infrastructure needed to operate a professional digital marketing agency.",
