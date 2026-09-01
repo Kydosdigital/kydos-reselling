@@ -4,7 +4,7 @@ import { login } from "./actions";
 export default async function LoginPage({
   searchParams
 }: {
-  searchParams: Promise<{ error?: string }>;
+  searchParams: Promise<{ error?: string; setup?: string }>;
 }) {
   const params = await searchParams;
 
@@ -13,11 +13,17 @@ export default async function LoginPage({
       <section className="auth-card card">
         <Link href="/" className="brand">
           <span className="brand-mark" />
-          <span>Kydos Digital</span>
+          <span>Kydos Academy</span>
         </Link>
 
         <h2 style={{ marginTop: 28 }}>Programme login</h2>
         <p className="muted">Access your agency launch plan, templates, progress and support information.</p>
+
+        {params.setup === "pending" ? (
+          <div className="notice">
+            Participant login is being prepared. The public Academy website is available now, but the student portal will be activated after the programme backend is connected.
+          </div>
+        ) : null}
 
         {params.error ? <div className="notice">The email or password was not recognised. Please try again.</div> : null}
 
