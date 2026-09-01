@@ -40,7 +40,7 @@ export default function ConsultationPage() {
               <span className="pill">Speak to Kydos</span>
               <h2>Book your consultation</h2>
               <p>
-                Use the booking link if configured, or contact the Manchester team directly.
+                Choose a consultation time that suits you. If you would rather speak by email or WhatsApp first, contact the Manchester team directly.
               </p>
               <a className="btn btn-primary btn-large" href={consultationUrl}>Choose a consultation time</a>
 
