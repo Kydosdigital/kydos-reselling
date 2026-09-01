@@ -118,3 +118,11 @@ export function canProvisionAcademyProfile(input: {
   if (input.isAdminEmail) return true;
   return String(input.paidOrderStatus || "").toLowerCase() === "paid";
 }
+
+export function mondayWeekStart(date = new Date()) {
+  const current = new Date(Date.UTC(date.getUTCFullYear(), date.getUTCMonth(), date.getUTCDate()));
+  const day = current.getUTCDay();
+  const daysSinceMonday = day === 0 ? 6 : day - 1;
+  current.setUTCDate(current.getUTCDate() - daysSinceMonday);
+  return current.toISOString().slice(0, 10);
+}
