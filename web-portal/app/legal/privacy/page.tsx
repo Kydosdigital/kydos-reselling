@@ -1,14 +1,20 @@
-import Link from "next/link";
+import type { Metadata } from "next";
+import { PublicHeader } from "@/components/public-header";
+import { PublicFooter } from "@/components/public-footer";
+
+export const metadata: Metadata = {
+  title: "Programme Privacy Notice",
+  description: "Pre-launch Kydos Academy privacy notice, pending data-protection review.",
+  alternates: { canonical: "/legal/privacy" }
+};
 
 export default function PrivacyPage() {
   return (
-    <main className="container legal-page">
-      <Link href="/" className="brand">
-        <span className="brand-mark" />
-        <span>Kydos Digital</span>
-      </Link>
+    <>
+      <PublicHeader />
+      <main className="container legal-page">
 
-      <span className="pill" style={{ marginTop: 28 }}>Draft for data-protection review</span>
+      <span className="pill" >Draft for data-protection review</span>
       <h1>Programme Privacy Notice</h1>
 
       <div className="notice">
@@ -17,7 +23,7 @@ export default function PrivacyPage() {
 
       <section className="legal-copy">
         <h2>Who we are</h2>
-        <p>KYDOS DIGITAL LTD is the provider of the Kydos Digital agency programme.</p>
+        <p>KYDOS DIGITAL LTD is the provider of the Kydos Academy agency programme.</p>
 
         <h2>Information we use</h2>
         <p>We may process contact details, billing records, programme tier, support communications, implementation information and files supplied for programme delivery.</p>
@@ -35,5 +41,7 @@ export default function PrivacyPage() {
         <p>Privacy queries can be sent to Support@kydosdigital.com.</p>
       </section>
     </main>
+      <PublicFooter />
+    </>
   );
 }
