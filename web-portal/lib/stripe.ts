@@ -34,6 +34,12 @@ export function resolveCheckoutMode(env: CheckoutEnvironment = process.env): Che
   return "disabled";
 }
 
+export function canProcessStripeEvent(livemode: boolean, env: CheckoutEnvironment = process.env) {
+  const mode = resolveCheckoutMode(env);
+  if (mode === "disabled") return false;
+  return (mode === "live" && livemode) || (mode === "test" && !livemode);
+}
+
 export function createStripeClient() {
   const secret = process.env.STRIPE_SECRET_KEY;
   if (!secret) {
