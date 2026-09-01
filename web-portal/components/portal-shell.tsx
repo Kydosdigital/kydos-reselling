@@ -27,6 +27,7 @@ export async function PortalShell({ children }: { children: React.ReactNode }) {
             <Link href="/portal">Dashboard</Link>
             <Link href="/portal/search">Search</Link>
             <Link href="/portal/intake">My Intake</Link>
+            <Link href="/portal/check-in">Weekly Check-in</Link>
             <Link href="/portal/implementation">Implementation</Link>
             <Link href="/portal/launch">Launch Plan</Link>
             <Link href="/portal/downloads">Downloads</Link>
