@@ -21,7 +21,8 @@ export async function generateMetadata({
 
   return {
     title: plan.name + " Agency Programme",
-    description: plan.strapline
+    description: plan.strapline,
+    alternates: { canonical: "/plans/" + plan.slug }
   };
 }
 
