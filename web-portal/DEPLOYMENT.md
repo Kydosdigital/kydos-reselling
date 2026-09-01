@@ -1,120 +1,60 @@
-# Kydos Programme Portal Deployment
+# Kydos Academy Deployment
 
-## Vercel
+## Vercel project
 
-Create a new Vercel project from:
+Repository: Kydosdigital/kydos-reselling
+Root Directory: web-portal
+Framework: Next.js
+Domain: academy.kydosdigital.com
 
-Kydosdigital/kydos-reselling
+## Neon production project
 
-Set the project Root Directory to:
+Project: Kydos wl
+Project ID: fragrant-cake-46339841
+Production branch: br-shy-paper-za4cfx0d
+Database: neondb
+Region: AWS eu-west-2, London
 
-web-portal
+## Neon setup
 
-Framework:
-Next.js
+1. Enable Managed Neon Auth on the production branch.
+2. Run neon/001_academy_schema.sql in the neondb SQL Editor.
+3. Copy the pooled neondb connection string.
+4. Create the first Academy admin user in Neon Auth.
+5. Make the first Academy user an Auth admin in Neon Console.
 
-## Environment variables
+## Vercel environment variables
 
-Required:
-
-- NEXT_PUBLIC_SUPABASE_URL
-- NEXT_PUBLIC_SUPABASE_ANON_KEY
-- SUPABASE_SERVICE_ROLE_KEY
-- NEXT_PUBLIC_APP_URL
+- DATABASE_URL
+- NEON_AUTH_BASE_URL
+- NEON_AUTH_COOKIE_SECRET
+- ACADEMY_ADMIN_EMAILS
+- NEXT_PUBLIC_APP_URL=https://academy.kydosdigital.com
 - NEXT_PUBLIC_CONSULTATION_URL
-- STRIPE_SECRET_KEY
-- STRIPE_WEBHOOK_SECRET
-- STRIPE_PRICE_BLUEPRINT
-- STRIPE_PRICE_BUILD
-- STRIPE_PRICE_DFY
-- ENABLE_LIVE_CHECKOUT
-- NEXT_PUBLIC_ENABLE_INDEXING
+- NEXT_PUBLIC_ENABLE_INDEXING=false before launch
+- ENABLE_LIVE_CHECKOUT=false before legal sign-off
 
-Keep these OFF before launch:
+Stripe variables are added only when checkout is ready for test mode.
 
-ENABLE_LIVE_CHECKOUT=false
+## First admin
 
-NEXT_PUBLIC_ENABLE_INDEXING=false
-
-## Supabase
-
-Create a dedicated programme Supabase project.
-
-Run migrations in order:
-
-1. supabase/schema.sql
-2. supabase/002_admin_intake_implementation.sql
-3. supabase/003_checkout_orders.sql
-
-Then create the first Kydos admin Auth user.
-
-Set its profile role:
-
-```sql
-update public.profiles
-set role = 'admin'
-where email = 'YOUR_ADMIN_EMAIL';
-```
-
-Do not expose the service-role key in browser code.
-
-## Stripe
-
-Create three one-time prices:
-
-- Blueprint, £2,500
-- Build With Us, £5,000
-- Done For You, £10,000
-
-Put the Stripe price IDs into the corresponding environment variables.
-
-Do not enable live checkout until legal review is complete.
-
-Webhook endpoint after deployment:
-
-https://YOUR_DOMAIN/api/stripe/webhook
-
-Listen for:
-
-checkout.session.completed
-
-Add the webhook signing secret to STRIPE_WEBHOOK_SECRET.
-
-## Consultation booking
-
-Set NEXT_PUBLIC_CONSULTATION_URL to the Kydos consultation calendar.
+ACADEMY_ADMIN_EMAILS must include the email used for the Kydos admin Auth account.
+After sign-in, the application creates the matching Academy admin record.
 
 ## Prelaunch QA
 
-Before public release:
+- public website desktop/mobile QA
+- login and logout
+- first admin access
+- create participant
+- participant login
+- tier restrictions
+- lesson completion
+- intake form
+- implementation board
+- admin task updates
+- DFY handover and 90-day support timer
+- protected downloads
+- Stripe test-mode checkout after legal review
 
-- GitHub CI passes
-- public sales page checked on mobile
-- login tested
-- participant invite tested
-- tier access tested
-- lesson progress tested
-- intake saved
-- implementation board tested
-- Stripe test-mode checkout completed
-- webhook provisioned participant
-- Supabase invite received
-- admin handover date starts 90-day DFY support timer
-- legal URLs contain approved final copy
-- checkout consent wording approved
-- privacy/cookie implementation approved
-- ENABLE_LIVE_CHECKOUT remains false until sign-off
-- NEXT_PUBLIC_ENABLE_INDEXING remains false until launch
-
-## Launch
-
-After final approval:
-
-1. replace draft legal pages with approved wording
-2. set real Stripe live keys and price IDs
-3. configure live Stripe webhook
-4. set ENABLE_LIVE_CHECKOUT=true
-5. set NEXT_PUBLIC_ENABLE_INDEXING=true
-6. redeploy
-7. test one real low-risk checkout path only if commercially authorised
-8. monitor webhook and Supabase provisioning logs
+Do not enable live checkout or search indexing until the relevant launch gates are complete.
