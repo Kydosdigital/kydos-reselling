@@ -162,7 +162,7 @@ export default async function AdminParticipantPage({ params }: { params: Promise
               <thead><tr><th>Area</th><th>Task</th><th>Owner</th><th>Due</th><th>Status</th></tr></thead>
               <tbody>{tasks.map((task) => (
                 <tr key={String(task.id)}>
-                  <td>{String(task.area)}</td><td>{String(task.title)}</td><td>{task.owner ? String(task.owner) : "Unassigned"}</td><td>{task.due_date ? String(task.due_date) : "Not set"}</td><td>{String(task.status)}</td>
+                  <td>{String(task.area)}</td><td><Link className="admin-person-link" href={"/admin/tasks/" + String(task.id)}>{String(task.title)}</Link></td><td>{task.owner ? String(task.owner) : "Unassigned"}</td><td>{task.due_date ? String(task.due_date) : "Not set"}</td><td>{String(task.status)}</td>
                 </tr>
               ))}</tbody>
             </table>
