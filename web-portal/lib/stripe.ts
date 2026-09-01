@@ -1,5 +1,39 @@
 import Stripe from "stripe";
 
+export type CheckoutMode = "disabled" | "test" | "live";
+
+type CheckoutEnvironment = {
+  ENABLE_TEST_CHECKOUT?: string;
+  ENABLE_LIVE_CHECKOUT?: string;
+  STRIPE_SECRET_KEY?: string;
+};
+
+export function resolveCheckoutMode(env: CheckoutEnvironment = process.env): CheckoutMode {
+  const testEnabled = env.ENABLE_TEST_CHECKOUT === "true";
+  const liveEnabled = env.ENABLE_LIVE_CHECKOUT === "true";
+  const secret = env.STRIPE_SECRET_KEY || "";
+
+  if (testEnabled && liveEnabled) {
+    throw new Error("Test and live checkout cannot be enabled at the same time.");
+  }
+
+  if (liveEnabled) {
+    if (!secret.startsWith("sk_live_")) {
+      throw new Error("Live checkout requires a Stripe live-mode secret key.");
+    }
+    return "live";
+  }
+
+  if (testEnabled) {
+    if (!secret.startsWith("sk_test_")) {
+      throw new Error("Test checkout requires a Stripe test-mode secret key.");
+    }
+    return "test";
+  }
+
+  return "disabled";
+}
+
 export function createStripeClient() {
   const secret = process.env.STRIPE_SECRET_KEY;
   if (!secret) {
