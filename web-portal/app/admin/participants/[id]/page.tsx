@@ -13,14 +13,15 @@ export default async function AdminParticipantPage({ params }: { params: Promise
   const { id } = await params;
   const sql = getSql();
 
-  const [users, enrolments, intakeRows, progressRows, tasks, orders, adminNotes] = await Promise.all([
+  const [users, enrolments, intakeRows, progressRows, tasks, orders, adminNotes, weeklyCheckIns] = await Promise.all([
     sql.query("select id, auth_user_id, email, full_name, role, created_at from academy_users where id = $1 limit 1", [id]),
     sql.query("select id, tier, status, programme_start, support_end, handover_date, created_at from enrolments where user_id = $1 order by created_at desc", [id]),
     sql.query("select * from participant_intake where user_id = $1 limit 1", [id]),
     sql.query("select lesson_id, completed_at from lesson_progress where user_id = $1 order by completed_at desc", [id]),
     sql.query("select id, area, title, owner, status, due_date, notes, created_at from implementation_tasks where user_id = $1 order by created_at desc", [id]),
     sql.query("select id, tier, amount_total, currency, status, created_at, stripe_session_id from programme_orders where user_id = $1 order by created_at desc", [id]),
-    sql.query("select n.id, n.note, n.created_at, a.full_name as author_name from participant_admin_notes n left join academy_users a on a.id = n.author_user_id where n.user_id = $1 order by n.created_at desc limit 50", [id])
+    sql.query("select n.id, n.note, n.created_at, a.full_name as author_name from participant_admin_notes n left join academy_users a on a.id = n.author_user_id where n.user_id = $1 order by n.created_at desc limit 50", [id]),
+    sql.query("select id, week_start, wins, blockers, next_focus, support_needed, confidence, submitted_at, updated_at from participant_weekly_checkins where user_id = $1 order by week_start desc limit 12", [id])
   ]);
 
   if (!users.length) notFound();
@@ -34,6 +35,7 @@ export default async function AdminParticipantPage({ params }: { params: Promise
   const percent = accessible.length ? Math.round((completeCount / accessible.length) * 100) : 0;
   const intake = intakeRows[0] as Record<string, any> | undefined;
   const readiness = getLaunchReadiness(intake);
+  const latestCheckIn = weeklyCheckIns[0];
 
   return (
     <main className="container admin-participant-page">
@@ -53,6 +55,7 @@ export default async function AdminParticipantPage({ params }: { params: Promise
         <section className="portal-stat card"><small>Programme start</small><strong className="stat-date">{active?.programme_start ? String(active.programme_start) : "Not set"}</strong><span>Current enrolment</span></section>
         <section className="portal-stat card"><small>Support end</small><strong className="stat-date">{active?.support_end ? String(active.support_end) : tier === "dfy" ? "After handover" : "Not set"}</strong><span>{tier === "dfy" && active?.handover_date ? "Handover " + String(active.handover_date) : "Support window"}</span></section>
         <section className="portal-stat card"><small>Launch readiness</small><strong>{intake ? readiness.percent + "%" : "No intake"}</strong><span>{intake ? readiness.stage : "Waiting for participant intake"}</span></section>
+        <section className="portal-stat card"><small>Latest check-in</small><strong>{latestCheckIn?.confidence ? String(latestCheckIn.confidence) + "/5" : weeklyCheckIns.length ? "Submitted" : "None"}</strong><span>{latestCheckIn?.week_start ? "Week of " + String(latestCheckIn.week_start) : "No weekly update yet"}</span></section>
       </div>
 
       <div className="admin-detail-grid">
@@ -101,6 +104,31 @@ export default async function AdminParticipantPage({ params }: { params: Promise
           </div>
         </section>
       </div>
+
+      <section className="panel card" style={{ marginTop: 30 }}>
+        <div className="portal-section-heading">
+          <div>
+            <span className="eyebrow">Participant pulse</span>
+            <h2>Weekly check-in history</h2>
+            <p className="muted">The latest 12 weekly updates are kept here so support conversations have the participant's recent context.</p>
+          </div>
+          <Link className="btn" href="/admin/check-ins">Open all check-ins</Link>
+        </div>
+        {weeklyCheckIns.length ? (
+          <div className="compact-list">
+            {weeklyCheckIns.map((checkIn) => (
+              <div key={String(checkIn.id)}>
+                <strong>Week of {String(checkIn.week_start)}{checkIn.confidence ? " · Confidence " + String(checkIn.confidence) + "/5" : ""}</strong>
+                {checkIn.wins ? <span><b>Wins:</b> {String(checkIn.wins)}</span> : null}
+                {checkIn.blockers ? <span><b>Blockers:</b> {String(checkIn.blockers)}</span> : null}
+                {checkIn.next_focus ? <span><b>Next focus:</b> {String(checkIn.next_focus)}</span> : null}
+                {checkIn.support_needed ? <span><b>Kydos support requested:</b> {String(checkIn.support_needed)}</span> : null}
+                <span className="muted">Submitted {String(checkIn.submitted_at)}</span>
+              </div>
+            ))}
+          </div>
+        ) : <div className="notice">This participant has not submitted a weekly check-in yet.</div>}
+      </section>
 
       {active ? (
         <section className="panel card admin-control-panel">
