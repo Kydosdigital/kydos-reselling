@@ -5,7 +5,7 @@ import { canAccessTier, modules, tierLabels, type Tier } from "@/lib/programme-d
 import { getActiveEnrolment, requireAcademyContext } from "@/lib/academy";
 import { getSql } from "@/lib/db";
 import contentMap from "@/generated/content.json";
-import { setLessonCompletion } from "../../actions";
+import { saveLessonNote, setLessonCompletion } from "../../actions";
 
 export const dynamic = "force-dynamic";
 
@@ -17,9 +17,10 @@ export default async function LessonPage({ params }: { params: Promise<{ id: str
 
   const { academyUser } = await requireAcademyContext();
   const sql = getSql();
-  const [enrolment, progress] = await Promise.all([
+  const [enrolment, progress, noteRows] = await Promise.all([
     getActiveEnrolment(academyUser.id),
-    sql.query("select lesson_id from lesson_progress where user_id = $1 and lesson_id = $2 limit 1", [academyUser.id, lesson.id])
+    sql.query("select lesson_id from lesson_progress where user_id = $1 and lesson_id = $2 limit 1", [academyUser.id, lesson.id]),
+    sql.query("select note, updated_at from lesson_notes where user_id = $1 and lesson_id = $2 limit 1", [academyUser.id, lesson.id])
   ]);
   if (!enrolment) redirect("/portal");
 
@@ -30,6 +31,7 @@ export default async function LessonPage({ params }: { params: Promise<{ id: str
   const isCsv = lesson.source.endsWith(".csv");
   const html = isCsv ? "" : await marked.parse(raw || "# Content is being prepared");
   const isComplete = progress.length > 0;
+  const savedNote = noteRows.length ? String(noteRows[0].note || "") : "";
 
   return (
     <>
@@ -60,6 +62,29 @@ export default async function LessonPage({ params }: { params: Promise<{ id: str
       ) : (
         <article className="lesson-content card" dangerouslySetInnerHTML={{ __html: html }} />
       )}
+
+      <section className="lesson-notes-card card">
+        <div>
+          <span className="eyebrow">Private workspace</span>
+          <h2>My implementation notes</h2>
+          <p>Capture decisions, questions and action points for your own agency. These notes are private to your participant account.</p>
+        </div>
+        <form action={saveLessonNote}>
+          <input type="hidden" name="lessonId" value={lesson.id} />
+          <textarea
+            className="textarea"
+            name="note"
+            rows={7}
+            maxLength={10000}
+            defaultValue={savedNote}
+            placeholder="What do I need to implement from this lesson? What decisions have I made?"
+          />
+          <div className="lesson-note-actions">
+            <span>{noteRows.length ? "Last saved " + String(noteRows[0].updated_at) : "No note saved yet"}</span>
+            <button className="btn btn-primary" type="submit">Save note</button>
+          </div>
+        </form>
+      </section>
     </>
   );
 }
