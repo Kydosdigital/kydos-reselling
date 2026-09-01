@@ -1,8 +1,16 @@
+import type { Metadata } from "next";
 import Link from "next/link";
+import { PublicHeader } from "@/components/public-header";
+import { PublicFooter } from "@/components/public-footer";
+
+export const metadata: Metadata = {
+  title: "Kydos Academy | Build Your UK Digital Marketing Agency",
+  description: "Build a structured UK digital marketing agency with the company, brand, website, CRM, sales, team and delivery systems behind Kydos Digital."
+};
 
 const consultationUrl =
   process.env.NEXT_PUBLIC_CONSULTATION_URL ||
-  "mailto:Support@kydosdigital.com?subject=Kydos%20Agency%20Programme%20Consultation";
+  "/consultation";
 
 const plans = [
   {
@@ -73,22 +81,7 @@ const buildItems = [
 export default function HomePage() {
   return (
     <>
-      <header className="site-header">
-        <div className="container header-inner">
-          <Link href="/" className="brand">
-            <span className="brand-mark" />
-            <span>Kydos Digital</span>
-          </Link>
-          <nav className="nav">
-            <a href="#what-you-build">What you build</a>
-            <a href="#how">How it works</a>
-            <a href="#plans">Plans</a>
-            <a href="#faq">FAQ</a>
-            <Link href="/login">Login</Link>
-            <a className="btn btn-primary" href={consultationUrl}>Book a consultation</a>
-          </nav>
-        </div>
-      </header>
+      <PublicHeader />
 
       <main>
         <section className="hero hero-premium">
@@ -103,7 +96,7 @@ export default function HomePage() {
               </p>
               <div className="hero-actions">
                 <a className="btn btn-primary btn-large" href={consultationUrl}>Book your agency consultation</a>
-                <a className="btn btn-large" href="#plans">See the three ways to build</a>
+                <Link className="btn btn-large" href="/compare">Compare the three ways to build</Link>
               </div>
               <div className="hero-proof">
                 <div><strong>Manchester-based</strong><span>Kydos Digital team</span></div>
@@ -311,8 +304,8 @@ export default function HomePage() {
                     <a className="btn btn-primary" style={{ width: "100%" }} href={consultationUrl}>
                       Discuss this route
                     </a>
-                    <Link className="btn" style={{ width: "100%" }} href={"/enrol/" + plan.slug}>
-                      View enrolment
+                    <Link className="btn" style={{ width: "100%" }} href="/compare">
+                      Compare full inclusions
                     </Link>
                   </div>
                 </article>
@@ -392,32 +385,7 @@ export default function HomePage() {
         </section>
       </main>
 
-      <footer className="footer">
-        <div className="container footer-grid">
-          <div>
-            <Link href="/" className="brand">
-              <span className="brand-mark" />
-              <span>Kydos Digital</span>
-            </Link>
-            <p>Manchester-based digital solutions and agency-building systems.</p>
-          </div>
-          <div>
-            <strong>Contact</strong>
-            <p>Support@kydosdigital.com<br />+44 7860 254271</p>
-          </div>
-          <div>
-            <strong>Programme</strong>
-            <p><a href="#plans">Plans</a><br /><Link href="/login">Participant login</Link></p>
-          </div>
-          <div>
-            <strong>Photography</strong>
-            <p>
-              Free stock photography from Pexels.<br />
-              Andrea Piacquadio, Antoni Shkraba and Mikhail Nilov.
-            </p>
-          </div>
-        </div>
-      </footer>
+      <PublicFooter />
     </>
   );
 }
