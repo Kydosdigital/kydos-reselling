@@ -187,3 +187,59 @@ export async function addAdminTaskUpdate(formData: FormData) {
   revalidatePath("/admin/participants/" + String(task.user_id));
   revalidatePath("/portal/implementation");
 }
+
+
+export async function setParticipantTemporaryPassword(formData: FormData) {
+  const { academyUser: adminUser } = await requireAdminContext();
+  const userId = String(formData.get("userId") || "");
+  const newPassword = String(formData.get("newPassword") || "");
+
+  if (!userId || newPassword.length < 12) {
+    throw new Error("Temporary password must contain at least 12 characters.");
+  }
+
+  const sql = getSql();
+  const users = await sql.query(
+    "select auth_user_id, email from academy_users where id = $1 and role = 'student' limit 1",
+    [userId]
+  );
+  if (!users.length) throw new Error("Participant account not found.");
+
+  const result = await getAuth().admin.setUserPassword({
+    userId: String(users[0].auth_user_id),
+    newPassword
+  });
+
+  if (result.error) throw new Error(result.error.message || "Unable to reset participant password.");
+
+  await writeAudit(adminUser.id, "participant_password_reset_by_admin", "academy_user", userId, {
+    email: String(users[0].email)
+  });
+
+  revalidatePath("/admin/participants/" + userId);
+}
+
+export async function revokeParticipantSessions(formData: FormData) {
+  const { academyUser: adminUser } = await requireAdminContext();
+  const userId = String(formData.get("userId") || "");
+  if (!userId) throw new Error("Missing participant account.");
+
+  const sql = getSql();
+  const users = await sql.query(
+    "select auth_user_id, email from academy_users where id = $1 and role = 'student' limit 1",
+    [userId]
+  );
+  if (!users.length) throw new Error("Participant account not found.");
+
+  const result = await getAuth().admin.revokeUserSessions({
+    userId: String(users[0].auth_user_id)
+  });
+
+  if (result.error) throw new Error(result.error.message || "Unable to revoke participant sessions.");
+
+  await writeAudit(adminUser.id, "participant_sessions_revoked", "academy_user", userId, {
+    email: String(users[0].email)
+  });
+
+  revalidatePath("/admin/participants/" + userId);
+}
