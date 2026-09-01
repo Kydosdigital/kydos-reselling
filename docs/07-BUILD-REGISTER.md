@@ -273,8 +273,8 @@ This section is informational and must not imply guaranteed immigration or spons
 - [x] Programme content versioning SOP
 - [x] Professional referral directory template
 - [x] Student download library structure
-- [ ] Portal implementation/build
-- [ ] Programme sales page implementation on Kydos website
+- [x] Portal implementation/build, participant and admin application code complete; runtime backend QA pending
+- [x] Programme sales page implementation on academy.kydosdigital.com
 - [ ] Checkout implementation and solicitor-approved consent flow
 - [ ] Programme CRM automation implementation
 - [ ] Programme Meta campaign live build
@@ -303,16 +303,27 @@ This section is informational and must not imply guaranteed immigration or spons
 - [x] Checkout consent capture architecture
 - [x] Stripe webhook automated participant provisioning
 - [x] Programme order audit table
+- [x] Neon Postgres application schema prepared
+- [x] Neon Managed Better Auth provisioned on production branch
+- [x] Neon Data API provisioned and linked to Neon Auth
+- [x] Participant-facing Data API RLS migration prepared
+- [x] Participant account and support summary page
+- [x] Tier-aware download library page
+- [x] Enhanced participant dashboard with next-step, support and implementation status
+- [x] Admin participant detail view with intake, progress, task and order visibility
+- [ ] Apply Academy Postgres schema to production neondb
+- [ ] Apply participant-facing RLS migration to production neondb
+- [ ] Create and verify first Kydos admin account
 - [x] Prelaunch legal pages
 - [x] Prelaunch no-index control
 - [x] GitHub Actions production-build CI
-- [x] Vercel/Supabase deployment guide
-- [ ] Create dedicated Supabase production project, cost approval required before creation
-- [ ] Connect repository to a new Vercel project with web-portal as Root Directory
-- [ ] Add production environment variables
+- [x] Vercel/Neon deployment guide
+- [x] Dedicated Neon production project created in London, Managed Better Auth and Data API provisioned
+- [x] Repository connected to Vercel with web-portal as Root Directory and Academy custom domain attached
+- [ ] Add final Neon production environment variables to Vercel
 - [ ] Create Stripe products/prices after legal launch approval
 - [ ] Configure Stripe webhook in deployed environment
-- [ ] Upload approved final DOCX/XLSX/PDF download assets
+- [ ] Upload approved final DOCX/XLSX/PDF download assets to private object storage
 - [ ] Replace draft legal web pages with solicitor-approved text
 - [ ] End-to-end test-mode purchase and provisioning QA
 - [ ] Public launch approval
