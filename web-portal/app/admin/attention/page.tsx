@@ -1,14 +1,18 @@
 import Link from "next/link";
 import { requireAdminContext } from "@/lib/academy";
 import { getSql } from "@/lib/db";
+import { getWeeklyCheckInSignal, mondayWeekStart } from "@/lib/academy-rules";
 
 export const dynamic = "force-dynamic";
+
+type CheckInRow = Record<string, unknown>;
 
 export default async function AdminAttentionPage() {
   await requireAdminContext();
   const sql = getSql();
+  const currentWeekStart = mondayWeekStart();
 
-  const [overdueTasks, expiringSupport, unprovisionedOrders, missingIntake] = await Promise.all([
+  const [overdueTasks, expiringSupport, unprovisionedOrders, missingIntake, latestCheckIns] = await Promise.all([
     sql.query(
       "select t.id, t.user_id, t.area, t.title, t.owner, t.status, t.due_date, u.full_name, u.email from implementation_tasks t join academy_users u on u.id = t.user_id where t.status <> 'complete' and t.due_date is not null and t.due_date < current_date order by t.due_date asc limit 100"
     ),
@@ -20,10 +24,37 @@ export default async function AdminAttentionPage() {
     ),
     sql.query(
       "select u.id, u.full_name, u.email, e.tier, e.programme_start from academy_users u join enrolments e on e.user_id = u.id and e.status = 'active' left join participant_intake i on i.user_id = u.id where u.role = 'student' and i.user_id is null order by e.programme_start asc nulls first limit 100"
+    ),
+    sql.query(
+      `select u.id as user_id, u.full_name, u.email, e.tier,
+        c.week_start, c.support_needed, c.blockers, c.confidence
+      from enrolments e
+      join academy_users u on u.id = e.user_id
+      left join lateral (
+        select week_start, support_needed, blockers, confidence
+        from participant_weekly_checkins
+        where user_id = u.id
+        order by week_start desc
+        limit 1
+      ) c on true
+      where e.status = 'active' and u.role = 'student'
+      order by u.full_name asc`
     )
   ]);
 
-  const totalAttention = overdueTasks.length + expiringSupport.length + unprovisionedOrders.length + missingIntake.length;
+  const checkInAttention = (latestCheckIns as CheckInRow[])
+    .map((row) => ({
+      ...row,
+      signal: getWeeklyCheckInSignal({
+        latestWeekStart: row.week_start ? String(row.week_start) : null,
+        currentWeekStart,
+        supportNeeded: row.support_needed ? String(row.support_needed) : null,
+        confidence: row.confidence == null ? null : Number(row.confidence)
+      })
+    }))
+    .filter((row) => row.signal !== "clear");
+
+  const totalAttention = overdueTasks.length + expiringSupport.length + unprovisionedOrders.length + missingIntake.length + checkInAttention.length;
 
   return (
     <main className="container admin-page">
@@ -39,14 +70,38 @@ export default async function AdminAttentionPage() {
           <h1>Attention queue</h1>
           <p className="muted">The items most likely to need a Kydos team action next.</p>
         </div>
+        <div className="admin-top-actions">
+          <Link className="btn" href="/admin/check-ins">Weekly check-ins</Link>
+        </div>
       </div>
 
       <div className="portal-stat-grid">
         <section className="portal-stat card"><small>Total attention items</small><strong>{totalAttention}</strong><span>Across current operational checks</span></section>
         <section className="portal-stat card"><small>Overdue tasks</small><strong>{overdueTasks.length}</strong><span>Open tasks past their due date</span></section>
-        <section className="portal-stat card"><small>Support ending</small><strong>{expiringSupport.length}</strong><span>Within the next 14 days</span></section>
+        <section className="portal-stat card"><small>Check-in follow-up</small><strong>{checkInAttention.length}</strong><span>Missing, low-confidence or support-requested</span></section>
         <section className="portal-stat card"><small>Activation / intake</small><strong>{unprovisionedOrders.length + missingIntake.length}</strong><span>Paid access or onboarding follow-up</span></section>
       </div>
+
+      <section className="attention-section">
+        <div className="portal-section-heading"><div><span className="eyebrow">Participant pulse</span><h2>Weekly check-in follow-up</h2><p className="muted">Current week starts {currentWeekStart}. Missing check-ins are prioritised before signals from an older week.</p></div></div>
+        {checkInAttention.length ? (
+          <div className="attention-list">
+            {checkInAttention.map((row) => (
+              <article className="attention-row card" key={String(row.user_id)}>
+                <div>
+                  <small>{String(row.tier)} · {row.signal === "missing" ? "current check-in missing" : row.signal === "support_requested" ? "support requested" : "low confidence"}</small>
+                  <strong>{String(row.full_name)}</strong>
+                  <span>{String(row.email)}</span>
+                  {row.support_needed ? <span><strong>Support:</strong> {String(row.support_needed)}</span> : null}
+                  {row.blockers ? <span><strong>Blockers:</strong> {String(row.blockers)}</span> : null}
+                  {row.confidence != null ? <span>Confidence: {String(row.confidence)}/5</span> : null}
+                </div>
+                <Link className="btn" href={"/admin/participants/" + String(row.user_id)}>Review participant</Link>
+              </article>
+            ))}
+          </div>
+        ) : <div className="notice attention-clear">No active participant currently needs follow-up from the weekly check-in flow.</div>}
+      </section>
 
       <section className="attention-section">
         <div className="portal-section-heading"><div><span className="eyebrow">Delivery</span><h2>Overdue implementation tasks</h2></div></div>
