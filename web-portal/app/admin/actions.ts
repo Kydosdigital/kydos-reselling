@@ -1,135 +1,106 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
-import { createClient } from "@/lib/supabase/server";
-import { createAdminClient } from "@/lib/supabase/admin";
-
-async function requireAdmin() {
-  const supabase = await createClient();
-  const { data: { user } } = await supabase.auth.getUser();
-  if (!user) throw new Error("Not signed in.");
-
-  const { data: profile } = await supabase
-    .from("profiles")
-    .select("role")
-    .eq("id", user.id)
-    .maybeSingle();
-
-  if (profile?.role !== "admin") throw new Error("Admin access required.");
-
-  return createAdminClient();
-}
+import { getAuth } from "@/lib/auth/server";
+import { requireAdminContext, supportEndForTier } from "@/lib/academy";
+import { getSql } from "@/lib/db";
 
 function isoDate(date: Date) {
   return date.toISOString().slice(0, 10);
 }
 
-export async function inviteParticipant(formData: FormData) {
-  const admin = await requireAdmin();
-  const email = String(formData.get("email") || "").trim();
+async function writeAudit(actorId: string, action: string, targetType: string, targetId: string, details: Record<string, unknown> = {}) {
+  const sql = getSql();
+  await sql.query(
+    "insert into academy_audit_log (actor_user_id, action, target_type, target_id, details) values ($1,$2,$3,$4,$5::jsonb)",
+    [actorId, action, targetType, targetId, JSON.stringify(details)]
+  );
+}
+
+export async function createParticipant(formData: FormData) {
+  const { academyUser: adminUser } = await requireAdminContext();
+  const email = String(formData.get("email") || "").trim().toLowerCase();
   const fullName = String(formData.get("fullName") || "").trim();
   const tier = String(formData.get("tier") || "blueprint");
+  const temporaryPassword = String(formData.get("temporaryPassword") || "");
 
-  if (!email || !fullName || !["blueprint","build","dfy"].includes(tier)) {
-    throw new Error("Missing participant details.");
-  }
+  if (!email || !fullName || !["blueprint","build","dfy"].includes(tier)) throw new Error("Missing participant details.");
+  if (temporaryPassword.length < 12) throw new Error("Temporary password must contain at least 12 characters.");
 
-  const { data, error } = await admin.auth.admin.inviteUserByEmail(email, {
-    data: { full_name: fullName }
+  const sql = getSql();
+  const existing = await sql.query("select id from academy_users where lower(email) = lower($1) limit 1", [email]);
+  if (existing.length) throw new Error("A participant with this email already exists.");
+
+  const created = await getAuth().admin.createUser({
+    email,
+    password: temporaryPassword,
+    name: fullName,
+    role: "user"
   });
 
-  if (error || !data.user) {
-    throw new Error(error?.message || "Unable to invite participant.");
-  }
+  if (created.error || !created.data?.user) throw new Error(created.error?.message || "Unable to create Neon Auth user.");
 
-  await admin.from("profiles").upsert({
-    id: data.user.id,
-    full_name: fullName,
-    role: "student"
-  });
+  const authUserId = created.data.user.id;
+  const userRows = await sql.query(
+    "insert into academy_users (auth_user_id, email, full_name, role) values ($1,$2,$3,$4) returning id",
+    [authUserId, email, fullName, "student"]
+  );
+  const userId = String(userRows[0].id);
+  const start = isoDate(new Date());
+  const supportEnd = supportEndForTier(tier);
 
-  const start = new Date();
-  let supportEnd: string | null = null;
+  await sql.query(
+    "insert into enrolments (user_id, tier, status, programme_start, support_end) values ($1,$2,$3,$4,$5)",
+    [userId, tier, "active", start, supportEnd]
+  );
 
-  if (tier === "blueprint") {
-    const end = new Date(start);
-    end.setDate(end.getDate() + 56);
-    supportEnd = isoDate(end);
-  }
-
-  if (tier === "build") {
-    const end = new Date(start);
-    end.setDate(end.getDate() + 84);
-    supportEnd = isoDate(end);
-  }
-
-  await admin.from("enrolments").insert({
-    user_id: data.user.id,
-    tier,
-    status: "active",
-    programme_start: isoDate(start),
-    support_end: supportEnd
-  });
-
+  await writeAudit(adminUser.id, "participant_created", "academy_user", userId, { tier, email });
   revalidatePath("/admin");
 }
 
 export async function createImplementationTask(formData: FormData) {
-  const admin = await requireAdmin();
+  const { academyUser: adminUser } = await requireAdminContext();
   const userId = String(formData.get("userId") || "");
   const area = String(formData.get("area") || "");
   const title = String(formData.get("title") || "");
   const owner = String(formData.get("owner") || "");
   const dueDate = String(formData.get("dueDate") || "") || null;
-
   if (!userId || !area || !title) throw new Error("Missing task details.");
 
-  await admin.from("implementation_tasks").insert({
-    user_id: userId,
-    area,
-    title,
-    owner: owner || null,
-    due_date: dueDate
-  });
-
+  const sql = getSql();
+  const rows = await sql.query(
+    "insert into implementation_tasks (user_id, area, title, owner, due_date) values ($1,$2,$3,$4,$5) returning id",
+    [userId, area, title, owner || null, dueDate]
+  );
+  await writeAudit(adminUser.id, "implementation_task_created", "implementation_task", String(rows[0].id), { userId, area });
   revalidatePath("/admin");
 }
 
 export async function updateTaskStatus(formData: FormData) {
-  const admin = await requireAdmin();
+  const { academyUser: adminUser } = await requireAdminContext();
   const taskId = String(formData.get("taskId") || "");
   const status = String(formData.get("status") || "");
-
   if (!taskId) return;
-
-  await admin
-    .from("implementation_tasks")
-    .update({ status, updated_at: new Date().toISOString() })
-    .eq("id", taskId);
-
+  const sql = getSql();
+  await sql.query("update implementation_tasks set status = $1, updated_at = now() where id = $2", [status, taskId]);
+  await writeAudit(adminUser.id, "implementation_task_status_updated", "implementation_task", taskId, { status });
   revalidatePath("/admin");
 }
 
-
 export async function recordHandover(formData: FormData) {
-  const admin = await requireAdmin();
+  const { academyUser: adminUser } = await requireAdminContext();
   const enrolmentId = String(formData.get("enrolmentId") || "");
   const handoverDate = String(formData.get("handoverDate") || "");
-
   if (!enrolmentId || !handoverDate) throw new Error("Missing handover details.");
 
   const handover = new Date(handoverDate + "T00:00:00Z");
   const supportEnd = new Date(handover);
   supportEnd.setDate(supportEnd.getDate() + 90);
-
-  await admin
-    .from("enrolments")
-    .update({
-      handover_date: handoverDate,
-      support_end: isoDate(supportEnd)
-    })
-    .eq("id", enrolmentId)
-    .eq("tier", "dfy");
-
+  const sql = getSql();
+  await sql.query(
+    "update enrolments set handover_date = $1, support_end = $2, updated_at = now() where id = $3 and tier = $4",
+    [handoverDate, isoDate(supportEnd), enrolmentId, "dfy"]
+  );
+  await writeAudit(adminUser.id, "dfy_handover_recorded", "enrolment", enrolmentId, { handoverDate, supportEnd: isoDate(supportEnd) });
   revalidatePath("/admin");
 }

@@ -1,25 +1,26 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
-import { createClient } from "@/lib/supabase/server";
+import { requireAcademyContext } from "@/lib/academy";
+import { getSql } from "@/lib/db";
 
 export async function saveIntake(formData: FormData) {
-  const supabase = await createClient();
-  const { data: { user } } = await supabase.auth.getUser();
-  if (!user) return;
+  const { academyUser } = await requireAcademyContext();
+  const sql = getSql();
 
-  await supabase.from("participant_intake").upsert({
-    user_id: user.id,
-    agency_name: String(formData.get("agencyName") || ""),
-    company_status: String(formData.get("companyStatus") || ""),
-    target_launch_date: String(formData.get("targetLaunchDate") || "") || null,
-    preferred_structure: String(formData.get("preferredStructure") || ""),
-    location: String(formData.get("location") || ""),
-    goals: String(formData.get("goals") || ""),
-    notes: String(formData.get("notes") || ""),
-    submitted_at: new Date().toISOString(),
-    updated_at: new Date().toISOString()
-  });
+  await sql.query(
+    "insert into participant_intake (user_id, agency_name, company_status, target_launch_date, preferred_structure, location, goals, notes, submitted_at, updated_at) values ($1,$2,$3,$4,$5,$6,$7,$8,now(),now()) on conflict (user_id) do update set agency_name = excluded.agency_name, company_status = excluded.company_status, target_launch_date = excluded.target_launch_date, preferred_structure = excluded.preferred_structure, location = excluded.location, goals = excluded.goals, notes = excluded.notes, submitted_at = now(), updated_at = now()",
+    [
+      academyUser.id,
+      String(formData.get("agencyName") || ""),
+      String(formData.get("companyStatus") || ""),
+      String(formData.get("targetLaunchDate") || "") || null,
+      String(formData.get("preferredStructure") || ""),
+      String(formData.get("location") || ""),
+      String(formData.get("goals") || ""),
+      String(formData.get("notes") || "")
+    ]
+  );
 
   revalidatePath("/portal/intake");
 }
