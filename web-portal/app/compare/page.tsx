@@ -5,7 +5,8 @@ import { PublicFooter } from "@/components/public-footer";
 
 export const metadata: Metadata = {
   title: "Compare Agency Build Plans",
-  description: "Compare Blueprint, Build With Us and Done For You at Kydos Academy."
+  description: "Compare Blueprint, Build With Us and Done For You at Kydos Academy.",
+  alternates: { canonical: "/compare" }
 };
 
 const rows = [
