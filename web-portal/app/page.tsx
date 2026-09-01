@@ -114,6 +114,7 @@ export default function HomePage() {
                   src="https://images.pexels.com/photos/3931504/pexels-photo-3931504.jpeg?cs=srgb&fm=jpg"
                   alt="A diverse business team collaborating around a laptop in a modern office"
                   className="hero-photo"
+                  fetchPriority="high"
                 />
                 <div className="image-shade" />
                 <div className="hero-image-caption">
@@ -181,6 +182,7 @@ export default function HomePage() {
                 src="https://images.pexels.com/photos/5466236/pexels-photo-5466236.jpeg?cs=srgb&fm=jpg"
                 alt="A diverse business team collaborating around a laptop in a bright modern office"
                 className="story-image"
+                loading="lazy"
               />
               <div className="story-badge">
                 <strong>Systems, not guesswork.</strong>
@@ -274,6 +276,7 @@ export default function HomePage() {
               src="https://images.pexels.com/photos/7988237/pexels-photo-7988237.jpeg?cs=srgb&fm=jpg"
               alt="A business team celebrating progress together in an office"
               className="wide-story-image"
+              loading="lazy"
             />
           </div>
         </section>
