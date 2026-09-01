@@ -1,6 +1,6 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import { canProvisionAcademyProfile, daysRemaining, getLaunchReadiness, mondayWeekStart, supportEndForTier } from "../lib/academy-rules.ts";
+import { canProvisionAcademyProfile, daysRemaining, getLaunchReadiness, getWeeklyCheckInSignal, mondayWeekStart, supportEndForTier } from "../lib/academy-rules.ts";
 
 test("Blueprint support lasts 56 days", () => {
   const from = new Date("2026-09-01T12:00:00Z");
@@ -66,4 +66,40 @@ test("weekly check-ins consistently use Monday as the week start", () => {
   assert.equal(mondayWeekStart(new Date("2026-09-01T23:00:00Z")), "2026-08-31");
   assert.equal(mondayWeekStart(new Date("2026-09-06T12:00:00Z")), "2026-08-31");
   assert.equal(mondayWeekStart(new Date("2026-09-07T00:01:00Z")), "2026-09-07");
+});
+
+test("weekly check-in signal prioritises a missing current-week check-in", () => {
+  assert.equal(getWeeklyCheckInSignal({
+    latestWeekStart: "2026-08-24",
+    currentWeekStart: "2026-08-31",
+    supportNeeded: "Please review my CRM setup",
+    confidence: 1
+  }), "missing");
+});
+
+test("weekly check-in signal surfaces explicit support requests", () => {
+  assert.equal(getWeeklyCheckInSignal({
+    latestWeekStart: "2026-08-31",
+    currentWeekStart: "2026-08-31",
+    supportNeeded: "Please review my CRM setup",
+    confidence: 4
+  }), "support_requested");
+});
+
+test("weekly check-in signal surfaces low confidence when no support request is written", () => {
+  assert.equal(getWeeklyCheckInSignal({
+    latestWeekStart: "2026-08-31",
+    currentWeekStart: "2026-08-31",
+    supportNeeded: "",
+    confidence: 2
+  }), "low_confidence");
+});
+
+test("weekly check-in signal stays clear for a current healthy check-in", () => {
+  assert.equal(getWeeklyCheckInSignal({
+    latestWeekStart: "2026-08-31",
+    currentWeekStart: "2026-08-31",
+    supportNeeded: "",
+    confidence: 4
+  }), "clear");
 });
