@@ -235,6 +235,28 @@ export default function HomePage() {
           </div>
         </section>
 
+
+        <section className="section ownership-section">
+          <div className="container ownership-grid">
+            <div>
+              <span className="eyebrow">Your agency, not ours</span>
+              <h2 style={{ marginTop: 14 }}>You are building an independent company you control.</h2>
+              <p className="hero-copy" style={{ fontSize: 17 }}>
+                This is not a franchise and it is not a white-label client reselling scheme.
+                Your company, brand, domain, website, clients and day-to-day commercial decisions belong to you.
+                Kydos gives you the operating system, implementation support and the agreed build work for your tier.
+              </p>
+            </div>
+
+            <div className="ownership-list">
+              <div><span>01</span><strong>Your company</strong><p>Your own legal business and commercial identity.</p></div>
+              <div><span>02</span><strong>Your brand</strong><p>Your own name, visual identity, website and positioning.</p></div>
+              <div><span>03</span><strong>Your clients</strong><p>Your agency builds and owns its own client relationships.</p></div>
+              <div><span>04</span><strong>Your operation</strong><p>Your team, CRM, processes and management structure.</p></div>
+            </div>
+          </div>
+        </section>
+
         <section className="section section-image-break">
           <div className="container image-break-grid">
             <div>
