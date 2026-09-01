@@ -2,11 +2,7 @@ import Stripe from "stripe";
 
 export type CheckoutMode = "disabled" | "test" | "live";
 
-type CheckoutEnvironment = {
-  ENABLE_TEST_CHECKOUT?: string;
-  ENABLE_LIVE_CHECKOUT?: string;
-  STRIPE_SECRET_KEY?: string;
-};
+type CheckoutEnvironment = Record<string, string | undefined>;
 
 export function resolveCheckoutMode(env: CheckoutEnvironment = process.env): CheckoutMode {
   const testEnabled = env.ENABLE_TEST_CHECKOUT === "true";
