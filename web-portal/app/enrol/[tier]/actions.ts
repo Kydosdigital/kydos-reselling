@@ -1,7 +1,7 @@
 "use server";
 
 import { redirect } from "next/navigation";
-import { createStripeClient, programmePrices } from "@/lib/stripe";
+import { createStripeClient, programmePrices, resolveCheckoutMode } from "@/lib/stripe";
 
 const allowedTiers = ["blueprint","build","dfy"] as const;
 type CheckoutTier = typeof allowedTiers[number];
@@ -18,7 +18,7 @@ export async function createCheckoutSession(formData: FormData) {
     throw new Error("Invalid programme tier.");
   }
 
-  if (!email || !fullName) {
+  if (!email || !fullName || email.length > 320 || fullName.length > 200) {
     redirect("/enrol/" + tier + "?error=details");
   }
 
@@ -26,7 +26,8 @@ export async function createCheckoutSession(formData: FormData) {
     redirect("/enrol/" + tier + "?error=consent");
   }
 
-  if (process.env.ENABLE_LIVE_CHECKOUT !== "true") {
+  const checkoutMode = resolveCheckoutMode();
+  if (checkoutMode === "disabled") {
     redirect("/enrol/" + tier + "?checkout=disabled");
   }
 
@@ -49,6 +50,7 @@ export async function createCheckoutSession(formData: FormData) {
     metadata: {
       programme_tier: tier,
       participant_name: fullName,
+      checkout_mode: checkoutMode,
       terms_accepted: "true",
       digital_content_consent: "true",
       early_service_start_consent: "true",
@@ -57,7 +59,8 @@ export async function createCheckoutSession(formData: FormData) {
     payment_intent_data: {
       metadata: {
         programme_tier: tier,
-        participant_email: email
+        participant_email: email,
+        checkout_mode: checkoutMode
       }
     }
   });
