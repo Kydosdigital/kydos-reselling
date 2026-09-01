@@ -1,55 +1,77 @@
 # Programme Website Stock Photography
 
-The programme website currently uses free Pexels photography.
+The Kydos Academy public website currently uses free stock photography from Pexels.
 
-## Hero image
+The creative direction intentionally favours real office photography over AI-generated people.
+
+## Homepage hero
+
+Pexels asset:
+3931504
+
+Source:
+https://www.pexels.com/photo/3931504/
 
 Photographer:
 Andrea Piacquadio
 
-Pexels page:
-https://www.pexels.com/photo/diverse-business-team-working-on-laptop-in-modern-office-3931504/
-
 Use:
-Hero section.
+Homepage hero.
 
-Pexels marks the image as free to use.
+## Homepage systems/team section
 
-## Systems / team image
+Pexels asset:
+5466236
+
+Source:
+https://www.pexels.com/photo/5466236/
 
 Photographer:
 Antoni Shkraba
 
-Pexels page:
-https://www.pexels.com/photo/office-team-looking-at-the-laptop-5466236/
-
 Use:
 "This is not a generic online course" section.
 
-Pexels marks the image as free to use.
+## Homepage operations/growth section
 
-## Operations / growth image
+Pexels asset:
+7988237
+
+Source:
+https://www.pexels.com/photo/7988237/
 
 Photographer:
 Mikhail Nilov
 
-Pexels page:
-https://www.pexels.com/photo/people-having-a-business-meeting-in-the-office-7988237/
-
 Use:
 "Build something that can grow beyond you" section.
 
-Pexels marks the image as free to use.
+## Programme page hero
+
+Pexels asset:
+3184291
+
+Source:
+https://www.pexels.com/photo/3184291/
+
+Use:
+Programme overview hero.
+
+## Programme page operations section
+
+Pexels asset:
+3184418
+
+Source:
+https://www.pexels.com/photo/3184418/
+
+Use:
+Owner-led vs Operations Manager section.
 
 ## Production note
 
-The current implementation loads the images from Pexels-hosted image URLs.
+Pexels permits free use of its stock photography subject to its licence.
 
-Before final public launch, Kydos should decide whether to:
+The current website loads Pexels-hosted image files. Before final public launch, Kydos can optionally store optimised local copies in the site for tighter performance and asset control.
 
-1. continue using the hosted Pexels images, or
-2. download the chosen originals and serve optimised local copies from the website.
-
-Serving local optimised copies is preferred for performance and long-term control.
-
-Do not replace these with AI-generated people unless Kydos deliberately chooses that creative direction.
+Do not replace the real-person photography with AI-generated people unless Kydos deliberately changes the Academy visual direction.
