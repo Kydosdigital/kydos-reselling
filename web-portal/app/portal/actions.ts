@@ -3,6 +3,8 @@
 import { revalidatePath } from "next/cache";
 import { requireAcademyContext } from "@/lib/academy";
 import { getSql } from "@/lib/db";
+import { canAccessTier, modules, type Tier } from "@/lib/programme-data";
+import { getActiveEnrolment } from "@/lib/academy";
 
 export async function setLessonCompletion(formData: FormData) {
   const lessonId = String(formData.get("lessonId") || "");
@@ -27,4 +29,35 @@ export async function setLessonCompletion(formData: FormData) {
 
   revalidatePath("/portal");
   if (moduleSlug) revalidatePath("/portal/module/" + moduleSlug);
+}
+
+
+export async function saveLessonNote(formData: FormData) {
+  const lessonId = String(formData.get("lessonId") || "");
+  const note = String(formData.get("note") || "");
+  if (!lessonId || note.length > 10000) throw new Error("Invalid lesson note.");
+
+  const { academyUser } = await requireAcademyContext();
+  const enrolment = await getActiveEnrolment(academyUser.id);
+  if (!enrolment) throw new Error("No active programme access.");
+
+  const lesson = modules.flatMap((module) => module.lessons).find((item) => item.id === lessonId);
+  if (!lesson || !canAccessTier(enrolment.tier as Tier, lesson.minimumTier)) {
+    throw new Error("This lesson is not included in your programme access.");
+  }
+
+  const sql = getSql();
+  if (note.trim()) {
+    await sql.query(
+      "insert into lesson_notes (user_id, lesson_id, note, updated_at) values ($1,$2,$3,now()) on conflict (user_id, lesson_id) do update set note = excluded.note, updated_at = now()",
+      [academyUser.id, lessonId, note]
+    );
+  } else {
+    await sql.query(
+      "delete from lesson_notes where user_id = $1 and lesson_id = $2",
+      [academyUser.id, lessonId]
+    );
+  }
+
+  revalidatePath("/portal/lesson/" + lessonId);
 }
