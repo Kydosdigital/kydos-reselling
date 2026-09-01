@@ -5,8 +5,13 @@ import { createImplementationTask, createParticipant, recordHandover, updateTask
 
 export const dynamic = "force-dynamic";
 
-export default async function AdminPage() {
+export default async function AdminPage({
+  searchParams
+}: {
+  searchParams: Promise<{ q?: string; tier?: string; taskStatus?: string }>;
+}) {
   await requireAdminContext();
+  const filters = await searchParams;
   const sql = getSql();
   const [participants, tasks] = await Promise.all([
     sql.query("select e.id, e.user_id, e.tier, e.status, e.programme_start, e.support_end, e.handover_date, e.created_at, u.full_name, u.email from enrolments e join academy_users u on u.id = e.user_id order by e.created_at desc"),
@@ -16,6 +21,21 @@ export default async function AdminPage() {
   const waitingKydos = tasks.filter((t) => String(t.status) === "waiting_kydos").length;
   const waitingParticipant = tasks.filter((t) => String(t.status) === "waiting_participant").length;
   const openTasks = tasks.filter((t) => String(t.status) !== "complete").length;
+  const q = String(filters.q || "").trim().toLowerCase();
+  const tierFilter = String(filters.tier || "");
+  const taskStatusFilter = String(filters.taskStatus || "");
+
+  const filteredParticipants = active.filter((participant) => {
+    const matchesText = !q || String(participant.full_name).toLowerCase().includes(q) || String(participant.email).toLowerCase().includes(q);
+    const matchesTier = !tierFilter || String(participant.tier) === tierFilter;
+    return matchesText && matchesTier;
+  });
+
+  const filteredTasks = tasks.filter((task) => {
+    const matchesText = !q || String(task.full_name).toLowerCase().includes(q) || String(task.email).toLowerCase().includes(q) || String(task.title).toLowerCase().includes(q);
+    const matchesStatus = !taskStatusFilter || String(task.status) === taskStatusFilter;
+    return matchesText && matchesStatus;
+  });
 
   return (
     <main className="container admin-page">
@@ -58,10 +78,45 @@ export default async function AdminPage() {
         </section>
       </div>
 
+      <section className="admin-filter-panel card">
+        <form method="get" className="admin-filter-grid">
+          <div className="field">
+            <label htmlFor="admin-q">Search</label>
+            <input id="admin-q" name="q" defaultValue={filters.q || ""} placeholder="Participant, email or task" />
+          </div>
+          <div className="field">
+            <label htmlFor="admin-tier">Participant tier</label>
+            <select id="admin-tier" name="tier" className="select" defaultValue={tierFilter}>
+              <option value="">All tiers</option>
+              <option value="blueprint">Blueprint</option>
+              <option value="build">Build With Us</option>
+              <option value="dfy">Done For You</option>
+            </select>
+          </div>
+          <div className="field">
+            <label htmlFor="admin-task-status">Task status</label>
+            <select id="admin-task-status" name="taskStatus" className="select" defaultValue={taskStatusFilter}>
+              <option value="">All task statuses</option>
+              <option value="not_started">Not started</option>
+              <option value="in_progress">In progress</option>
+              <option value="waiting_participant">Waiting participant</option>
+              <option value="waiting_kydos">Waiting Kydos</option>
+              <option value="waiting_third_party">Waiting third party</option>
+              <option value="review">Review</option>
+              <option value="complete">Complete</option>
+            </select>
+          </div>
+          <div className="admin-filter-actions">
+            <button className="btn btn-primary" type="submit">Apply filters</button>
+            <Link className="btn" href="/admin">Clear</Link>
+          </div>
+        </form>
+      </section>
+
       <section style={{ marginTop: 30 }}>
-        <div className="portal-section-heading"><div><span className="eyebrow">Participants</span><h2>Active programme accounts</h2></div></div>
+        <div className="portal-section-heading"><div><span className="eyebrow">Participants</span><h2>Active programme accounts</h2><p className="muted">{filteredParticipants.length} matching participant{filteredParticipants.length === 1 ? "" : "s"}</p></div></div>
         <div className="admin-table-wrap card"><table className="admin-table"><thead><tr><th>Name</th><th>Email</th><th>Tier</th><th>Status</th><th>Start</th><th>Support end</th><th>DFY handover</th></tr></thead><tbody>
-          {active.map((e) => (
+          {filteredParticipants.map((e) => (
             <tr key={String(e.id)}>
               <td><Link className="admin-person-link" href={"/admin/participants/" + String(e.user_id)}>{String(e.full_name)}</Link></td>
               <td>{String(e.email)}</td><td>{String(e.tier)}</td><td>{String(e.status)}</td><td>{e.programme_start ? String(e.programme_start) : "Not set"}</td><td>{e.support_end ? String(e.support_end) : e.tier === "dfy" ? "Starts after handover" : "Not set"}</td>
@@ -81,7 +136,7 @@ export default async function AdminPage() {
       </form></div></section>
 
       <section style={{ marginTop: 34 }}><div className="portal-section-heading"><div><span className="eyebrow">Work queue</span><h2>Recent implementation tasks</h2></div></div><div className="admin-table-wrap card"><table className="admin-table"><thead><tr><th>Participant</th><th>Area</th><th>Task</th><th>Owner</th><th>Due</th><th>Status</th></tr></thead><tbody>
-        {tasks.map((task) => (<tr key={String(task.id)}><td><Link className="admin-person-link" href={"/admin/participants/" + String(task.user_id)}>{String(task.full_name)}</Link></td><td>{String(task.area)}</td><td><Link className="admin-person-link" href={"/admin/tasks/" + String(task.id)}>{String(task.title)}</Link></td><td>{task.owner ? String(task.owner) : "Unassigned"}</td><td>{task.due_date ? String(task.due_date) : "Not set"}</td><td><form action={updateTaskStatus}><input type="hidden" name="taskId" value={String(task.id)} /><div style={{ display: "flex", gap: 8, alignItems: "center" }}><select name="status" defaultValue={String(task.status)} className="select compact"><option value="not_started">Not started</option><option value="in_progress">In progress</option><option value="waiting_participant">Waiting participant</option><option value="waiting_kydos">Waiting Kydos</option><option value="waiting_third_party">Waiting third party</option><option value="review">Review</option><option value="complete">Complete</option></select><button className="btn" type="submit">Save</button></div></form></td></tr>))}
+        {filteredTasks.map((task) => (<tr key={String(task.id)}><td><Link className="admin-person-link" href={"/admin/participants/" + String(task.user_id)}>{String(task.full_name)}</Link></td><td>{String(task.area)}</td><td><Link className="admin-person-link" href={"/admin/tasks/" + String(task.id)}>{String(task.title)}</Link></td><td>{task.owner ? String(task.owner) : "Unassigned"}</td><td>{task.due_date ? String(task.due_date) : "Not set"}</td><td><form action={updateTaskStatus}><input type="hidden" name="taskId" value={String(task.id)} /><div style={{ display: "flex", gap: 8, alignItems: "center" }}><select name="status" defaultValue={String(task.status)} className="select compact"><option value="not_started">Not started</option><option value="in_progress">In progress</option><option value="waiting_participant">Waiting participant</option><option value="waiting_kydos">Waiting Kydos</option><option value="waiting_third_party">Waiting third party</option><option value="review">Review</option><option value="complete">Complete</option></select><button className="btn" type="submit">Save</button></div></form></td></tr>))}
       </tbody></table></div></section>
     </main>
   );
