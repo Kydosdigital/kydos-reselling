@@ -1,11 +1,13 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
-import { requireAcademyContext } from "@/lib/academy";
+import { requireAcademyContext, requireActiveEnrolment } from "@/lib/academy";
 import { getSql } from "@/lib/db";
 
 export async function addParticipantTaskUpdate(formData: FormData) {
   const { academyUser } = await requireAcademyContext();
+  await requireActiveEnrolment(academyUser.id);
+
   const taskId = String(formData.get("taskId") || "");
   const message = String(formData.get("message") || "").trim();
 
