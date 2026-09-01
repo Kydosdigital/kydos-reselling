@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
 import test from "node:test";
-import { canProcessStripeEvent, resolveCheckoutMode } from "../lib/stripe";
+import { canProcessStripeEvent, resolveCheckoutMode } from "../lib/stripe.ts";
 
 test("checkout is disabled by default", () => {
   assert.equal(resolveCheckoutMode({}), "disabled");
