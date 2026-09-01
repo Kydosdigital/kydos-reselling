@@ -45,6 +45,7 @@ export default async function AdminPage({
           <Link className="btn" href="/admin/orders">Orders</Link>
           <Link className="btn" href="/admin/audit">Audit log</Link>
           <Link className="btn" href="/admin/system">System</Link>
+          <Link className="btn" href="/admin/exports">Exports</Link>
           <Link className="btn" href="/portal">Participant view</Link>
         </div>
       </div>
