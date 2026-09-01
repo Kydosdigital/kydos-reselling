@@ -71,6 +71,19 @@ create table if not exists implementation_tasks (
 
 create index if not exists implementation_tasks_user_status_idx on implementation_tasks(user_id, status);
 
+create table if not exists implementation_task_updates (
+  id uuid primary key default gen_random_uuid(),
+  task_id uuid not null references implementation_tasks(id) on delete cascade,
+  user_id uuid not null references academy_users(id) on delete cascade,
+  author_user_id uuid references academy_users(id) on delete set null,
+  author_role text not null check (author_role in ('participant','admin','system')),
+  message text not null check (char_length(message) between 1 and 4000),
+  created_at timestamptz not null default now()
+);
+
+create index if not exists implementation_task_updates_task_created_idx on implementation_task_updates(task_id, created_at);
+create index if not exists implementation_task_updates_user_created_idx on implementation_task_updates(user_id, created_at desc);
+
 create table if not exists programme_orders (
   id uuid primary key default gen_random_uuid(),
   stripe_session_id text not null unique,
