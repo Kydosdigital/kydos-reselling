@@ -110,3 +110,11 @@ export function daysRemaining(dateOnly: string | null | undefined, now = new Dat
   const end = new Date(dateOnly + "T23:59:59.999Z");
   return Math.max(0, Math.ceil((end.getTime() - now.getTime()) / 86400000));
 }
+
+export function canProvisionAcademyProfile(input: {
+  isAdminEmail: boolean;
+  paidOrderStatus?: string | null;
+}) {
+  if (input.isAdminEmail) return true;
+  return String(input.paidOrderStatus || "").toLowerCase() === "paid";
+}
