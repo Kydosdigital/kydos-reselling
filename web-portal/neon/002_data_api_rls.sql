@@ -200,6 +200,8 @@ create policy implementation_task_updates_insert_own on implementation_task_upda
       where u.id = implementation_task_updates.user_id
         and t.id = implementation_task_updates.task_id
         and t.user_id = implementation_task_updates.user_id
+        and implementation_task_updates.author_user_id = implementation_task_updates.user_id
+        and implementation_task_updates.author_role = 'participant'
         and u.auth_user_id = auth.user_id()
     )
   );
