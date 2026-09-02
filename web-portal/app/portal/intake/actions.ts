@@ -3,6 +3,7 @@
 import { revalidatePath } from "next/cache";
 import { requireAcademyContext, requireActiveEnrolment } from "@/lib/academy";
 import { getSql } from "@/lib/db";
+import { recordAcademyActivity } from "@/lib/activity";
 
 function optionalInteger(formData: FormData, key: string) {
   const raw = String(formData.get(key) || "").trim();
@@ -38,6 +39,13 @@ export async function saveIntake(formData: FormData) {
       String(formData.get("notes") || "")
     ]
   );
+
+  await recordAcademyActivity({
+    userId: academyUser.id,
+    eventType: "intake_saved",
+    entityType: "participant_intake",
+    entityId: academyUser.id
+  });
 
   revalidatePath("/portal/intake");
   revalidatePath("/portal");

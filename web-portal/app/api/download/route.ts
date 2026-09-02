@@ -1,6 +1,7 @@
 import { canAccessTier, modules, type Tier } from "@/lib/programme-data";
 import { getActiveEnrolment, getCurrentAcademyContext } from "@/lib/academy";
 import contentMap from "@/generated/content.json";
+import { recordAcademyActivity } from "@/lib/activity";
 
 export const dynamic = "force-dynamic";
 
@@ -24,6 +25,14 @@ export async function GET(request: Request) {
   if (!lesson || !canAccessTier(enrolment.tier as Tier, lesson.minimumTier)) {
     return new Response("This file is not included in your programme access", { status: 403 });
   }
+
+  await recordAcademyActivity({
+    userId: context.academyUser.id,
+    eventType: "resource_downloaded",
+    entityType: "lesson",
+    entityId: lesson.id,
+    metadata: { source }
+  });
 
   const filename = safeDownloadFilename(source);
   const contentType = filename.endsWith(".csv") ? "text/csv; charset=utf-8" : "text/markdown; charset=utf-8";

@@ -4,6 +4,7 @@ import { revalidatePath } from "next/cache";
 import { getActiveEnrolment, requireAcademyContext } from "@/lib/academy";
 import { getSql } from "@/lib/db";
 import { canAccessTier, modules, type Tier } from "@/lib/programme-data";
+import { recordAcademyActivity } from "@/lib/activity";
 
 export async function setLessonCompletion(formData: FormData) {
   const lessonId = String(formData.get("lessonId") || "");
@@ -33,6 +34,14 @@ export async function setLessonCompletion(formData: FormData) {
       [academyUser.id, lessonId]
     );
   }
+
+  await recordAcademyActivity({
+    userId: academyUser.id,
+    eventType: completed ? "lesson_completed" : "lesson_uncompleted",
+    entityType: "lesson",
+    entityId: lessonId,
+    metadata: { moduleSlug: moduleSlug || null }
+  });
 
   revalidatePath("/portal");
   if (moduleSlug) revalidatePath("/portal/module/" + moduleSlug);
@@ -65,6 +74,13 @@ export async function saveLessonNote(formData: FormData) {
       [academyUser.id, lessonId]
     );
   }
+
+  await recordAcademyActivity({
+    userId: academyUser.id,
+    eventType: note.trim() ? "lesson_note_saved" : "lesson_note_deleted",
+    entityType: "lesson",
+    entityId: lessonId
+  });
 
   revalidatePath("/portal/lesson/" + lessonId);
 }

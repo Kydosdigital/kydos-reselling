@@ -3,6 +3,7 @@
 import { revalidatePath } from "next/cache";
 import { requireAcademyContext, requireActiveEnrolment } from "@/lib/academy";
 import { getSql } from "@/lib/db";
+import { recordAcademyActivity } from "@/lib/activity";
 
 export async function addParticipantTaskUpdate(formData: FormData) {
   const { academyUser } = await requireAcademyContext();
@@ -40,6 +41,13 @@ export async function addParticipantTaskUpdate(formData: FormData) {
     "insert into academy_audit_log (actor_user_id, action, target_type, target_id, details) values ($1,$2,$3,$4,$5::jsonb)",
     [academyUser.id, "participant_task_update_added", "implementation_task", taskId, JSON.stringify({ statusBefore: currentStatus })]
   );
+
+  await recordAcademyActivity({
+    userId: academyUser.id,
+    eventType: "participant_task_update_added",
+    entityType: "implementation_task",
+    entityId: taskId
+  });
 
   revalidatePath("/portal");
   revalidatePath("/portal/implementation");
