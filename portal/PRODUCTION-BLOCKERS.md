@@ -109,3 +109,34 @@ Only after QA and professional sign-off:
 `ENABLE_LIVE_CHECKOUT=true`
 
 `NEXT_PUBLIC_ENABLE_INDEXING=true`
+
+
+## 8. Super Admin analytics runtime QA
+
+The code-level Super Admin analytics system is complete and CI-tested.
+
+Prepared analytics include:
+
+- login count, last login and last seen
+- 7-day and 30-day active participants
+- never-logged-in and stalled-learning signals
+- participant and average course progress
+- module and lesson completion diagnostics
+- tier and cohort performance
+- weekly check-in coverage, confidence and support signals
+- resource download popularity
+- 14-day activity trends
+- implementation workload and overdue work
+- paid programme revenue and account-provisioning rate
+- participant activity timeline and CSV exports
+
+Still required after Neon activation:
+
+- confirm the new analytics columns/table are present from the production schema migration
+- verify one Blueprint, one Build With Us and one Done For You test account populate analytics correctly
+- verify login counters and last-seen timestamps update as designed
+- verify analytics telemetry is not queryable by participant Data API roles
+- verify inactivity/stalled rules against real account dates
+- visually QA the Super Admin dashboard on desktop and mobile with populated data
+
+Analytics begin accumulating when this instrumentation is deployed. Exact historic login/activity data from before instrumentation cannot be reconstructed.

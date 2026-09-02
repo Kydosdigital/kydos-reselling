@@ -299,6 +299,20 @@ This section is informational and must not imply guaranteed immigration or spons
 - [x] Build With Us / Done For You implementation board
 - [x] Kydos admin dashboard
 - [x] Admin weekly check-in review dashboard
+- [x] Kydos Super Admin analytics dashboard
+- [x] Participant successful-login count, last-login and last-seen tracking
+- [x] Participant activity telemetry for module/lesson views, progress, check-ins, downloads and implementation updates
+- [x] 7-day/30-day engagement, stalled-learning and never-logged-in analytics
+- [x] Programme tier performance and enrolment cohort analytics
+- [x] Module completion, lesson drop-off and resource-download analytics
+- [x] Admin participant engagement timeline
+- [x] Participant engagement and activity CSV exports
+- [x] Super Admin analytics pagination and filtering
+- [x] Participant inactivity signals in admin attention queue
+- [x] Analytics query indexes prepared in Neon schema
+- [x] Analytics RLS/static security tests
+- [x] Analytics data-minimisation and accuracy-limit documentation
+- [x] Accessibility focus, reduced-motion and progress semantics polish
 - [x] Weekly check-in support and low-confidence signals in admin attention queue
 - [x] Participant invite and enrolment flow
 - [x] Implementation task management
@@ -339,6 +353,7 @@ This section is informational and must not imply guaranteed immigration or spons
 - [ ] Apply Academy Postgres schema to production neondb
 - [ ] Apply participant-facing RLS migration to production neondb
 - [ ] Create and verify first Kydos admin account
+- [ ] Runtime QA of Super Admin analytics with real Neon participant accounts
 - [x] Prelaunch legal pages
 - [x] Prelaunch no-index control
 - [x] GitHub Actions production-build CI
