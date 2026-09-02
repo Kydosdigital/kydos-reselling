@@ -21,9 +21,10 @@ test("participant profile has no self-update policy", () => {
   assert.doesNotMatch(rls, /create policy\s+academy_users_update_own/i);
 });
 
-test("audit log and admin notes have no participant create/update policies", () => {
-  assert.doesNotMatch(rls, /create policy[\s\S]*academy_audit_log[\s\S]*(for insert|for update|for delete)/i);
-  assert.doesNotMatch(rls, /create policy[\s\S]*participant_admin_notes[\s\S]*(for insert|for update|for delete)/i);
+test("audit log, admin notes and analytics telemetry are not participant-writable", () => {
+  assert.doesNotMatch(rls, /create policy\s+\S+\s+on\s+academy_audit_log/i);
+  assert.doesNotMatch(rls, /create policy\s+\S+\s+on\s+participant_admin_notes/i);
+  assert.doesNotMatch(rls, /create policy\s+\S+\s+on\s+academy_activity_events/i);
 });
 
 test("implementation update insert policy checks task ownership", () => {
