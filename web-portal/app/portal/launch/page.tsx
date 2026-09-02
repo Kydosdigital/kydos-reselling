@@ -57,7 +57,7 @@ export default async function LaunchPlanPage() {
           <span className="eyebrow">Launch readiness</span>
           <strong>{readiness.percent}%</strong>
           <p>{readiness.stage} · {readiness.completeCount} of {readiness.total} core launch areas ready</p>
-          <div className="progress-track launch-progress"><div className="progress-bar" style={{ width: readiness.percent + "%" }} /></div>
+          <div className="progress-track launch-progress" role="progressbar" aria-label="Launch readiness" aria-valuemin={0} aria-valuemax={100} aria-valuenow={readiness.percent}><div className="progress-bar" style={{ width: readiness.percent + "%" }} /></div>
         </div>
         <div className="launch-meta">
           <div><small>Target launch</small><strong>{intake?.target_launch_date || "Not set"}</strong></div>
