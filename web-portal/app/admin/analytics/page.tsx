@@ -227,6 +227,30 @@ export default async function SuperAdminAnalyticsPage({
   }));
   const maxTierCount = Math.max(1, ...tierCounts.map((row) => row.count));
 
+  const tierPerformance = (["blueprint", "build", "dfy"] as Tier[]).map((tier) => {
+    const group = activeParticipants.filter((row) => row.tier === tier);
+    const averageProgress = group.length
+      ? Math.round(group.reduce((sum, row) => sum + row.progressPercent, 0) / group.length)
+      : 0;
+    const activeIn7 = group.filter((row) => row.active7).length;
+    const complete = group.filter((row) => row.progressPercent === 100).length;
+    const readinessValues = group
+      .map((row) => row.readiness?.percent)
+      .filter((value): value is number => typeof value === "number");
+    const averageReadiness = readinessValues.length
+      ? Math.round(readinessValues.reduce((sum, value) => sum + value, 0) / readinessValues.length)
+      : 0;
+    return {
+      tier,
+      label: tierLabels[tier],
+      participants: group.length,
+      averageProgress,
+      activeRate: group.length ? Math.round((activeIn7 / group.length) * 100) : 0,
+      completionRate: group.length ? Math.round((complete / group.length) * 100) : 0,
+      averageReadiness
+    };
+  });
+
   const modulePerformance = modules.map((module) => {
     const eligible = activeParticipants.filter((participant) => participant.tier && module.lessons.some((lesson) => canAccessTier(participant.tier!, lesson.minimumTier)));
     const percentages = eligible.map((participant) => {
@@ -252,6 +276,20 @@ export default async function SuperAdminAnalyticsPage({
   }
   const cohortRows = Array.from(enrolmentMonths.entries()).sort(([a], [b]) => a.localeCompare(b)).slice(-12);
   const maxCohort = Math.max(1, ...cohortRows.map(([, count]) => count));
+
+  const cohortPerformance = cohortRows.map(([month, count]) => {
+    const group = activeParticipants.filter((row) => {
+      const date = analyticsDate(row.programme_start || row.created_at);
+      return date?.toISOString().slice(0, 7) === month;
+    });
+    const averageProgress = group.length
+      ? Math.round(group.reduce((sum, row) => sum + row.progressPercent, 0) / group.length)
+      : 0;
+    const activeRate = group.length
+      ? Math.round((group.filter((row) => row.active30).length / group.length) * 100)
+      : 0;
+    return { month, count, averageProgress, activeRate };
+  });
 
   const activeUserIds = new Set(activeParticipants.map((row) => String(row.id)));
   const lessonCompletionCounts = new Map<string, number>();
@@ -375,6 +413,22 @@ export default async function SuperAdminAnalyticsPage({
       </div>
 
       <section className="analytics-panel card" style={{ marginTop: 18 }}>
+        <div className="analytics-panel-head"><div><span className="eyebrow">Plan performance</span><h2>Engagement by programme tier</h2></div><span>Active participants only</span></div>
+        <div className="tier-performance-grid">
+          {tierPerformance.map((row) => (
+            <article key={row.tier}>
+              <span>{row.label}</span>
+              <strong>{row.participants}</strong>
+              <div><small>Avg progress</small><b>{row.averageProgress}%</b></div>
+              <div><small>Active 7d</small><b>{row.activeRate}%</b></div>
+              <div><small>Course complete</small><b>{row.completionRate}%</b></div>
+              <div><small>Avg launch readiness</small><b>{row.averageReadiness}%</b></div>
+            </article>
+          ))}
+        </div>
+      </section>
+
+      <section className="analytics-panel card" style={{ marginTop: 18 }}>
         <div className="analytics-panel-head"><div><span className="eyebrow">Learning funnel</span><h2>Average progress by module</h2></div><span>Across eligible active participants</span></div>
         <div className="module-analytics-grid">
           {modulePerformance.map((module) => (
@@ -391,8 +445,13 @@ export default async function SuperAdminAnalyticsPage({
       <div className="analytics-two-column">
         <section className="analytics-panel card">
           <div className="analytics-panel-head"><div><span className="eyebrow">Cohorts</span><h2>Enrolments by month</h2></div><span>Latest 12 months represented</span></div>
-          {cohortRows.length ? <div className="analytics-bars">{cohortRows.map(([month,count]) => (
-            <div className="analytics-bar-row" key={month}><span>{month}</span><div className="analytics-bar-track"><div style={{ width: Math.max(2,Math.round((count/maxCohort)*100))+"%" }} /></div><strong>{count}</strong></div>
+          {cohortPerformance.length ? <div className="cohort-performance-list">{cohortPerformance.map((row) => (
+            <div key={row.month}>
+              <div><strong>{row.month}</strong><small>{row.count} enrolled</small></div>
+              <div><small>Avg progress</small><b>{row.averageProgress}%</b></div>
+              <div><small>Active 30d</small><b>{row.activeRate}%</b></div>
+              <div className="analytics-bar-track"><div style={{ width: Math.max(2,Math.round((row.count/maxCohort)*100))+"%" }} /></div>
+            </div>
           ))}</div> : <div className="notice">No enrolment cohorts yet.</div>}
         </section>
 
