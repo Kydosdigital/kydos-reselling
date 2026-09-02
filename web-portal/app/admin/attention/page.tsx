@@ -8,7 +8,7 @@ export default async function AdminAttentionPage() {
   await requireAdminContext();
   const sql = getSql();
 
-  const [overdueTasks, expiringSupport, unprovisionedOrders, missingIntake, checkInSignals] = await Promise.all([
+  const [overdueTasks, expiringSupport, unprovisionedOrders, missingIntake, checkInSignals, engagementRisks] = await Promise.all([
     sql.query(
       "select t.id, t.user_id, t.area, t.title, t.owner, t.status, t.due_date, u.full_name, u.email from implementation_tasks t join academy_users u on u.id = t.user_id where t.status <> 'complete' and t.due_date is not null and t.due_date < current_date order by t.due_date asc limit 100"
     ),
@@ -23,10 +23,13 @@ export default async function AdminAttentionPage() {
     ),
     sql.query(
       "select * from (select distinct on (c.user_id) c.id, c.user_id, c.week_start, c.blockers, c.support_needed, c.confidence, c.updated_at, u.full_name, u.email, e.tier from participant_weekly_checkins c join academy_users u on u.id = c.user_id join enrolments e on e.user_id = c.user_id and e.status = 'active' where c.week_start >= current_date - interval '14 days' order by c.user_id, c.week_start desc, c.updated_at desc) latest where coalesce(trim(latest.support_needed), '') <> '' or latest.confidence <= 2 order by latest.week_start desc limit 100"
+    ),
+    sql.query(
+      "select u.id, u.full_name, u.email, u.last_login_at, u.last_seen_at, u.login_count, e.tier, e.programme_start from academy_users u join enrolments e on e.user_id = u.id and e.status = 'active' where u.role = 'student' and ((u.last_login_at is null and coalesce(e.programme_start, u.created_at::date) <= current_date - 2) or (u.last_seen_at is not null and u.last_seen_at < now() - interval '14 days')) order by u.last_seen_at asc nulls first, e.programme_start asc limit 100"
     )
   ]);
 
-  const totalAttention = overdueTasks.length + expiringSupport.length + unprovisionedOrders.length + missingIntake.length + checkInSignals.length;
+  const totalAttention = overdueTasks.length + expiringSupport.length + unprovisionedOrders.length + missingIntake.length + checkInSignals.length + engagementRisks.length;
 
   return (
     <main className="container admin-page">
@@ -43,6 +46,7 @@ export default async function AdminAttentionPage() {
           <p className="muted">The items most likely to need a Kydos team action next.</p>
         </div>
         <div className="admin-top-actions">
+          <Link className="btn" href="/admin/analytics">Super Admin Analytics</Link>
           <Link className="btn" href="/admin/check-ins">Weekly check-ins</Link>
           <Link className="btn" href="/admin">Programme operations</Link>
         </div>
@@ -53,7 +57,26 @@ export default async function AdminAttentionPage() {
         <section className="portal-stat card"><small>Check-in signals</small><strong>{checkInSignals.length}</strong><span>Recent support requests or low confidence</span></section>
         <section className="portal-stat card"><small>Overdue tasks</small><strong>{overdueTasks.length}</strong><span>Open tasks past their due date</span></section>
         <section className="portal-stat card"><small>Activation / intake</small><strong>{unprovisionedOrders.length + missingIntake.length}</strong><span>Paid access or onboarding follow-up</span></section>
+        <section className="portal-stat card"><small>Engagement risk</small><strong>{engagementRisks.length}</strong><span>Never logged in or inactive 14+ days</span></section>
       </div>
+
+      <section className="attention-section">
+        <div className="portal-section-heading"><div><span className="eyebrow">Engagement</span><h2>Participants who may be drifting</h2></div><Link className="btn" href="/admin/analytics?engagement=stalled">Open analytics</Link></div>
+        {engagementRisks.length ? (
+          <div className="attention-list">
+            {engagementRisks.map((row) => (
+              <article className="attention-row card" key={String(row.id)}>
+                <div>
+                  <small>{String(row.tier)} · {row.last_login_at ? "inactive" : "never logged in"}</small>
+                  <strong>{String(row.full_name)}</strong>
+                  <span>{row.last_login_at ? "Last seen " + String(row.last_seen_at || row.last_login_at) : "Account has not recorded a successful login"} · {Number(row.login_count || 0)} logins</span>
+                </div>
+                <Link className="btn" href={"/admin/participants/" + String(row.id)}>Review participant</Link>
+              </article>
+            ))}
+          </div>
+        ) : <div className="notice attention-clear">No active participants currently meet the inactivity follow-up threshold.</div>}
+      </section>
 
       <section className="attention-section">
         <div className="portal-section-heading"><div><span className="eyebrow">Participant pulse</span><h2>Weekly check-ins needing attention</h2></div><Link className="btn" href="/admin/check-ins">Review all check-ins</Link></div>
