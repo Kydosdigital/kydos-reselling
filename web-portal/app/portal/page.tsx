@@ -136,7 +136,7 @@ export default async function PortalDashboard() {
                 <p>{module.description}</p>
                 {!locked ? (
                   <>
-                    <div className="progress-track module-progress">
+                    <div className="progress-track module-progress" role="progressbar" aria-label={module.title + " completion"} aria-valuemin={0} aria-valuemax={100} aria-valuenow={modulePercent}>
                       <div className="progress-bar" style={{ width: modulePercent + "%" }} />
                     </div>
                     <small>{moduleComplete}/{accessible.length} complete</small>
