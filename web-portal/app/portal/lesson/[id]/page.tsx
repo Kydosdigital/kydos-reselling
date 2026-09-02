@@ -6,6 +6,7 @@ import { getActiveEnrolment, requireAcademyContext } from "@/lib/academy";
 import { getSql } from "@/lib/db";
 import contentMap from "@/generated/content.json";
 import { saveLessonNote, setLessonCompletion } from "../../actions";
+import { recordAcademyActivity } from "@/lib/activity";
 
 export const dynamic = "force-dynamic";
 
@@ -26,6 +27,14 @@ export default async function LessonPage({ params }: { params: Promise<{ id: str
 
   const tier = enrolment.tier as Tier;
   if (!canAccessTier(tier, lesson.minimumTier)) redirect("/portal/module/" + module.slug);
+
+  await recordAcademyActivity({
+    userId: academyUser.id,
+    eventType: "lesson_viewed",
+    entityType: "lesson",
+    entityId: lesson.id,
+    metadata: { moduleSlug: module.slug }
+  });
 
   const raw = (contentMap as Record<string, string>)[lesson.source] || "";
   const isCsv = lesson.source.endsWith(".csv");
