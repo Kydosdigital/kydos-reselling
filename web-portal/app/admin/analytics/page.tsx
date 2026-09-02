@@ -3,22 +3,12 @@ import { requireAdminContext } from "@/lib/academy";
 import { getSql } from "@/lib/db";
 import { accessibleLessons, canAccessTier, modules, tierLabels, type Tier } from "@/lib/programme-data";
 import { getLaunchReadiness } from "@/lib/academy-rules";
+import { analyticsDate, completionPercent, daysSince, isLearningStalled, isRecentlyActive } from "@/lib/analytics";
 
 export const dynamic = "force-dynamic";
 
-function dateValue(value: unknown) {
-  if (!value) return null;
-  const date = new Date(String(value));
-  return Number.isNaN(date.getTime()) ? null : date;
-}
-
-function daysAgo(value: unknown) {
-  const date = dateValue(value);
-  return date ? Math.floor((Date.now() - date.getTime()) / 86400000) : null;
-}
-
 function formatDateTime(value: unknown) {
-  const date = dateValue(value);
+  const date = analyticsDate(value);
   if (!date) return "Never";
   return new Intl.DateTimeFormat("en-GB", {
     day: "2-digit",
@@ -88,17 +78,18 @@ export default async function SuperAdminAnalyticsPage({
     const progress = progressByUser.get(id) || [];
     const completedIds = new Set(progress.map((row) => String(row.lesson_id)));
     const completed = accessible.filter((lesson) => completedIds.has(lesson.id)).length;
-    const percent = accessible.length ? Math.round((completed / accessible.length) * 100) : 0;
+    const percent = completionPercent(completed, accessible.length);
     const latestLessonAt = progress.length ? progress[0].completed_at : null;
     const checkin = checkinByUser.get(id);
     const intake = intakeByUser.get(id);
     const readiness = intake ? getLaunchReadiness(intake) : null;
     const participantTasks = taskData.filter((task) => String(task.user_id) === id);
-    const overdue = participantTasks.filter((task) => String(task.status) !== "complete" && task.due_date && dateValue(task.due_date)! < new Date()).length;
-    const seenAge = daysAgo(participant.last_seen_at);
-    const programmeAge = daysAgo(participant.programme_start || participant.created_at);
-    const learningAge = daysAgo(latestLessonAt);
-    const stalled = percent < 100 && programmeAge !== null && programmeAge >= 14 && (learningAge === null || learningAge >= 14);
+    const overdue = participantTasks.filter((task) => String(task.status) !== "complete" && task.due_date && analyticsDate(task.due_date)! < new Date()).length;
+    const stalled = isLearningStalled({
+      progressPercent: percent,
+      programmeStart: participant.programme_start || participant.created_at,
+      latestLearningAt: latestLessonAt
+    });
 
     return {
       ...participant,
@@ -110,8 +101,8 @@ export default async function SuperAdminAnalyticsPage({
       checkin,
       readiness,
       overdueTasks: overdue,
-      active7: seenAge !== null && seenAge <= 7,
-      active30: seenAge !== null && seenAge <= 30,
+      active7: isRecentlyActive(participant.last_seen_at, 7),
+      active30: isRecentlyActive(participant.last_seen_at, 30),
       neverLoggedIn: !participant.last_login_at,
       stalled
     };
@@ -147,7 +138,7 @@ export default async function SuperAdminAnalyticsPage({
     .map((row) => row.checkin)
     .filter((row): row is Record<string, any> => Boolean(row))
     .filter((row) => {
-    const age = daysAgo(row.week_start);
+    const age = daysSince(row.week_start);
     return age !== null && age <= 7;
   });
   const confidenceValues = recentCheckins.map((row) => Number(row.confidence)).filter((value) => value >= 1 && value <= 5);
@@ -156,7 +147,7 @@ export default async function SuperAdminAnalyticsPage({
   const lowConfidence = recentCheckins.filter((row) => Number(row.confidence || 0) > 0 && Number(row.confidence) <= 2).length;
 
   const openTasks = taskData.filter((task) => String(task.status) !== "complete");
-  const overdueTasks = openTasks.filter((task) => task.due_date && dateValue(task.due_date)! < new Date()).length;
+  const overdueTasks = openTasks.filter((task) => task.due_date && analyticsDate(task.due_date)! < new Date()).length;
   const waitingKydos = openTasks.filter((task) => String(task.status) === "waiting_kydos").length;
   const waitingParticipants = openTasks.filter((task) => String(task.status) === "waiting_participant").length;
 
@@ -190,7 +181,7 @@ export default async function SuperAdminAnalyticsPage({
       const accessible = module.lessons.filter((lesson) => canAccessTier(participant.tier!, lesson.minimumTier));
       const completedIds = new Set((progressByUser.get(String(participant.id)) || []).map((row) => String(row.lesson_id)));
       const completed = accessible.filter((lesson) => completedIds.has(lesson.id)).length;
-      return accessible.length ? Math.round((completed / accessible.length) * 100) : 0;
+      return completionPercent(completed, accessible.length);
     });
     return {
       number: module.number,
@@ -202,7 +193,7 @@ export default async function SuperAdminAnalyticsPage({
 
   const enrolmentMonths = new Map<string, number>();
   for (const enrolment of enrolmentData) {
-    const date = dateValue(enrolment.programme_start || enrolment.created_at);
+    const date = analyticsDate(enrolment.programme_start || enrolment.created_at);
     if (!date) continue;
     const key = date.toISOString().slice(0, 7);
     enrolmentMonths.set(key, (enrolmentMonths.get(key) || 0) + 1);

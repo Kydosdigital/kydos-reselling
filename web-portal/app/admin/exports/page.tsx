@@ -18,6 +18,16 @@ const exports = [
     type: "orders",
     title: "Programme orders",
     description: "Stripe reconciliation fields, payment status and recorded checkout consent evidence."
+  },
+  {
+    type: "engagement",
+    title: "Participant engagement",
+    description: "Login history, course progress, latest learning activity and weekly check-in signals for every participant."
+  },
+  {
+    type: "activity",
+    title: "Activity events",
+    description: "Timestamped Academy engagement events such as logins, lesson completion, resource downloads and task activity."
   }
 ];
 

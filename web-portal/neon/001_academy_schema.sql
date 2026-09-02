@@ -178,3 +178,10 @@ create index if not exists academy_activity_events_user_created_idx on academy_a
 create index if not exists academy_activity_events_type_created_idx on academy_activity_events(event_type, created_at desc);
 create index if not exists academy_users_last_login_idx on academy_users(last_login_at desc) where role = 'student';
 create index if not exists academy_users_last_seen_idx on academy_users(last_seen_at desc) where role = 'student';
+
+
+-- Analytics query indexes
+create index if not exists lesson_progress_completed_idx on lesson_progress(completed_at desc);
+create index if not exists implementation_tasks_due_status_idx on implementation_tasks(due_date, status) where status <> 'complete';
+create index if not exists participant_weekly_checkins_week_idx on participant_weekly_checkins(week_start desc);
+create index if not exists programme_orders_status_created_idx on programme_orders(status, created_at desc);

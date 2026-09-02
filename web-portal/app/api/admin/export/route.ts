@@ -4,7 +4,7 @@ import { rowsToCsv } from "@/lib/csv";
 
 export const dynamic = "force-dynamic";
 
-type ExportType = "participants" | "tasks" | "orders";
+type ExportType = "participants" | "tasks" | "orders" | "engagement" | "activity";
 
 const exportDefinitions: Record<ExportType, {
   filename: string;
@@ -30,6 +30,16 @@ const exportDefinitions: Record<ExportType, {
     filename: "kydos-academy-orders.csv",
     columns: ["full_name","email","tier","amount_total","currency","status","terms_accepted","digital_content_consent","early_service_start_consent","consent_timestamp","provisioned_at","created_at","stripe_session_id","stripe_payment_intent_id"],
     query: "select full_name, email, tier, amount_total, currency, status, terms_accepted, digital_content_consent, early_service_start_consent, consent_timestamp, provisioned_at, created_at, stripe_session_id, stripe_payment_intent_id from programme_orders order by created_at desc"
+  },
+  engagement: {
+    filename: "kydos-academy-engagement.csv",
+    columns: ["full_name","email","tier","last_login_at","last_seen_at","login_count","completed_lessons","latest_learning_at","latest_checkin_week","latest_confidence","support_requested"],
+    query: "select u.full_name, u.email, e.tier, u.last_login_at, u.last_seen_at, u.login_count, coalesce(p.completed_lessons,0) as completed_lessons, p.latest_learning_at, c.week_start as latest_checkin_week, c.confidence as latest_confidence, case when coalesce(trim(c.support_needed),'') <> '' then true else false end as support_requested from academy_users u left join enrolments e on e.user_id = u.id and e.status = 'active' left join lateral (select count(*)::int as completed_lessons, max(completed_at) as latest_learning_at from lesson_progress lp where lp.user_id = u.id) p on true left join lateral (select week_start, confidence, support_needed from participant_weekly_checkins pc where pc.user_id = u.id order by week_start desc, updated_at desc limit 1) c on true where u.role = 'student' order by u.created_at desc"
+  },
+  activity: {
+    filename: "kydos-academy-activity-events.csv",
+    columns: ["full_name","email","event_type","entity_type","entity_id","created_at"],
+    query: "select u.full_name, u.email, a.event_type, a.entity_type, a.entity_id, a.created_at from academy_activity_events a left join academy_users u on u.id = a.user_id order by a.created_at desc limit 10000"
   }
 };
 

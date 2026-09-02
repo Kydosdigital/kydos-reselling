@@ -13,15 +13,16 @@ export default async function AdminParticipantPage({ params }: { params: Promise
   const { id } = await params;
   const sql = getSql();
 
-  const [users, enrolments, intakeRows, progressRows, tasks, orders, adminNotes, weeklyCheckIns] = await Promise.all([
-    sql.query("select id, auth_user_id, email, full_name, role, created_at from academy_users where id = $1 limit 1", [id]),
+  const [users, enrolments, intakeRows, progressRows, tasks, orders, adminNotes, weeklyCheckIns, activityRows] = await Promise.all([
+    sql.query("select id, auth_user_id, email, full_name, role, last_login_at, last_seen_at, login_count, created_at from academy_users where id = $1 limit 1", [id]),
     sql.query("select id, tier, status, programme_start, support_end, handover_date, created_at from enrolments where user_id = $1 order by created_at desc", [id]),
     sql.query("select * from participant_intake where user_id = $1 limit 1", [id]),
     sql.query("select lesson_id, completed_at from lesson_progress where user_id = $1 order by completed_at desc", [id]),
     sql.query("select id, area, title, owner, status, due_date, notes, created_at from implementation_tasks where user_id = $1 order by created_at desc", [id]),
     sql.query("select id, tier, amount_total, currency, status, created_at, stripe_session_id from programme_orders where user_id = $1 order by created_at desc", [id]),
     sql.query("select n.id, n.note, n.created_at, a.full_name as author_name from participant_admin_notes n left join academy_users a on a.id = n.author_user_id where n.user_id = $1 order by n.created_at desc limit 50", [id]),
-    sql.query("select id, week_start, wins, blockers, next_focus, support_needed, confidence, submitted_at, updated_at from participant_weekly_checkins where user_id = $1 order by week_start desc limit 12", [id])
+    sql.query("select id, week_start, wins, blockers, next_focus, support_needed, confidence, submitted_at, updated_at from participant_weekly_checkins where user_id = $1 order by week_start desc limit 12", [id]),
+    sql.query("select id, event_type, entity_type, entity_id, created_at from academy_activity_events where user_id = $1 order by created_at desc limit 50", [id])
   ]);
 
   if (!users.length) notFound();
@@ -56,6 +57,8 @@ export default async function AdminParticipantPage({ params }: { params: Promise
         <section className="portal-stat card"><small>Support end</small><strong className="stat-date">{active?.support_end ? String(active.support_end) : tier === "dfy" ? "After handover" : "Not set"}</strong><span>{tier === "dfy" && active?.handover_date ? "Handover " + String(active.handover_date) : "Support window"}</span></section>
         <section className="portal-stat card"><small>Launch readiness</small><strong>{intake ? readiness.percent + "%" : "No intake"}</strong><span>{intake ? readiness.stage : "Waiting for participant intake"}</span></section>
         <section className="portal-stat card"><small>Latest check-in</small><strong>{latestCheckIn?.confidence ? String(latestCheckIn.confidence) + "/5" : weeklyCheckIns.length ? "Submitted" : "None"}</strong><span>{latestCheckIn?.week_start ? "Week of " + String(latestCheckIn.week_start) : "No weekly update yet"}</span></section>
+        <section className="portal-stat card"><small>Logins</small><strong>{Number(user.login_count || 0)}</strong><span>Last login {user.last_login_at ? String(user.last_login_at) : "never"}</span></section>
+        <section className="portal-stat card"><small>Last seen</small><strong className="stat-date">{user.last_seen_at ? String(user.last_seen_at) : "Never"}</strong><span>Latest Academy activity</span></section>
       </div>
 
       <div className="admin-detail-grid">
@@ -128,6 +131,30 @@ export default async function AdminParticipantPage({ params }: { params: Promise
             ))}
           </div>
         ) : <div className="notice">This participant has not submitted a weekly check-in yet.</div>}
+      </section>
+
+      <section className="panel card" style={{ marginTop: 30 }}>
+        <div className="portal-section-heading">
+          <div>
+            <span className="eyebrow">Engagement timeline</span>
+            <h2>Recent Academy activity</h2>
+            <p className="muted">The most recent 50 tracked engagement events for this participant.</p>
+          </div>
+          <Link className="btn" href="/admin/analytics">Super Admin Analytics</Link>
+        </div>
+        {activityRows.length ? (
+          <div className="activity-feed">
+            {activityRows.map((event) => (
+              <article key={String(event.id)}>
+                <span className="activity-dot" />
+                <div>
+                  <strong>{String(event.event_type).replaceAll("_", " ")}</strong>
+                  <small>{String(event.created_at)}{event.entity_type ? " · " + String(event.entity_type) : ""}{event.entity_id ? " · " + String(event.entity_id) : ""}</small>
+                </div>
+              </article>
+            ))}
+          </div>
+        ) : <div className="notice">No tracked activity yet. Events will appear after this participant starts using the Academy.</div>}
       </section>
 
       {active ? (
