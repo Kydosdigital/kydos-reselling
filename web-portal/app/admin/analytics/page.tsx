@@ -61,18 +61,27 @@ export default async function SuperAdminAnalyticsPage({
     sql.query("select user_id, tier, status, programme_start, created_at from enrolments order by created_at asc")
   ]);
 
-  const progressByUser = new Map<string, Array<Record<string, unknown>>>();
-  for (const row of progressRows) {
+  const participantRows = participants as Record<string, any>[];
+  const progressData = progressRows as Record<string, any>[];
+  const intakeData = intakeRows as Record<string, any>[];
+  const checkInData = checkIns as Record<string, any>[];
+  const taskData = tasks as Record<string, any>[];
+  const orderData = orders as Record<string, any>[];
+  const activityData = activity as Record<string, any>[];
+  const enrolmentData = enrolmentHistory as Record<string, any>[];
+
+  const progressByUser = new Map<string, Array<Record<string, any>>>();
+  for (const row of progressData) {
     const key = String(row.user_id);
     const list = progressByUser.get(key) || [];
     list.push(row as Record<string, unknown>);
     progressByUser.set(key, list);
   }
 
-  const intakeByUser = new Map(intakeRows.map((row) => [String(row.user_id), row as Record<string, any>]));
-  const checkinByUser = new Map(checkIns.map((row) => [String(row.user_id), row as Record<string, any>]));
+  const intakeByUser = new Map(intakeData.map((row) => [String(row.user_id), row]));
+  const checkinByUser = new Map(checkInData.map((row) => [String(row.user_id), row]));
 
-  const participantMetrics = participants.map((participant) => {
+  const participantMetrics = participantRows.map((participant) => {
     const id = String(participant.id);
     const tier = participant.tier as Tier | undefined;
     const accessible = tier ? accessibleLessons(tier) : [];
@@ -84,7 +93,7 @@ export default async function SuperAdminAnalyticsPage({
     const checkin = checkinByUser.get(id);
     const intake = intakeByUser.get(id);
     const readiness = intake ? getLaunchReadiness(intake) : null;
-    const participantTasks = tasks.filter((task) => String(task.user_id) === id);
+    const participantTasks = taskData.filter((task) => String(task.user_id) === id);
     const overdue = participantTasks.filter((task) => String(task.status) !== "complete" && task.due_date && dateValue(task.due_date)! < new Date()).length;
     const seenAge = daysAgo(participant.last_seen_at);
     const programmeAge = daysAgo(participant.programme_start || participant.created_at);
@@ -134,7 +143,10 @@ export default async function SuperAdminAnalyticsPage({
   const completedProgramme = activeParticipants.filter((row) => row.progressPercent === 100).length;
   const stalled = activeParticipants.filter((row) => row.stalled).length;
 
-  const recentCheckins = activeParticipants.map((row) => row.checkin).filter(Boolean).filter((row) => {
+  const recentCheckins = activeParticipants
+    .map((row) => row.checkin)
+    .filter((row): row is Record<string, any> => Boolean(row))
+    .filter((row) => {
     const age = daysAgo(row.week_start);
     return age !== null && age <= 7;
   });
@@ -143,17 +155,17 @@ export default async function SuperAdminAnalyticsPage({
   const supportRequests = recentCheckins.filter((row) => String(row.support_needed || "").trim()).length;
   const lowConfidence = recentCheckins.filter((row) => Number(row.confidence || 0) > 0 && Number(row.confidence) <= 2).length;
 
-  const openTasks = tasks.filter((task) => String(task.status) !== "complete");
+  const openTasks = taskData.filter((task) => String(task.status) !== "complete");
   const overdueTasks = openTasks.filter((task) => task.due_date && dateValue(task.due_date)! < new Date()).length;
   const waitingKydos = openTasks.filter((task) => String(task.status) === "waiting_kydos").length;
   const waitingParticipants = openTasks.filter((task) => String(task.status) === "waiting_participant").length;
 
-  const paidOrders = orders.filter((row) => String(row.status) === "paid");
+  const paidOrders = orderData.filter((row) => String(row.status) === "paid");
   const paidRevenue = paidOrders.reduce((sum, row) => sum + Number(row.amount_total || 0), 0);
   const provisionedPaid = paidOrders.filter((row) => row.provisioned_at).length;
   const activationRate = paidOrders.length ? Math.round((provisionedPaid / paidOrders.length) * 100) : 0;
-  const refunds = orders.filter((row) => String(row.status) === "refunded").length;
-  const disputes = orders.filter((row) => String(row.status) === "disputed").length;
+  const refunds = orderData.filter((row) => String(row.status) === "refunded").length;
+  const disputes = orderData.filter((row) => String(row.status) === "disputed").length;
 
   const progressBands = [
     { label: "Not started", count: activeParticipants.filter((row) => row.progressPercent === 0).length },
@@ -189,7 +201,7 @@ export default async function SuperAdminAnalyticsPage({
   });
 
   const enrolmentMonths = new Map<string, number>();
-  for (const enrolment of enrolmentHistory) {
+  for (const enrolment of enrolmentData) {
     const date = dateValue(enrolment.programme_start || enrolment.created_at);
     if (!date) continue;
     const key = date.toISOString().slice(0, 7);
@@ -335,7 +347,7 @@ export default async function SuperAdminAnalyticsPage({
       <section className="analytics-panel card" style={{ marginTop: 28 }}>
         <div className="analytics-panel-head"><div><span className="eyebrow">Live activity</span><h2>Recent Academy activity</h2></div><Link href="/admin/audit">Full audit log →</Link></div>
         <div className="activity-feed">
-          {activity.slice(0,30).length ? activity.slice(0,30).map((event) => (
+          {activityData.slice(0,30).length ? activityData.slice(0,30).map((event) => (
             <article key={String(event.id)}>
               <span className="activity-dot" />
               <div><strong>{event.full_name?String(event.full_name):"System"} · {eventLabel(event.event_type)}</strong><small>{formatDateTime(event.created_at)}{event.entity_type?" · "+String(event.entity_type):""}</small></div>
