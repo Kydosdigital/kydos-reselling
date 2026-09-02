@@ -34,13 +34,13 @@ function eventLabel(value: unknown) {
 export default async function SuperAdminAnalyticsPage({
   searchParams
 }: {
-  searchParams: Promise<{ q?: string; tier?: string; engagement?: string }>;
+  searchParams: Promise<{ q?: string; tier?: string; engagement?: string; page?: string }>;
 }) {
   await requireAdminContext();
   const filters = await searchParams;
   const sql = getSql();
 
-  const [participants, progressRows, intakeRows, checkIns, tasks, orders, activity, enrolmentHistory] = await Promise.all([
+  const [participants, progressRows, intakeRows, checkIns, tasks, orders, activity, enrolmentHistory, dailyActivityRows, resourceDownloadRows] = await Promise.all([
     sql.query("select u.id, u.full_name, u.email, u.created_at, u.last_login_at, u.last_seen_at, u.login_count, e.tier, e.status, e.programme_start, e.support_end, e.handover_date from academy_users u left join enrolments e on e.user_id = u.id and e.status = 'active' where u.role = 'student' order by u.created_at desc"),
     sql.query("select user_id, lesson_id, completed_at from lesson_progress order by completed_at desc"),
     sql.query("select * from participant_intake"),
@@ -48,7 +48,9 @@ export default async function SuperAdminAnalyticsPage({
     sql.query("select user_id, status, due_date, updated_at from implementation_tasks"),
     sql.query("select user_id, tier, amount_total, currency, status, provisioned_at, created_at from programme_orders order by created_at desc"),
     sql.query("select a.id, a.user_id, a.event_type, a.entity_type, a.entity_id, a.metadata, a.created_at, u.full_name, u.email from academy_activity_events a left join academy_users u on u.id = a.user_id order by a.created_at desc limit 300"),
-    sql.query("select user_id, tier, status, programme_start, created_at from enrolments order by created_at asc")
+    sql.query("select user_id, tier, status, programme_start, created_at from enrolments order by created_at asc"),
+    sql.query("select created_at::date as day, count(*)::int as events, count(distinct user_id)::int as active_users from academy_activity_events where created_at >= current_date - interval '13 days' group by created_at::date order by day asc"),
+    sql.query("select entity_id as lesson_id, count(*)::int as downloads, count(distinct user_id)::int as unique_users from academy_activity_events where event_type = 'resource_downloaded' and entity_id is not null group by entity_id order by downloads desc limit 10")
   ]);
 
   const participantRows = participants as Record<string, any>[];
@@ -59,6 +61,8 @@ export default async function SuperAdminAnalyticsPage({
   const orderData = orders as Record<string, any>[];
   const activityData = activity as Record<string, any>[];
   const enrolmentData = enrolmentHistory as Record<string, any>[];
+  const dailyActivityData = dailyActivityRows as Record<string, any>[];
+  const resourceDownloadData = resourceDownloadRows as Record<string, any>[];
 
   const progressByUser = new Map<string, Array<Record<string, any>>>();
   for (const row of progressData) {
@@ -158,6 +162,22 @@ export default async function SuperAdminAnalyticsPage({
     return textMatch && tierMatch && engagementMatch;
   });
 
+  const pageSize = 50;
+  const requestedPage = Math.max(1, Number.parseInt(String(filters.page || "1"), 10) || 1);
+  const totalPages = Math.max(1, Math.ceil(filteredParticipants.length / pageSize));
+  const currentPage = Math.min(requestedPage, totalPages);
+  const visibleParticipants = filteredParticipants.slice((currentPage - 1) * pageSize, currentPage * pageSize);
+
+  function paginationHref(page: number) {
+    const params = new URLSearchParams();
+    if (filters.q) params.set("q", filters.q);
+    if (tierFilter) params.set("tier", tierFilter);
+    if (engagementFilter) params.set("engagement", engagementFilter);
+    if (page > 1) params.set("page", String(page));
+    const query = params.toString();
+    return query ? "/admin/analytics?" + query : "/admin/analytics";
+  }
+
   const loggedInEver = activeParticipants.filter((row) => !row.neverLoggedIn).length;
   const active7 = activeParticipants.filter((row) => row.active7).length;
   const active30 = activeParticipants.filter((row) => row.active30).length;
@@ -233,6 +253,65 @@ export default async function SuperAdminAnalyticsPage({
   const cohortRows = Array.from(enrolmentMonths.entries()).sort(([a], [b]) => a.localeCompare(b)).slice(-12);
   const maxCohort = Math.max(1, ...cohortRows.map(([, count]) => count));
 
+  const activeUserIds = new Set(activeParticipants.map((row) => String(row.id)));
+  const lessonCompletionCounts = new Map<string, number>();
+  for (const row of progressData) {
+    if (!activeUserIds.has(String(row.user_id))) continue;
+    const lessonId = String(row.lesson_id);
+    lessonCompletionCounts.set(lessonId, (lessonCompletionCounts.get(lessonId) || 0) + 1);
+  }
+
+  const lessonPerformance = modules.flatMap((module) =>
+    module.lessons.map((lesson) => {
+      const eligible = activeParticipants.filter((participant) =>
+        participant.tier ? canAccessTier(participant.tier, lesson.minimumTier) : false
+      ).length;
+      const completions = lessonCompletionCounts.get(lesson.id) || 0;
+      return {
+        id: lesson.id,
+        title: lesson.title,
+        module: module.title,
+        eligible,
+        completions,
+        rate: completionPercent(completions, eligible)
+      };
+    })
+  );
+  const dropOffWatch = lessonPerformance
+    .filter((row) => row.eligible > 0)
+    .sort((a, b) => a.rate - b.rate || b.eligible - a.eligible)
+    .slice(0, 8);
+
+  const lessonLookup = new Map(
+    modules.flatMap((module) => module.lessons.map((lesson) => [lesson.id, { title: lesson.title, module: module.title }] as const))
+  );
+  const topDownloads = resourceDownloadData.map((row) => {
+    const lesson = lessonLookup.get(String(row.lesson_id));
+    return {
+      lessonId: String(row.lesson_id || ""),
+      title: lesson?.title || String(row.lesson_id || "Unknown resource"),
+      module: lesson?.module || "Programme resource",
+      downloads: Number(row.downloads || 0),
+      uniqueUsers: Number(row.unique_users || 0)
+    };
+  });
+
+  const activityByDay = new Map(dailyActivityData.map((row) => [String(row.day), row]));
+  const dailyActivity = Array.from({ length: 14 }, (_, index) => {
+    const date = new Date();
+    date.setUTCDate(date.getUTCDate() - (13 - index));
+    const key = date.toISOString().slice(0, 10);
+    const row = activityByDay.get(key);
+    return {
+      day: key,
+      label: new Intl.DateTimeFormat("en-GB", { day: "2-digit", month: "short" }).format(date),
+      events: Number(row?.events || 0),
+      activeUsers: Number(row?.active_users || 0)
+    };
+  });
+  const maxDailyEvents = Math.max(1, ...dailyActivity.map((row) => row.events));
+  const trackedEvents14d = dailyActivity.reduce((sum, row) => sum + row.events, 0);
+
   return (
     <main className="container admin-page super-admin-analytics">
       <div className="portal-top">
@@ -246,6 +325,7 @@ export default async function SuperAdminAnalyticsPage({
           <Link className="btn" href="/admin/check-ins">Check-ins</Link>
           <Link className="btn" href="/admin/orders">Orders</Link>
           <Link className="btn" href="/admin/attention">Attention queue</Link>
+          <Link className="btn" href="/admin/exports">Exports</Link>
         </div>
       </div>
 
@@ -327,6 +407,52 @@ export default async function SuperAdminAnalyticsPage({
         </section>
       </div>
 
+      <div className="analytics-two-column">
+        <section className="analytics-panel card">
+          <div className="analytics-panel-head"><div><span className="eyebrow">Engagement trend</span><h2>Academy activity, last 14 days</h2></div><span>{trackedEvents14d} tracked events</span></div>
+          <div className="daily-activity-chart">
+            {dailyActivity.map((row) => (
+              <div className="daily-activity-column" key={row.day} title={row.events + " events · " + row.activeUsers + " active users"}>
+                <div className="daily-activity-bar-wrap"><div className="daily-activity-bar" style={{ height: Math.max(3, Math.round((row.events / maxDailyEvents) * 100)) + "%" }} /></div>
+                <strong>{row.events}</strong>
+                <span>{row.label}</span>
+              </div>
+            ))}
+          </div>
+        </section>
+
+        <section className="analytics-panel card">
+          <div className="analytics-panel-head"><div><span className="eyebrow">Resource usage</span><h2>Most downloaded resources</h2></div><span>Tracked downloads</span></div>
+          {topDownloads.length ? (
+            <div className="analytics-ranked-list">
+              {topDownloads.map((row, index) => (
+                <div key={row.lessonId}>
+                  <span>{String(index + 1).padStart(2, "0")}</span>
+                  <div><strong>{row.title}</strong><small>{row.module}</small></div>
+                  <b>{row.downloads}<small>{row.uniqueUsers} users</small></b>
+                </div>
+              ))}
+            </div>
+          ) : <div className="notice">Download analytics will appear after participants begin using programme resources.</div>}
+        </section>
+      </div>
+
+      <section className="analytics-panel card" style={{ marginTop: 18 }}>
+        <div className="analytics-panel-head"><div><span className="eyebrow">Learning diagnostics</span><h2>Lesson drop-off watch</h2></div><span>Lowest completion rates among eligible participants</span></div>
+        {dropOffWatch.length ? (
+          <div className="dropoff-grid">
+            {dropOffWatch.map((lesson) => (
+              <article key={lesson.id}>
+                <small>{lesson.module} · {lesson.completions}/{lesson.eligible} completed</small>
+                <strong>{lesson.title}</strong>
+                <div className="progress-track"><div className="progress-bar" style={{ width: lesson.rate + "%" }} /></div>
+                <span>{lesson.rate}% completion</span>
+              </article>
+            ))}
+          </div>
+        ) : <div className="notice">Lesson drop-off analytics will appear once active participants begin the programme.</div>}
+      </section>
+
       <section className="admin-filter-panel card">
         <form method="get" className="admin-filter-grid">
           <div className="field"><label htmlFor="analytics-q">Search participant</label><input id="analytics-q" name="q" defaultValue={filters.q || ""} placeholder="Name or email" /></div>
@@ -337,11 +463,11 @@ export default async function SuperAdminAnalyticsPage({
       </section>
 
       <section style={{ marginTop: 28 }}>
-        <div className="portal-section-heading"><div><span className="eyebrow">Participant analytics</span><h2>Everyone taking the programme</h2><p className="muted">{filteredParticipants.length} matching participant{filteredParticipants.length===1?"":"s"}</p></div></div>
+        <div className="portal-section-heading"><div><span className="eyebrow">Participant analytics</span><h2>Everyone taking the programme</h2><p className="muted">{filteredParticipants.length} matching participant{filteredParticipants.length===1?"":"s"} · page {currentPage} of {totalPages}</p></div></div>
         <div className="admin-table-wrap card">
           <table className="admin-table analytics-participant-table">
             <thead><tr><th>Participant</th><th>Plan</th><th>Last login</th><th>Logins</th><th>Last seen</th><th>Progress</th><th>Latest learning</th><th>Check-in</th><th>Launch readiness</th><th>Signals</th></tr></thead>
-            <tbody>{filteredParticipants.map((row) => {
+            <tbody>{visibleParticipants.map((row) => {
               const checkin=row.checkin;
               const signals=[
                 row.neverLoggedIn?"Never logged in":"",
@@ -365,6 +491,13 @@ export default async function SuperAdminAnalyticsPage({
             })}</tbody>
           </table>
         </div>
+        {totalPages > 1 ? (
+          <nav className="analytics-pagination" aria-label="Participant analytics pages">
+            {currentPage > 1 ? <Link className="btn" href={paginationHref(currentPage - 1)}>← Previous</Link> : <span />}
+            <span>Showing {(currentPage - 1) * pageSize + 1}–{Math.min(currentPage * pageSize, filteredParticipants.length)} of {filteredParticipants.length}</span>
+            {currentPage < totalPages ? <Link className="btn" href={paginationHref(currentPage + 1)}>Next →</Link> : <span />}
+          </nav>
+        ) : null}
       </section>
 
       <section className="analytics-panel card" style={{ marginTop: 28 }}>
