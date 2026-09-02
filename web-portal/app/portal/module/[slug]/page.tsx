@@ -4,6 +4,7 @@ import { canAccessTier, modules, tierLabels, type Tier } from "@/lib/programme-d
 import { getActiveEnrolment, requireAcademyContext } from "@/lib/academy";
 import { getSql } from "@/lib/db";
 import { setLessonCompletion } from "../../actions";
+import { recordAcademyActivity } from "@/lib/activity";
 
 export const dynamic = "force-dynamic";
 
@@ -22,6 +23,14 @@ export default async function ModulePage({ params }: { params: Promise<{ slug: s
   if (!enrolment) return <div className="notice">Your programme enrolment is not active yet.</div>;
 
   const tier = enrolment.tier as Tier;
+
+  await recordAcademyActivity({
+    userId: academyUser.id,
+    eventType: "module_viewed",
+    entityType: "module",
+    entityId: module.slug
+  });
+
   const completed = new Set(progress.map((item) => String(item.lesson_id)));
   const lessons = module.lessons.filter((lesson) => canAccessTier(tier, lesson.minimumTier));
 
