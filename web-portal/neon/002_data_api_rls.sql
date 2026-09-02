@@ -13,6 +13,7 @@ alter table implementation_task_updates enable row level security;
 alter table programme_orders enable row level security;
 alter table academy_audit_log enable row level security;
 alter table participant_admin_notes enable row level security;
+alter table academy_activity_events enable row level security;
 
 -- Participant profile rows are read-only through the Data API. This is
 -- deliberate: allowing self-update here would also expose the application

@@ -6,6 +6,9 @@ create table if not exists academy_users (
   email text not null,
   full_name text not null,
   role text not null default 'student' check (role in ('student','admin')),
+  last_login_at timestamptz,
+  last_seen_at timestamptz,
+  login_count integer not null default 0 check (login_count >= 0),
   created_at timestamptz not null default now(),
   updated_at timestamptz not null default now()
 );
@@ -153,3 +156,25 @@ create table if not exists participant_admin_notes (
 );
 
 create index if not exists participant_admin_notes_user_created_idx on participant_admin_notes(user_id, created_at desc);
+
+
+-- Engagement analytics for the Kydos Super Admin dashboard.
+-- Store event names and non-sensitive metadata only.
+alter table academy_users add column if not exists last_login_at timestamptz;
+alter table academy_users add column if not exists last_seen_at timestamptz;
+alter table academy_users add column if not exists login_count integer not null default 0;
+
+create table if not exists academy_activity_events (
+  id bigserial primary key,
+  user_id uuid references academy_users(id) on delete set null,
+  event_type text not null,
+  entity_type text,
+  entity_id text,
+  metadata jsonb not null default '{}'::jsonb,
+  created_at timestamptz not null default now()
+);
+
+create index if not exists academy_activity_events_user_created_idx on academy_activity_events(user_id, created_at desc);
+create index if not exists academy_activity_events_type_created_idx on academy_activity_events(event_type, created_at desc);
+create index if not exists academy_users_last_login_idx on academy_users(last_login_at desc) where role = 'student';
+create index if not exists academy_users_last_seen_idx on academy_users(last_seen_at desc) where role = 'student';

@@ -3,6 +3,7 @@ import { getAuth, isNeonAuthConfigured } from "@/lib/auth/server";
 import { getSql, isDatabaseConfigured } from "@/lib/db";
 import type { Tier } from "@/lib/programme-data";
 import { canProvisionAcademyProfile, supportEndForTier as calculateSupportEnd } from "@/lib/academy-rules";
+import { recordAcademyActivity, touchAcademySeen } from "@/lib/activity";
 
 export type AcademyUser = {
   id: string;
@@ -10,6 +11,9 @@ export type AcademyUser = {
   email: string;
   full_name: string;
   role: "student" | "admin";
+  last_login_at?: string | null;
+  last_seen_at?: string | null;
+  login_count?: number;
   created_at: string;
 };
 
@@ -43,7 +47,7 @@ export async function getCurrentAcademyContext() {
 
   const sql = getSql();
   let rows = await sql.query(
-    "select id, auth_user_id, email, full_name, role, created_at from academy_users where auth_user_id = $1 limit 1",
+    "select id, auth_user_id, email, full_name, role, last_login_at, last_seen_at, login_count, created_at from academy_users where auth_user_id = $1 limit 1",
     [authUser.id]
   );
 
@@ -68,13 +72,21 @@ export async function getCurrentAcademyContext() {
     const name = authUser.name || email.split("@")[0] || "Participant";
 
     rows = await sql.query(
-      "insert into academy_users (auth_user_id, email, full_name, role) values ($1,$2,$3,$4) on conflict (auth_user_id) do update set email = excluded.email, full_name = excluded.full_name, updated_at = now() returning id, auth_user_id, email, full_name, role, created_at",
+      "insert into academy_users (auth_user_id, email, full_name, role, last_login_at, last_seen_at, login_count) values ($1,$2,$3,$4,now(),now(),1) on conflict (auth_user_id) do update set email = excluded.email, full_name = excluded.full_name, last_seen_at = now(), updated_at = now() returning id, auth_user_id, email, full_name, role, last_login_at, last_seen_at, login_count, created_at",
       [authUser.id, email, name, role]
     );
 
     academyUser = rows[0] as AcademyUser;
+    await recordAcademyActivity({
+      userId: academyUser.id,
+      eventType: "academy_profile_provisioned",
+      entityType: "academy_user",
+      entityId: academyUser.id,
+      metadata: { role }
+    });
   }
 
+  await touchAcademySeen(academyUser.id);
   return { authUser, academyUser };
 }
 
