@@ -71,7 +71,31 @@ export default async function SuperAdminAnalyticsPage({
   const intakeByUser = new Map(intakeData.map((row) => [String(row.user_id), row]));
   const checkinByUser = new Map(checkInData.map((row) => [String(row.user_id), row]));
 
-  const participantMetrics = participantRows.map((participant) => {
+  type ParticipantMetric = {
+    id: string;
+    full_name: string;
+    email: string;
+    created_at: unknown;
+    last_login_at: unknown;
+    last_seen_at: unknown;
+    login_count: number;
+    tier: Tier | undefined;
+    status: string | null;
+    programme_start: unknown;
+    completedLessons: number;
+    accessibleLessons: number;
+    progressPercent: number;
+    latestLessonAt: unknown;
+    checkin: Record<string, any> | undefined;
+    readiness: ReturnType<typeof getLaunchReadiness> | null;
+    overdueTasks: number;
+    active7: boolean;
+    active30: boolean;
+    neverLoggedIn: boolean;
+    stalled: boolean;
+  };
+
+  const participantMetrics: ParticipantMetric[] = participantRows.map((participant): ParticipantMetric => {
     const id = String(participant.id);
     const tier = participant.tier as Tier | undefined;
     const accessible = tier ? accessibleLessons(tier) : [];
@@ -92,7 +116,15 @@ export default async function SuperAdminAnalyticsPage({
     });
 
     return {
-      ...participant,
+      id,
+      full_name: String(participant.full_name || ""),
+      email: String(participant.email || ""),
+      created_at: participant.created_at,
+      last_login_at: participant.last_login_at,
+      last_seen_at: participant.last_seen_at,
+      login_count: Number(participant.login_count || 0),
+      status: participant.status ? String(participant.status) : null,
+      programme_start: participant.programme_start,
       tier,
       completedLessons: completed,
       accessibleLessons: accessible.length,
