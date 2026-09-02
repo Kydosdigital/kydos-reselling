@@ -40,8 +40,9 @@ export default async function AdminPage({
   return (
     <main className="container admin-page">
       <div className="portal-top">
-        <div><span className="pill">Kydos Admin</span><h1>Programme operations</h1><p className="muted">Create participants, assign tiers and manage implementation work.</p></div>
+        <div><span className="pill">Kydos Super Admin</span><h1>Programme operations</h1><p className="muted">Create participants, assign tiers and manage implementation work.</p></div>
         <div className="admin-top-actions">
+          <Link className="btn btn-primary" href="/admin/analytics">Super Admin Analytics</Link>
           <Link className="btn" href="/admin/orders">Orders</Link>
           <Link className="btn" href="/admin/audit">Audit log</Link>
           <Link className="btn" href="/admin/system">System</Link>
