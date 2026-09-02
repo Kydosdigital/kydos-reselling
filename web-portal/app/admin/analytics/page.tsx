@@ -381,7 +381,7 @@ export default async function SuperAdminAnalyticsPage({
             <article key={module.number}>
               <small>Module {String(module.number).padStart(2, "0")} · {module.eligible} eligible</small>
               <strong>{module.title}</strong>
-              <div className="progress-track"><div className="progress-bar" style={{ width: module.average + "%" }} /></div>
+              <div className="progress-track" role="progressbar" aria-label={module.title + " average completion"} aria-valuemin={0} aria-valuemax={100} aria-valuenow={module.average}><div className="progress-bar" style={{ width: module.average + "%" }} /></div>
               <span>{module.average}% average completion</span>
             </article>
           ))}
@@ -445,7 +445,7 @@ export default async function SuperAdminAnalyticsPage({
               <article key={lesson.id}>
                 <small>{lesson.module} · {lesson.completions}/{lesson.eligible} completed</small>
                 <strong>{lesson.title}</strong>
-                <div className="progress-track"><div className="progress-bar" style={{ width: lesson.rate + "%" }} /></div>
+                <div className="progress-track" role="progressbar" aria-label={lesson.title + " completion"} aria-valuemin={0} aria-valuemax={100} aria-valuenow={lesson.rate}><div className="progress-bar" style={{ width: lesson.rate + "%" }} /></div>
                 <span>{lesson.rate}% completion</span>
               </article>
             ))}
