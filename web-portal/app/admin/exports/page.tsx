@@ -22,7 +22,7 @@ const exports = [
   {
     type: "engagement",
     title: "Participant engagement",
-    description: "Login history, course progress, latest learning activity and weekly check-in signals for every participant."
+    description: "Login history, course progress, latest learning activity and weekly check-in signals for every participant, with E2E test accounts explicitly flagged."
   },
   {
     type: "activity",
