@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import "./globals.css";
 
 const appUrl = process.env.NEXT_PUBLIC_APP_URL || "https://academy.kydosdigital.com";
-const allowIndexing = process.env.NEXT_PUBLIC_ENABLE_INDEXING === "true";
+const allowIndexing = process.env.VERCEL_ENV === "production";
 
 export const metadata: Metadata = {
   metadataBase: new URL(appUrl),
