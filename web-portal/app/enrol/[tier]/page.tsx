@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { BrandLogo } from "@/components/brand-logo";
 import { notFound } from "next/navigation";
 import { createCheckoutSession } from "./actions";
 
@@ -38,9 +39,8 @@ export default async function EnrolPage({
   return (
     <main className="auth-wrap">
       <section className="auth-card card" style={{ width: "min(720px, 100%)" }}>
-        <Link href="/" className="brand">
-          <span className="brand-mark" />
-          <span>Kydos Digital</span>
+        <Link href="/" className="brand" aria-label="Kydos Academy home">
+          <BrandLogo variant="light" className="academy-logo-auth" />
         </Link>
 
         <div style={{ marginTop: 28 }}>
