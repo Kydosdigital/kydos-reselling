@@ -1,13 +1,13 @@
 import Link from "next/link";
+import { BrandLogo } from "@/components/brand-logo";
 import { signOut } from "@/app/login/actions";
 
 export default function AccessPendingPage() {
   return (
     <main className="auth-wrap">
       <section className="auth-card card access-pending-card">
-        <Link href="/" className="brand">
-          <span className="brand-mark" />
-          <span>Kydos Academy</span>
+        <Link href="/" className="brand" aria-label="Kydos Academy home">
+          <BrandLogo variant="light" className="academy-logo-auth" />
         </Link>
 
         <div style={{ marginTop: 28 }}>
