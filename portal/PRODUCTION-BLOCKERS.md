@@ -6,20 +6,26 @@ Already complete:
 
 - London Neon project created
 - Managed Better Auth provisioned
-- Neon Data API provisioned
-- Data API linked to Neon Auth
-- Academy Postgres schema prepared
-- participant-facing RLS migration prepared
+- Neon Data API provisioned and linked to Neon Auth
+- Academy Postgres schema applied to production neondb
+- participant-facing RLS migration applied
+- E2E test-data flag migration applied
+- trusted production domain added to Neon Auth
+- Auth application name set to Kydos Academy
+- first Kydos Super Admin Auth account created for Kydosdigital@gmail.com
+- Neon Auth role set to admin
+- matching Academy admin profile created
+- Blueprint, Build With Us and Done For You synthetic E2E accounts created and seeded
+- E2E accounts explicitly flagged so they are excluded from normal commercial analytics
+- Super Admin E2E impersonation lab prepared
 
 Still required:
 
-- run `web-portal/neon/001_academy_schema.sql` in neondb
-- run `web-portal/neon/002_data_api_rls.sql`
-- add the pooled `DATABASE_URL` to Vercel
-- add the Auth URL and a new cookie secret to Vercel
-- create and verify the first Kydos admin Auth account
-- complete the Neon Auth production checklist
-- perform two-user RLS isolation testing
+- add the pooled `DATABASE_URL` to the Vercel project
+- redeploy so the live application can reach Neon
+- complete runtime Google sign-in for Kydosdigital@gmail.com
+- complete participant-vs-participant RLS isolation testing through real authenticated sessions
+- complete the remaining Neon Auth production checklist (custom SMTP, email verification/password reset, localhost removal)
 
 ## 2. Vercel
 
@@ -31,9 +37,12 @@ The Hobby build-rate limit can also delay automatic deployments during heavy dev
 
 Still required:
 
-- confirm a current-main Vercel deployment completes after CI is green
-- add the final Neon environment variables
-- runtime QA of /login, /portal and /admin after Neon schema activation
+- add `DATABASE_URL` to Vercel Production/Preview/Development
+- redeploy the current main branch
+- verify `/api/system/health` reports authConfigured/databaseConfigured/databaseReachable/schemaReady = true
+- runtime QA of /login, /portal, /admin/analytics and /admin/e2e
+
+The application now has built-in fallbacks for the Neon Auth base URL. If no explicit `NEON_AUTH_COOKIE_SECRET` is supplied, the server derives a domain-separated HMAC secret from the server-only database connection secret. An explicit cookie secret remains the preferred long-term production configuration.
 
 ## 3. Stripe
 
@@ -73,13 +82,13 @@ Before live checkout:
 
 Before participant launch:
 
-- trusted domain: academy.kydosdigital.com
-- application name: Kydos Academy
-- custom SMTP
-- email verification
-- password reset test
-- localhost disabled on production Auth
-- first Kydos Auth admin confirmed
+- [x] trusted domain: academy.kydosdigital.com
+- [x] application name: Kydos Academy
+- [x] first Kydos Auth admin created and assigned admin role
+- [ ] custom SMTP
+- [ ] email verification
+- [ ] password reset test
+- [ ] localhost disabled on production Auth
 
 ## 6. Final downloads
 
