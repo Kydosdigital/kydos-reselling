@@ -5,8 +5,8 @@ import { PublicFooter } from "@/components/public-footer";
 import { HomeStructuredData } from "@/components/home-structured-data";
 
 export const metadata: Metadata = {
-  title: "Build Your UK Digital Marketing Agency",
-  description: "Build a structured UK digital marketing agency with the company, brand, website, CRM, sales, team and delivery systems behind Kydos Digital.",
+  title: "Start a Digital Marketing Agency in the UK",
+  description: "Learn how to start a UK digital marketing agency with the company, brand, website, CRM, pricing, sales, team and delivery systems behind Kydos Digital.",
   alternates: { canonical: "/" }
 };
 
@@ -390,6 +390,38 @@ export default function HomePage() {
                 <span className="audience-icon">03</span>
                 <h3>You want support</h3>
                 <p>You want an experienced agency team available while you implement instead of working everything out alone.</p>
+              </article>
+            </div>
+          </div>
+        </section>
+
+        <section className="section home-guides-section">
+          <div className="container">
+            <div className="portal-section-heading">
+              <div>
+                <span className="eyebrow">Free agency guides</span>
+                <h2>Start with the decisions that make the business work.</h2>
+              </div>
+              <Link className="btn" href="/blog">View all guides</Link>
+            </div>
+            <div className="home-guides-grid">
+              <article className="card">
+                <span>Agency Setup</span>
+                <h3><Link href="/blog/how-to-start-digital-marketing-agency-uk">How to Start a Digital Marketing Agency in the UK</Link></h3>
+                <p>Company, pricing, website, CRM, team, onboarding and acquisition in the order we would build them.</p>
+                <Link href="/blog/how-to-start-digital-marketing-agency-uk">Read the guide →</Link>
+              </article>
+              <article className="card">
+                <span>Startup Budget</span>
+                <h3><Link href="/blog/cost-to-start-digital-marketing-agency-uk">How Much Does It Cost to Start an Agency?</Link></h3>
+                <p>Plan for people, software, acquisition and runway, not just the company registration fee.</p>
+                <Link href="/blog/cost-to-start-digital-marketing-agency-uk">Build your budget →</Link>
+              </article>
+              <article className="card">
+                <span>Team & Operations</span>
+                <h3><Link href="/blog/staff-needed-to-start-digital-marketing-agency">What Staff Do You Need to Start?</Link></h3>
+                <p>A lean structure for Account Management, Creative, Sales, specialists and Operations.</p>
+                <Link href="/blog/staff-needed-to-start-digital-marketing-agency">See the team structure →</Link>
               </article>
             </div>
           </div>

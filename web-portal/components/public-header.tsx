@@ -14,6 +14,7 @@ export function PublicHeader() {
           <Link href="/#how">How it works</Link>
           <Link href="/#plans">Plans</Link>
           <Link href="/#faq">FAQ</Link>
+          <Link href="/blog">Guides</Link>
           <Link href="/login">Login</Link>
           <Link className="btn btn-primary" href="/consultation">Book a consultation</Link>
         </nav>

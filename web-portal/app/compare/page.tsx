@@ -4,8 +4,8 @@ import { PublicHeader } from "@/components/public-header";
 import { PublicFooter } from "@/components/public-footer";
 
 export const metadata: Metadata = {
-  title: "Compare Agency Build Plans",
-  description: "Compare Blueprint, Build With Us and Done For You at Kydos Academy.",
+  title: "Digital Marketing Agency Course & Build Plans",
+  description: "Compare Kydos Academy Blueprint, Build With Us and Done For You plans for starting and building your own UK digital marketing agency.",
   alternates: { canonical: "/compare" }
 };
 

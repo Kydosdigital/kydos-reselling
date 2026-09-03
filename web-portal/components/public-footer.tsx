@@ -20,6 +20,7 @@ export function PublicFooter() {
             <Link href="/programme">Programme</Link><br />
             <Link href="/compare">Compare plans</Link><br />
             <Link href="/consultation">Consultation</Link><br />
+            <Link href="/blog">Agency guides</Link><br />
             <a href="https://kydosdigital.com">Kydos Digital</a>
           </p>
         </div>
