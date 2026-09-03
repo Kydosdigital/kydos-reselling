@@ -5,6 +5,7 @@ import { PublicFooter } from "@/components/public-footer";
 export const metadata: Metadata = {
   title: "Programme Privacy Notice",
   description: "Pre-launch Kydos Academy privacy notice, pending data-protection review.",
+  robots: { index: false, follow: false, nocache: true },
   alternates: { canonical: "/legal/privacy" }
 };
 

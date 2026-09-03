@@ -5,6 +5,7 @@ import { PublicFooter } from "@/components/public-footer";
 export const metadata: Metadata = {
   title: "Refund & Cancellation Policy",
   description: "Pre-launch Kydos Academy refund and cancellation policy, pending legal approval.",
+  robots: { index: false, follow: false, nocache: true },
   alternates: { canonical: "/legal/refunds" }
 };
 

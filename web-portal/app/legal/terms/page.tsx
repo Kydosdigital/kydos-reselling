@@ -5,6 +5,7 @@ import { PublicFooter } from "@/components/public-footer";
 export const metadata: Metadata = {
   title: "Programme Terms",
   description: "Pre-launch Kydos Academy programme terms, pending solicitor approval.",
+  robots: { index: false, follow: false, nocache: true },
   alternates: { canonical: "/legal/terms" }
 };
 

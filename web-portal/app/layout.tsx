@@ -23,6 +23,9 @@ export const metadata: Metadata = {
     apple: [{ url: "/brand/kydos-academy-app-icon.svg", type: "image/svg+xml" }]
   },
   category: "Business education and agency implementation",
+  alternates: {
+    types: { "application/rss+xml": "/blog/rss.xml" }
+  },
   openGraph: {
     title: "Kydos Academy | Build Your UK Digital Marketing Agency",
     description: "Build the company, brand, website, CRM, sales system, team and client-delivery infrastructure needed to operate a professional digital marketing agency.",
