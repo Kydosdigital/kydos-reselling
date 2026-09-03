@@ -15,7 +15,8 @@ export const metadata: Metadata = {
   manifest: "/manifest.webmanifest",
   icons: {
     icon: [{ url: "/brand/kydos-academy-app-icon.svg", type: "image/svg+xml" }],
-    shortcut: [{ url: "/brand/kydos-academy-app-icon.svg", type: "image/svg+xml" }]
+    shortcut: [{ url: "/brand/kydos-academy-app-icon.svg", type: "image/svg+xml" }],
+    apple: [{ url: "/brand/kydos-academy-app-icon.svg", type: "image/svg+xml" }]
   },
   category: "Business education and agency implementation",
   openGraph: {
@@ -27,10 +28,10 @@ export const metadata: Metadata = {
     locale: "en_GB",
     images: [
       {
-        url: "https://images.pexels.com/photos/3931504/pexels-photo-3931504.jpeg?cs=srgb&fm=jpg",
+        url: "/opengraph-image",
         width: 1200,
         height: 630,
-        alt: "Business team collaborating in a modern office"
+        alt: "Kydos Academy | Build Your UK Digital Marketing Agency"
       }
     ]
   },
@@ -38,7 +39,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "Kydos Academy | Build Your UK Digital Marketing Agency",
     description: "A practical agency build programme from Kydos Digital.",
-    images: ["https://images.pexels.com/photos/3931504/pexels-photo-3931504.jpeg?cs=srgb&fm=jpg"]
+    images: ["/twitter-image"]
   },
   robots: allowIndexing
     ? { index: true, follow: true }
