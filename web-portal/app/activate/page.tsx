@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { BrandLogo } from "@/components/brand-logo";
 import { createStripeClient } from "@/lib/stripe";
 import { publicPlans, type PublicPlanSlug } from "@/lib/public-plans";
 import { activatePaidAccount } from "./actions";
@@ -45,9 +46,8 @@ export default async function ActivatePage({
   return (
     <main className="auth-wrap">
       <section className="auth-card card activation-card">
-        <Link href="/" className="brand">
-          <span className="brand-mark" />
-          <span>Kydos Academy</span>
+        <Link href="/" className="brand" aria-label="Kydos Academy home">
+          <BrandLogo variant="light" className="academy-logo-auth" />
         </Link>
 
         <div style={{ marginTop: 28 }}>
