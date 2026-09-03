@@ -34,19 +34,19 @@ function eventLabel(value: unknown) {
 export default async function SuperAdminAnalyticsPage({
   searchParams
 }: {
-  searchParams: Promise<{ q?: string; tier?: string; engagement?: string; page?: string }>;
+  searchParams: Promise<{ q?: string; tier?: string; engagement?: string; page?: string; tests?: string }>;
 }) {
   await requireAdminContext();
   const filters = await searchParams;
   const sql = getSql();
 
   const [participants, progressRows, intakeRows, checkIns, tasks, orders, activity, enrolmentHistory, dailyActivityRows, resourceDownloadRows] = await Promise.all([
-    sql.query("select u.id, u.full_name, u.email, u.created_at, u.last_login_at, u.last_seen_at, u.login_count, e.tier, e.status, e.programme_start, e.support_end, e.handover_date from academy_users u left join enrolments e on e.user_id = u.id and e.status = 'active' where u.role = 'student' order by u.created_at desc"),
+    sql.query("select u.id, u.full_name, u.email, u.created_at, u.last_login_at, u.last_seen_at, u.login_count, u.is_test, e.tier, e.status, e.programme_start, e.support_end, e.handover_date from academy_users u left join enrolments e on e.user_id = u.id and e.status = 'active' where u.role = 'student' order by u.created_at desc"),
     sql.query("select user_id, lesson_id, completed_at from lesson_progress order by completed_at desc"),
     sql.query("select * from participant_intake"),
     sql.query("select distinct on (user_id) user_id, week_start, confidence, blockers, support_needed, submitted_at, updated_at from participant_weekly_checkins order by user_id, week_start desc, updated_at desc"),
     sql.query("select user_id, status, due_date, updated_at from implementation_tasks"),
-    sql.query("select user_id, tier, amount_total, currency, status, provisioned_at, created_at from programme_orders order by created_at desc"),
+    sql.query("select user_id, tier, amount_total, currency, status, provisioned_at, created_at, is_test from programme_orders order by created_at desc"),
     sql.query("select a.id, a.user_id, a.event_type, a.entity_type, a.entity_id, a.metadata, a.created_at, u.full_name, u.email from academy_activity_events a left join academy_users u on u.id = a.user_id order by a.created_at desc limit 300"),
     sql.query("select user_id, tier, status, programme_start, created_at from enrolments order by created_at asc"),
     sql.query("select created_at::date as day, count(*)::int as events, count(distinct user_id)::int as active_users from academy_activity_events where created_at >= current_date - interval '13 days' group by created_at::date order by day asc"),
@@ -83,6 +83,7 @@ export default async function SuperAdminAnalyticsPage({
     last_login_at: unknown;
     last_seen_at: unknown;
     login_count: number;
+    is_test: boolean;
     tier: Tier | undefined;
     status: string | null;
     programme_start: unknown;
@@ -127,6 +128,7 @@ export default async function SuperAdminAnalyticsPage({
       last_login_at: participant.last_login_at,
       last_seen_at: participant.last_seen_at,
       login_count: Number(participant.login_count || 0),
+      is_test: Boolean(participant.is_test),
       status: participant.status ? String(participant.status) : null,
       programme_start: participant.programme_start,
       tier,
@@ -144,12 +146,16 @@ export default async function SuperAdminAnalyticsPage({
     };
   });
 
-  const activeParticipants = participantMetrics.filter((row) => String(row.status) === "active");
+  const includeTests = String(filters.tests || "") === "1";
+  const activeParticipants = participantMetrics.filter(
+    (row) => String(row.status) === "active" && (includeTests || !row.is_test)
+  );
   const q = String(filters.q || "").trim().toLowerCase();
   const tierFilter = String(filters.tier || "");
   const engagementFilter = String(filters.engagement || "");
 
   const filteredParticipants = participantMetrics.filter((row) => {
+    const testMatch = includeTests || !row.is_test;
     const textMatch = !q || String(row.full_name).toLowerCase().includes(q) || String(row.email).toLowerCase().includes(q);
     const tierMatch = !tierFilter || row.tier === tierFilter;
     const engagementMatch =
@@ -159,7 +165,7 @@ export default async function SuperAdminAnalyticsPage({
       (engagementFilter === "never_logged_in" && row.neverLoggedIn) ||
       (engagementFilter === "stalled" && row.stalled) ||
       (engagementFilter === "complete" && row.progressPercent === 100);
-    return textMatch && tierMatch && engagementMatch;
+    return testMatch && textMatch && tierMatch && engagementMatch;
   });
 
   const pageSize = 50;
@@ -173,6 +179,7 @@ export default async function SuperAdminAnalyticsPage({
     if (filters.q) params.set("q", filters.q);
     if (tierFilter) params.set("tier", tierFilter);
     if (engagementFilter) params.set("engagement", engagementFilter);
+    if (includeTests) params.set("tests", "1");
     if (page > 1) params.set("page", String(page));
     const query = params.toString();
     return query ? "/admin/analytics?" + query : "/admin/analytics";
@@ -203,12 +210,13 @@ export default async function SuperAdminAnalyticsPage({
   const waitingKydos = openTasks.filter((task) => String(task.status) === "waiting_kydos").length;
   const waitingParticipants = openTasks.filter((task) => String(task.status) === "waiting_participant").length;
 
-  const paidOrders = orderData.filter((row) => String(row.status) === "paid");
+  const metricOrders = orderData.filter((row) => includeTests || !Boolean(row.is_test));
+  const paidOrders = metricOrders.filter((row) => String(row.status) === "paid");
   const paidRevenue = paidOrders.reduce((sum, row) => sum + Number(row.amount_total || 0), 0);
   const provisionedPaid = paidOrders.filter((row) => row.provisioned_at).length;
   const activationRate = paidOrders.length ? Math.round((provisionedPaid / paidOrders.length) * 100) : 0;
-  const refunds = orderData.filter((row) => String(row.status) === "refunded").length;
-  const disputes = orderData.filter((row) => String(row.status) === "disputed").length;
+  const refunds = metricOrders.filter((row) => String(row.status) === "refunded").length;
+  const disputes = metricOrders.filter((row) => String(row.status) === "disputed").length;
 
   const progressBands = [
     { label: "Not started", count: activeParticipants.filter((row) => row.progressPercent === 0).length },
@@ -364,8 +372,17 @@ export default async function SuperAdminAnalyticsPage({
           <Link className="btn" href="/admin/orders">Orders</Link>
           <Link className="btn" href="/admin/attention">Attention queue</Link>
           <Link className="btn" href="/admin/exports">Exports</Link>
+          <Link className="btn" href={includeTests ? "/admin/analytics" : "/admin/analytics?tests=1"}>
+            {includeTests ? "Hide E2E tests" : "Show E2E tests"}
+          </Link>
         </div>
       </div>
+
+      {includeTests ? (
+        <div className="notice" style={{ marginBottom: 18 }}>
+          E2E test mode is visible. Synthetic Blueprint, Build With Us and Done For You accounts are included in the dashboard figures below. Turn this off before using the figures for real commercial reporting.
+        </div>
+      ) : null}
 
       <section className="analytics-kpi-grid">
         <article className="analytics-kpi card"><small>Active participants</small><strong>{activeParticipants.length}</strong><span>{loggedInEver} have logged in</span></article>
