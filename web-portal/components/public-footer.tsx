@@ -1,13 +1,13 @@
 import Link from "next/link";
+import { BrandLogo } from "@/components/brand-logo";
 
 export function PublicFooter() {
   return (
     <footer className="footer">
       <div className="container footer-grid">
         <div>
-          <Link href="/" className="brand">
-            <span className="brand-mark" />
-            <span>Kydos Academy</span>
+          <Link href="/" className="brand" aria-label="Kydos Academy home">
+            <BrandLogo variant="light" className="academy-logo-footer" />
           </Link>
           <p>
             A Kydos Digital programme for building a structured UK digital marketing agency.
