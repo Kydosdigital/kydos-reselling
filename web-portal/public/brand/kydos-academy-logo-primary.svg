@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 930 220" role="img" aria-labelledby="title desc">
+<title id="title">Kydos Academy</title>
+<desc id="desc">Kydos Academy logo with a digital K and upward growth arrow.</desc>
+<g>
+<path d="M22 22h42v76l62-76h53l-70 82 76 94h-54l-68-88v88H22z" fill="#08285E"/>
+<rect x="28" y="70" width="16" height="16" fill="#09B8AA"/><rect x="49" y="57" width="10" height="10" fill="#09B8AA"/><rect x="51" y="88" width="13" height="13" fill="#09B8AA"/>
+<rect x="31" y="49" width="11" height="11" fill="none" stroke="#ffffff" stroke-width="4"/><rect x="45" y="76" width="12" height="12" fill="none" stroke="#ffffff" stroke-width="4"/>
+<rect x="24" y="164" width="23" height="34" rx="2" fill="#09B8AA"/><rect x="53" y="151" width="23" height="47" rx="2" fill="#09B8AA"/><rect x="82" y="134" width="23" height="64" rx="2" fill="#09B8AA"/>
+<path d="M12 170C64 148 113 116 151 78c21-21 38-43 53-69" fill="none" stroke="#09B8AA" stroke-width="12" stroke-linecap="round"/><path d="M190 10l24-6-5 25z" fill="#09B8AA"/>
+</g>
+<text x="250" y="145" font-family="Inter,Arial,sans-serif" font-size="94" font-weight="800" letter-spacing="-4" fill="#08285E">Kydos</text>
+<text x="535" y="145" font-family="Inter,Arial,sans-serif" font-size="82" font-weight="400" letter-spacing="-3" fill="#09B8AA">Academy</text>
+</svg>
