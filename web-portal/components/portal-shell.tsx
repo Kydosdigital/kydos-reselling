@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { signOut } from "@/app/login/actions";
+import { stopE2EImpersonation } from "@/app/admin/e2e/actions";
 import { getActiveEnrolment, requireAcademyContext } from "@/lib/academy";
 import { modules, tierLabels, type Tier } from "@/lib/programme-data";
 
@@ -52,7 +53,20 @@ export async function PortalShell({ children }: { children: React.ReactNode }) {
           <button className="btn" type="submit" style={{ width: "100%" }}>Sign out</button>
         </form>
       </aside>
-      <main className="portal-main">{children}</main>
+      <main className="portal-main">
+        {academyUser.is_test ? (
+          <div className="e2e-impersonation-banner">
+            <div>
+              <strong>E2E test session</strong>
+              <span>You are viewing the Academy as {academyUser.full_name}.</span>
+            </div>
+            <form action={stopE2EImpersonation}>
+              <button className="btn btn-primary" type="submit">Return to Super Admin</button>
+            </form>
+          </div>
+        ) : null}
+        {children}
+      </main>
     </div>
   );
 }

@@ -372,6 +372,7 @@ export default async function SuperAdminAnalyticsPage({
           <Link className="btn" href="/admin/orders">Orders</Link>
           <Link className="btn" href="/admin/attention">Attention queue</Link>
           <Link className="btn" href="/admin/exports">Exports</Link>
+          <Link className="btn" href="/admin/e2e">E2E Lab</Link>
           <Link className="btn" href={includeTests ? "/admin/analytics" : "/admin/analytics?tests=1"}>
             {includeTests ? "Hide E2E tests" : "Show E2E tests"}
           </Link>

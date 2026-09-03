@@ -14,6 +14,7 @@ export type AcademyUser = {
   last_login_at?: string | null;
   last_seen_at?: string | null;
   login_count?: number;
+  is_test?: boolean;
   created_at: string;
 };
 
@@ -47,7 +48,7 @@ export async function getCurrentAcademyContext() {
 
   const sql = getSql();
   let rows = await sql.query(
-    "select id, auth_user_id, email, full_name, role, last_login_at, last_seen_at, login_count, created_at from academy_users where auth_user_id = $1 limit 1",
+    "select id, auth_user_id, email, full_name, role, last_login_at, last_seen_at, login_count, is_test, created_at from academy_users where auth_user_id = $1 limit 1",
     [authUser.id]
   );
 
@@ -59,13 +60,13 @@ export async function getCurrentAcademyContext() {
 
     if (email && authRole === "admin") {
       const existingAdmin = await sql.query(
-        "select id, auth_user_id, email, full_name, role, last_login_at, last_seen_at, login_count, created_at from academy_users where lower(email) = lower($1) and role = 'admin' limit 1",
+        "select id, auth_user_id, email, full_name, role, last_login_at, last_seen_at, login_count, is_test, created_at from academy_users where lower(email) = lower($1) and role = 'admin' limit 1",
         [email]
       );
 
       if (existingAdmin.length) {
         const rebound = await sql.query(
-          "update academy_users set auth_user_id = $1, last_seen_at = now(), updated_at = now() where id = $2 returning id, auth_user_id, email, full_name, role, last_login_at, last_seen_at, login_count, created_at",
+          "update academy_users set auth_user_id = $1, last_seen_at = now(), updated_at = now() where id = $2 returning id, auth_user_id, email, full_name, role, last_login_at, last_seen_at, login_count, is_test, created_at",
           [authUser.id, String(existingAdmin[0].id)]
         );
         academyUser = rebound[0] as AcademyUser;
@@ -93,7 +94,7 @@ export async function getCurrentAcademyContext() {
     const name = authUser.name || email.split("@")[0] || "Participant";
 
     rows = await sql.query(
-      "insert into academy_users (auth_user_id, email, full_name, role, last_login_at, last_seen_at, login_count) values ($1,$2,$3,$4,now(),now(),1) on conflict (auth_user_id) do update set email = excluded.email, full_name = excluded.full_name, last_seen_at = now(), updated_at = now() returning id, auth_user_id, email, full_name, role, last_login_at, last_seen_at, login_count, created_at",
+      "insert into academy_users (auth_user_id, email, full_name, role, last_login_at, last_seen_at, login_count) values ($1,$2,$3,$4,now(),now(),1) on conflict (auth_user_id) do update set email = excluded.email, full_name = excluded.full_name, last_seen_at = now(), updated_at = now() returning id, auth_user_id, email, full_name, role, last_login_at, last_seen_at, login_count, is_test, created_at",
       [authUser.id, email, name, role]
     );
 
