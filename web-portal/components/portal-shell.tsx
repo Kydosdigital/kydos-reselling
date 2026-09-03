@@ -3,6 +3,7 @@ import { signOut } from "@/app/login/actions";
 import { stopE2EImpersonation } from "@/app/admin/e2e/actions";
 import { getActiveEnrolment, requireAcademyContext } from "@/lib/academy";
 import { modules, tierLabels, type Tier } from "@/lib/programme-data";
+import { BrandLogo } from "@/components/brand-logo";
 
 export async function PortalShell({ children }: { children: React.ReactNode }) {
   const { academyUser } = await requireAcademyContext();
@@ -12,9 +13,8 @@ export async function PortalShell({ children }: { children: React.ReactNode }) {
   return (
     <div className="portal-layout">
       <aside className="sidebar">
-        <Link href="/portal" className="brand">
-          <span className="brand-mark" />
-          <span>Kydos Academy</span>
+        <Link href="/portal" className="brand" aria-label="Kydos Academy dashboard">
+          <BrandLogo variant="light" className="academy-logo-sidebar" />
         </Link>
 
         <div className="side-profile">
