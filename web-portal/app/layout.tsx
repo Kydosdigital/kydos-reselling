@@ -12,6 +12,11 @@ export const metadata: Metadata = {
   },
   description: "Build a structured UK digital marketing agency with the company, website, CRM, sales, team and delivery systems behind Kydos Digital.",
   applicationName: "Kydos Academy",
+  manifest: "/manifest.webmanifest",
+  icons: {
+    icon: [{ url: "/brand/kydos-academy-app-icon.svg", type: "image/svg+xml" }],
+    shortcut: [{ url: "/brand/kydos-academy-app-icon.svg", type: "image/svg+xml" }]
+  },
   category: "Business education and agency implementation",
   openGraph: {
     title: "Kydos Academy | Build Your UK Digital Marketing Agency",
