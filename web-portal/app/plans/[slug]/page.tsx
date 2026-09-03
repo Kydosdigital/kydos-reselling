@@ -20,9 +20,15 @@ export async function generateMetadata({
   if (!plan) return {};
 
   return {
-    title: plan.name + " Agency Programme",
-    description: plan.strapline,
-    alternates: { canonical: "/plans/" + plan.slug }
+    title: plan.name + ": Start Your UK Digital Marketing Agency",
+    description: plan.strapline + " Compare what Kydos builds, what you implement and the support included.",
+    alternates: { canonical: "/plans/" + plan.slug },
+    openGraph: {
+      title: plan.name + " | Kydos Academy",
+      description: plan.strapline,
+      url: "/plans/" + plan.slug,
+      type: "website"
+    }
   };
 }
 

@@ -3,8 +3,10 @@ export function HomeStructuredData() {
     {
       "@context": "https://schema.org",
       "@type": "Organization",
+      "@id": "https://kydosdigital.com/#organization",
       name: "KYDOS DIGITAL LTD",
       url: "https://kydosdigital.com",
+      logo: "https://academy.kydosdigital.com/brand/kydos-academy-logo-primary.svg",
       email: "Support@kydosdigital.com",
       telephone: "+44 7860 254271",
       address: {
@@ -21,10 +23,13 @@ export function HomeStructuredData() {
     },
     {
       "@context": "https://schema.org",
-      "@type": "Service",
+      "@type": "Course",
+      "@id": "https://academy.kydosdigital.com/#course",
       name: "Kydos Academy Digital Marketing Agency Build Programme",
+      url: "https://academy.kydosdigital.com/programme",
       provider: {
         "@type": "Organization",
+        "@id": "https://kydosdigital.com/#organization",
         name: "KYDOS DIGITAL LTD"
       },
       areaServed: "United Kingdom",

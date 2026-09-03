@@ -10,7 +10,11 @@ export const metadata: Metadata = {
     default: "Kydos Academy | Build Your UK Digital Marketing Agency",
     template: "%s | Kydos Academy"
   },
-  description: "Build a structured UK digital marketing agency with the company, website, CRM, sales, team and delivery systems behind Kydos Digital.",
+  description: "Learn how to start and operate a UK digital marketing agency with the company, website, CRM, sales, team and delivery systems behind Kydos Digital.",
+  authors: [{ name: "Kydos Digital", url: "https://kydosdigital.com" }],
+  creator: "Kydos Digital",
+  publisher: "KYDOS DIGITAL LTD",
+  keywords: ["start digital marketing agency UK", "digital marketing agency course UK", "how to start a marketing agency", "digital marketing agency training", "agency business programme"],
   applicationName: "Kydos Academy",
   manifest: "/manifest.webmanifest",
   icons: {
@@ -47,5 +51,5 @@ export const metadata: Metadata = {
 };
 
 export default function RootLayout({children}:{children:React.ReactNode}) {
-  return <html lang="en"><body>{children}</body></html>;
+  return <html lang="en-GB"><body>{children}</body></html>;
 }
