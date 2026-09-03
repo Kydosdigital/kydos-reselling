@@ -1,12 +1,12 @@
 import Link from "next/link";
+import { BrandLogo } from "@/components/brand-logo";
 
 export function PublicHeader() {
   return (
     <header className="site-header">
       <div className="container header-inner academy-header-inner">
         <Link href="/" className="brand" aria-label="Kydos Academy home">
-          <span className="brand-mark" />
-          <span>Kydos Academy</span>
+          <BrandLogo variant="light" className="academy-logo-header" />
         </Link>
 
         <nav className="nav academy-nav" aria-label="Primary navigation">
