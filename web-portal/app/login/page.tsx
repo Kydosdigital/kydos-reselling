@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { BrandLogo } from "@/components/brand-logo";
 import { login, signInWithGoogle } from "./actions";
 
 export default async function LoginPage({
@@ -11,9 +12,8 @@ export default async function LoginPage({
   return (
     <main className="auth-wrap">
       <section className="auth-card card">
-        <Link href="/" className="brand">
-          <span className="brand-mark" />
-          <span>Kydos Academy</span>
+        <Link href="/" className="brand" aria-label="Kydos Academy home">
+          <BrandLogo variant="light" className="academy-logo-auth" />
         </Link>
 
         <h2 style={{ marginTop: 28 }}>Programme login</h2>
