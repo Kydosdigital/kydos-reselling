@@ -3,7 +3,14 @@ import { blogArticles } from "@/lib/blog-data";
 export const dynamic = "force-static";
 
 function escapeXml(value: string) {
-  return value.replace(/[<>&'"]/g, (char) => ({ "<": "&lt;", ">": "&gt;", "&": "&amp;", "'": "&apos;", '"': "&quot;" }[char] || char));
+  const entities: Record<string, string> = {
+    "<": "&lt;",
+    ">": "&gt;",
+    "&": "&amp;",
+    "'": "&apos;",
+    '"': "&quot;"
+  };
+  return value.replace(/[<>&'"]/g, (char) => entities[char] || char);
 }
 
 export async function GET() {
