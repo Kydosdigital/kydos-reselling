@@ -1,7 +1,11 @@
 import { createNeonAuth, type NeonAuth } from "@neondatabase/auth/next/server";
 
+const academyAuthBaseUrl =
+  process.env.NEON_AUTH_BASE_URL ||
+  "https://ep-lively-forest-za40cgbk.neonauth.c-2.eu-west-2.aws.neon.tech/neondb/auth";
+
 export function isNeonAuthConfigured() {
-  return Boolean(process.env.NEON_AUTH_BASE_URL && process.env.NEON_AUTH_COOKIE_SECRET);
+  return Boolean(academyAuthBaseUrl && process.env.NEON_AUTH_COOKIE_SECRET);
 }
 
 let authInstance: NeonAuth | undefined;
@@ -9,7 +13,7 @@ let authInstance: NeonAuth | undefined;
 export function getAuth(): NeonAuth {
   if (authInstance) return authInstance;
 
-  const baseUrl = process.env.NEON_AUTH_BASE_URL;
+  const baseUrl = academyAuthBaseUrl;
   const secret = process.env.NEON_AUTH_COOKIE_SECRET;
 
   if (!baseUrl || !secret) {

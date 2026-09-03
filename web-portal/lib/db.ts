@@ -1,15 +1,24 @@
 import { neon } from "@neondatabase/serverless";
 
+function connectionString() {
+  return (
+    process.env.DATABASE_URL ||
+    process.env.POSTGRES_URL ||
+    process.env.NEON_DATABASE_URL ||
+    ""
+  );
+}
+
 export function isDatabaseConfigured() {
-  return Boolean(process.env.DATABASE_URL);
+  return Boolean(connectionString());
 }
 
 export function getSql() {
-  const connectionString = process.env.DATABASE_URL;
+  const value = connectionString();
 
-  if (!connectionString) {
-    throw new Error("DATABASE_URL is not configured.");
+  if (!value) {
+    throw new Error("Academy database connection is not configured.");
   }
 
-  return neon(connectionString);
+  return neon(value);
 }

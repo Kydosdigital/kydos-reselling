@@ -49,3 +49,24 @@ export async function signOut() {
   }
   redirect("/");
 }
+
+
+export async function signInWithGoogle() {
+  if (!isNeonAuthConfigured()) {
+    redirect("/login?setup=pending");
+  }
+
+  const { data, error } = await getAuth().signIn.social({
+    provider: "google",
+    callbackURL: "/admin/analytics"
+  });
+
+  if (error) {
+    redirect("/login?oauth=error");
+  }
+
+  const target = String((data as { url?: string } | null)?.url || "");
+  if (target) redirect(target);
+
+  redirect("/admin/analytics");
+}

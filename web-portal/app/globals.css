@@ -2486,3 +2486,30 @@ h3{letter-spacing:-.025em}
   .cohort-performance-list>div{grid-template-columns:1fr 80px 80px}
   .cohort-performance-list .analytics-bar-track{grid-column:1/-1}
 }
+
+.google-auth-btn{
+  background:rgba(255,255,255,.96);
+  color:#101820;
+  border-color:rgba(255,255,255,.96);
+  font-weight:850
+}
+.google-auth-btn:hover{
+  background:#fff;
+  border-color:#fff
+}
+.auth-divider{
+  display:flex;
+  align-items:center;
+  gap:12px;
+  margin:4px 0 16px;
+  color:var(--muted);
+  font-size:10px;
+  text-transform:uppercase;
+  letter-spacing:.06em
+}
+.auth-divider:before,.auth-divider:after{
+  content:"";
+  height:1px;
+  background:var(--line);
+  flex:1
+}

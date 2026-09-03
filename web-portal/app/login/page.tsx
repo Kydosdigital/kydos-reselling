@@ -1,10 +1,10 @@
 import Link from "next/link";
-import { login } from "./actions";
+import { login, signInWithGoogle } from "./actions";
 
 export default async function LoginPage({
   searchParams
 }: {
-  searchParams: Promise<{ error?: string; setup?: string; activated?: string }>;
+  searchParams: Promise<{ error?: string; setup?: string; activated?: string; oauth?: string }>;
 }) {
   const params = await searchParams;
 
@@ -30,6 +30,15 @@ export default async function LoginPage({
         ) : null}
 
         {params.error ? <div className="notice">The email or password was not recognised. Please try again.</div> : null}
+        {params.oauth === "error" ? <div className="notice">Google sign-in could not be completed. Please try again.</div> : null}
+
+        <form action={signInWithGoogle}>
+          <button className="btn google-auth-btn" style={{ width: "100%", marginBottom: 14 }} type="submit">
+            Continue with Google
+          </button>
+        </form>
+
+        <div className="auth-divider"><span>or sign in with password</span></div>
 
         <form action={login}>
           <div className="field">

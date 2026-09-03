@@ -55,6 +55,27 @@ export async function getCurrentAcademyContext() {
 
   if (!academyUser) {
     const email = (authUser.email || "").trim().toLowerCase();
+    const authRole = String((authUser as { role?: unknown }).role || "");
+
+    if (email && authRole === "admin") {
+      const existingAdmin = await sql.query(
+        "select id, auth_user_id, email, full_name, role, last_login_at, last_seen_at, login_count, created_at from academy_users where lower(email) = lower($1) and role = 'admin' limit 1",
+        [email]
+      );
+
+      if (existingAdmin.length) {
+        const rebound = await sql.query(
+          "update academy_users set auth_user_id = $1, last_seen_at = now(), updated_at = now() where id = $2 returning id, auth_user_id, email, full_name, role, last_login_at, last_seen_at, login_count, created_at",
+          [authUser.id, String(existingAdmin[0].id)]
+        );
+        academyUser = rebound[0] as AcademyUser;
+      }
+    }
+
+    if (academyUser) {
+      await touchAcademySeen(academyUser.id);
+      return { authUser, academyUser };
+    }
     const isAdminEmail = adminEmails().includes(email);
     const paidOrders = email
       ? await sql.query(
