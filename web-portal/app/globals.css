@@ -30,14 +30,7 @@ button,input{font:inherit}
 }
 .header-inner{height:72px;display:flex;align-items:center;justify-content:space-between;gap:20px}
 .brand{display:inline-flex;align-items:center;gap:11px;font-weight:800;letter-spacing:-.02em}
-.brand-mark{
-  width:34px;height:34px;border-radius:10px;
-  background:
-    linear-gradient(90deg,transparent 38%,rgba(7,17,31,.65) 38% 62%,transparent 62%),
-    linear-gradient(transparent 38%,rgba(7,17,31,.65) 38% 62%,transparent 62%),
-    var(--accent);
-  box-shadow:0 0 0 5px rgba(127,227,106,.08)
-}
+
 .nav{display:flex;align-items:center;gap:24px;color:var(--muted);font-size:14px}
 .nav a:hover{color:var(--text)}
 .btn{
@@ -2543,3 +2536,23 @@ h3{letter-spacing:-.025em}
 .e2e-checklist{display:grid;grid-template-columns:repeat(2,1fr);gap:9px;margin-top:18px}
 .e2e-checklist span{padding:11px 12px;border:1px solid var(--line);border-radius:11px;color:#c6d1dc;font-size:11px;background:rgba(255,255,255,.02)}
 @media(max-width:900px){.e2e-grid{grid-template-columns:1fr}.e2e-checklist{grid-template-columns:1fr}.e2e-impersonation-banner{align-items:flex-start;flex-direction:column}}
+
+
+/* Kydos Academy brand system */
+.brand{display:inline-flex;align-items:center;line-height:0}
+.academy-logo{display:block;max-width:100%;height:auto;object-fit:contain}
+.academy-logo-full{width:220px}
+.academy-logo-header{width:214px}
+.academy-logo-footer{width:220px}
+.academy-logo-sidebar{width:208px}
+.academy-logo-auth{width:215px}
+.academy-logo-mark{width:44px;height:44px}
+@media(max-width:760px){
+  .academy-logo-header{width:176px}
+  .academy-logo-sidebar{width:190px}
+  .academy-logo-auth{width:188px}
+  .academy-logo-footer{width:195px}
+}
+@media(max-width:380px){
+  .academy-logo-header{width:158px}
+}
