@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import Link from "next/link";
 import { BrandLogo } from "@/components/brand-logo";
 import { createStripeClient } from "@/lib/stripe";
@@ -5,6 +6,11 @@ import { publicPlans, type PublicPlanSlug } from "@/lib/public-plans";
 import { maskEmail } from "@/lib/privacy";
 
 export const dynamic = "force-dynamic";
+
+
+export const metadata: Metadata = {
+  robots: { index: false, follow: false, nocache: true }
+};
 
 export default async function PurchaseSuccessPage({
   searchParams

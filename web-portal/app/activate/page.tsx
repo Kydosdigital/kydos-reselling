@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import Link from "next/link";
 import { BrandLogo } from "@/components/brand-logo";
 import { createStripeClient } from "@/lib/stripe";
@@ -15,6 +16,11 @@ const errorCopy: Record<string, string> = {
   payment: "We could not confirm a paid programme order for this activation link.",
   account: "We could not create this account automatically. Contact Kydos support and we will complete the activation.",
   email: "The email address does not match the paid programme order."
+};
+
+
+export const metadata: Metadata = {
+  robots: { index: false, follow: false, nocache: true }
 };
 
 export default async function ActivatePage({
