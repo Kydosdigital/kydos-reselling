@@ -149,6 +149,41 @@ export default function ProgrammePage() {
           </div>
         </section>
 
+        <section className="section section-soft">
+          <div className="container">
+            <div className="portal-section-heading">
+              <div>
+                <span className="eyebrow">Go deeper before you launch</span>
+                <h2>See how the core agency systems work in practice.</h2>
+              </div>
+              <Link className="btn" href="/blog">All agency guides</Link>
+            </div>
+
+            <div className="home-guides-grid">
+              <article className="card">
+                <span>Client Acquisition</span>
+                <h3><Link href="/blog/how-to-get-first-digital-marketing-agency-clients-uk">How to get your first agency clients</Link></h3>
+                <p>Build the full lead-to-payment journey before increasing traffic or ad spend.</p>
+                <Link href="/blog/how-to-get-first-digital-marketing-agency-clients-uk">Read the acquisition guide →</Link>
+              </article>
+
+              <article className="card">
+                <span>CRM & Automation</span>
+                <h3><Link href="/blog/digital-marketing-agency-crm-setup">How to structure your agency CRM</Link></h3>
+                <p>Pipeline stages, lead ownership, follow-up, booking, payment and onboarding in one operating flow.</p>
+                <Link href="/blog/digital-marketing-agency-crm-setup">Read the CRM guide →</Link>
+              </article>
+
+              <article className="card">
+                <span>Client Delivery</span>
+                <h3><Link href="/blog/digital-marketing-agency-client-onboarding-process">Build client onboarding before you sell</Link></h3>
+                <p>Turn a paid sale into a clean handover, organised account and professional first month.</p>
+                <Link href="/blog/digital-marketing-agency-client-onboarding-process">Read the onboarding guide →</Link>
+              </article>
+            </div>
+          </div>
+        </section>
+
         <section className="final-cta">
           <div className="container final-cta-inner">
             <div>
