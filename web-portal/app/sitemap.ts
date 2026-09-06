@@ -1,9 +1,9 @@
 import type { MetadataRoute } from "next";
-import { blogArticles } from "@/lib/blog-data";
+import { blogArticles } from "@/lib/all-blog-data";
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const base = (process.env.NEXT_PUBLIC_APP_URL || "https://academy.kydosdigital.com").replace(/\/$/, "");
-  const today = new Date("2026-09-03T00:00:00Z");
+  const today = new Date("2026-09-06T00:00:00Z");
 
   const routes = [
     { path: "", priority: 1, changeFrequency: "weekly" as const },
