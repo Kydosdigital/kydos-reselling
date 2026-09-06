@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import "./globals.css";
+import "./seo-blog.css";
 
 const appUrl = process.env.NEXT_PUBLIC_APP_URL || "https://academy.kydosdigital.com";
 const allowIndexing = process.env.VERCEL_ENV === "production";
