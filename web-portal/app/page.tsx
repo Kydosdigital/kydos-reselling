@@ -109,21 +109,28 @@ export default function HomePage() {
             </div>
 
             <div className="hero-visual">
-              <div className="hero-image-frame">
-                <img
-                  src="https://images.pexels.com/photos/3931504/pexels-photo-3931504.jpeg?cs=srgb&fm=jpg"
-                  alt="A diverse business team collaborating around a laptop in a modern office"
+              <div className="hero-image-frame" style={{ background: "#02070d" }}>
+                <video
                   className="hero-photo"
-                  fetchPriority="high"
-                />
-                <div className="image-shade" />
-                <div className="hero-image-caption">
-                  <small>Your agency build</small>
-                  <strong>Company → Systems → Team → Clients</strong>
-                </div>
+                  autoPlay
+                  muted
+                  loop
+                  playsInline
+                  controls
+                  preload="metadata"
+                  poster="https://resource2.heygen.ai/video/54e022efab61433081e42b2649310f91/v924cfe3d88324664a27c176a8944ddd2/gif.gif"
+                  aria-label="Kydos Academy social media agency programme video"
+                  style={{ objectFit: "contain", background: "#02070d" }}
+                >
+                  <source
+                    src="https://resource2.heygen.ai/aws_pacific/avatar_tmp/3f442aeb30f44b2dafefca148edf7ab7/v924cfe3d88324664a27c176a8944ddd2/caption_54e022efab61433081e42b2649310f91.mp4"
+                    type="video/mp4"
+                  />
+                  Your browser does not support embedded video.
+                </video>
               </div>
 
-              <div className="floating-card floating-card-one">
+              <div className="floating-card floating-card-one" style={{ pointerEvents: "none" }}>
                 <span className="floating-icon">✓</span>
                 <div>
                   <strong>CRM + sales pipeline</strong>
@@ -131,7 +138,7 @@ export default function HomePage() {
                 </div>
               </div>
 
-              <div className="floating-card floating-card-two">
+              <div className="floating-card floating-card-two" style={{ pointerEvents: "none" }}>
                 <span className="floating-icon">✓</span>
                 <div>
                   <strong>Delivery team</strong>
@@ -233,7 +240,6 @@ export default function HomePage() {
           </div>
         </section>
 
-
         <section className="section ownership-section">
           <div className="container ownership-grid">
             <div>
@@ -323,7 +329,6 @@ export default function HomePage() {
             </p>
           </div>
         </section>
-
 
         <section className="section startup-cost-section">
           <div className="container">
